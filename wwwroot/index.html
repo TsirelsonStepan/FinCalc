@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Dashboard</title>
+  <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+  <div class="sidebar">
+
+
+    <div class="assets-list">
+      <label>Selected assets</label>
+      <button id="calculate-btn">Calculate for this assets</button>
+    </div>
+
+    <div class="search-section">
+      <label>Search assets</label>
+      <input type="text" id="search-input" class="input-field" placeholder="Type asset name...">
+      <button id="search-btn">Search</button>
+
+      <div id="search-results"></div>
+    </div>
+
+
+  </div>
+
+  <div class="main">
+    <div class="group" id="group-1" data-target="details-panel-1">
+      <div class="collapse-btn">▶</div>
+      <div class="group-title">group 1</div>
+    </div>
+    <div class="details-panel" id="details-panel-1">
+      <div class="stats-list">
+        
+      </div>
+      <div class="image-holder">
+        
+      </div>
+    </div>
+
+  </div>
+  
+  <script src="js/toggle_main_groups.js"></script>
+  <script src="js/search_assets.js"></script>
+  <script src="js/manage_assets.js"></script>
+  <script src="js/calculations.js"></script>
+
+</body>
+
+</html>
