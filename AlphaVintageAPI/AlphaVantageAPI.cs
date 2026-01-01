@@ -5,7 +5,7 @@ namespace FinCalc.AlphaVantageAPI
 	class AlphaVantageAPI
 	{
 		private static readonly string domain = "https://www.alphavantage.co/query?";
-		private static readonly string api_key = "Q757JLDN2ICYX2HN";
+		private static readonly string api_key = "your_api_key";
 
 		private static async Task<string> GETReporting(string ticker, string function)
 		{
