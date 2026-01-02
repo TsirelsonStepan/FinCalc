@@ -3,22 +3,20 @@ const searchResults = document.getElementById("search-results");
 
 async function searchAssets() {
 	const query = searchInput.value.trim();
-	if (!query)
-	{
+	if (!query) {
 		searchResults.innerHTML = "<p>Please enter search query</p>";
 		return;
 	}
 
 	searchResults.innerHTML = "<p>Searching...</p>";
-
-	try {
-		const response = await fetch(`/getSecuritiesList?query=${query}`);
-		const short_names = await response.json();
-		renderSearchResults(short_names);
-	} catch (err) {
+	
+	const response = await fetch(`/getSecuritiesList?partialName=${query}`);
+	if (!response.ok) {
 		searchResults.innerHTML = "<p>Error loading results</p>";
-		console.error(err);
+		throw new Error(response.status);
 	}
+	const short_names = await response.json();
+	renderSearchResults(short_names);
 }
 
 function renderSearchResults(assets) {
@@ -47,4 +45,9 @@ function renderSearchResults(assets) {
 }
 
 document.getElementById("search-btn").addEventListener("click", searchAssets);
-searchInput.addEventListener("submit", searchAssets);
+searchInput.addEventListener("keydown", function(e) {
+	if (e.key === "Enter") {
+		e.preventDefault(); // prevent any default behavior
+		searchAssets();
+    }
+});

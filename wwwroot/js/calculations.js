@@ -1,14 +1,14 @@
 const calculateButton = document.getElementById("calculate-btn");
 
 async function calculatePortfolio() {
-	const response = await fetch("/calculatePortfolio", {
+    const response = await fetch("/calculatePortfolio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedAssets),
     });
-	const calculations = await response.json();
-
-	displayCalculations(calculations);
+    if (!response.ok) throw new Error(response.status);
+    const calculations = await response.json();
+    displayCalculations(calculations);
 }
 
 function displayCalculations(calculations) {
@@ -25,4 +25,3 @@ function displayCalculations(calculations) {
 }
 
 calculateButton.addEventListener("click", calculatePortfolio);
-searchInput.addEventListener("submit", calculatePortfolio);
