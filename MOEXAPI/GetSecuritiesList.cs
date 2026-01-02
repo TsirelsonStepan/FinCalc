@@ -4,7 +4,7 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class Get
 	{
-		public static async Task<JsonArray> SecuritiesList(string query)
+		public static async Task<Asset[]> SecuritiesList(string query)
 		{
 			string url = $"https://iss.moex.com/iss/securities.json?q={query}&is_trading=1&engine=stock&market=shares";
 			string response;
@@ -24,7 +24,7 @@ namespace FinCalc.MOEXAPI
 
 			JsonNode? json = JsonNode.Parse(response);
 			JsonArray companies_data = json["securities"]["data"].AsArray();
-			JsonArray companies_json = [];
+			Asset[] companies = new Asset[companies_data.Count];
 
 			for (int i = 0; i < companies_data.Count; i++)
 			{
@@ -37,10 +37,10 @@ namespace FinCalc.MOEXAPI
                     //Engine = company_data[11].GetValue<string>().Split('_')[0],
                     //Market = company_data[11].GetValue<string>().Split('_')[1]
                 };
-                companies_json.Add(company);
+                companies[i] = company;
 			}
 
-			return companies_json;
+			return companies;
 		}
 	}
 }
