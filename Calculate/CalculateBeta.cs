@@ -8,8 +8,8 @@ namespace FinCalc.Calculate
         {
             string note = "";
 
-            HistoricalData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
-            HistoricalData returns = Returns(await MOEXAPI.Get.Prices("shares", id, 5));
+            HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
+            HistoricData returns = Returns(await MOEXAPI.Get.Prices("shares", id, 5));
             if (marketReturns.Length != returns.Length)
             {
                 returns = returns.FillMissing(marketReturns.Dates);

@@ -1,6 +1,6 @@
 namespace FinCalc.DataStructures
 {
-	public readonly struct HistoricalData(string name, int length, int interval)
+	public readonly struct HistoricData(string name, int length, int interval)
     {
 		public string Name { get; } = name;
 		public string[] Dates { get; } = new string[length];
@@ -8,9 +8,9 @@ namespace FinCalc.DataStructures
 		public int Interval { get; } = interval; //in days
 		public int Length { get; } = length;
 
-		public HistoricalData FillMissing(string[] newDates)
+		public HistoricData FillMissing(string[] newDates)
 		{
-			HistoricalData newData = new(Name, newDates.Length, Interval);
+			HistoricData newData = new(Name, newDates.Length, Interval);
 			if (newDates.Length <= Length) return this;
 			double lastValue = Values[0];
 			int added_values = 0;

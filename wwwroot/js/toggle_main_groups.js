@@ -1,14 +1,13 @@
-const groups = Array.from(document.getElementsByClassName('group'));
 var currentGroup = null;
 
 function closeGroup(group) {
-    group.querySelector('.collapse-btn').classList.toggle('open', false)
+    group.querySelector('.collapse-icon').classList.toggle('open', false)
     const panel = document.getElementById(group.dataset.target);
     panel.style.display = 'none';
 }
 
 function openGroup(group) {
-    group.querySelector('.collapse-btn').classList.toggle('open', true)
+    group.querySelector('.collapse-icon').classList.toggle('open', true)
     const panel = document.getElementById(group.dataset.target);
     panel.style.display = 'flex';
 }
@@ -28,7 +27,3 @@ function manageGroups(group) {
         currentGroup = group;
     }    
 }
-
-groups.forEach(group => {
-    group.querySelector(".collapse-btn").addEventListener('click', () => manageGroups(group));
-})

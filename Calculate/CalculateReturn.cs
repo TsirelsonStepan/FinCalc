@@ -4,9 +4,9 @@ namespace FinCalc.Calculate
 {
 	public partial class BaseIndicator
 	{		
-        public static HistoricalData Returns(HistoricalData prices)
+        public static HistoricData Returns(HistoricData prices)
 		{
-			HistoricalData returns = new(prices.Name, prices.Length - 1, prices.Interval);
+			HistoricData returns = new(prices.Name, prices.Length - 1, prices.Interval);
 			
 			for (int i = 0; i < prices.Length - 1; i++)
 			{
@@ -16,7 +16,7 @@ namespace FinCalc.Calculate
 			return returns;
 		}
 
-		public static double AnnualReturn(HistoricalData returns)
+		public static double AnnualReturn(HistoricData returns)
 		{
 			double average = 1;
 			for (int i = 0; i < returns.Length; i++)

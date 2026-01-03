@@ -4,7 +4,7 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class Get
     {
-        public static async Task<HistoricalData> Prices(string market, string id, int years)
+        public static async Task<HistoricData> Prices(string market, string id, int years)
         {
             DateTime start = DateTime.Today.AddYears(-years);
 			
@@ -13,11 +13,11 @@ namespace FinCalc.MOEXAPI
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"] ?? throw new UnexpectedMoexResponce(response);
             
             int length = json.AsArray().Count;
-			HistoricalData result = new(id, length, 7);
+			HistoricData result = new(id, length, 7);
 			for (int i = 0; i < length; i++)
             {
                 //[7] - end date, [1] - close price
-                result.Dates[i] = json[i][7].GetValue<string>();
+                result.Dates[i] = json[i][7].GetValue<string>().Split(' ')[0];
                 result.Values[i] = json[i][1].GetValue<double>();
             }
 			return result;

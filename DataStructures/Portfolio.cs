@@ -8,6 +8,7 @@ namespace FinCalc.DataStructures
 		public double? ExpectedPortfolioReturn { get; set; }
 		public double? PortfolioVariance { get; set; }
 		public double? PortfolioBeta { get; set; }
+		public HistoricData[] PortfolioHistoricData { get; set; } = [];
 		public string Notes { get; set; } = "";
 
 		public void Verify()
@@ -16,6 +17,16 @@ namespace FinCalc.DataStructures
 			double totalAmount = 0;
 			foreach (Asset asset in Assets) totalAmount += asset.Amount;
 			if (totalAmount <= 0) throw new PortfolioSizeIsZero();
+		}
+
+		public async Task CalculatePriceHistory()
+		{
+			HistoricData[] assetsHistoricData = new HistoricData[Assets.Length];
+			for (int i = 0; i < Assets.Length; i++)
+			{
+				assetsHistoricData[i] = await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 1);
+			}
+			PortfolioHistoricData = assetsHistoricData;
 		}
 
 		public async Task CalculateBeta()
