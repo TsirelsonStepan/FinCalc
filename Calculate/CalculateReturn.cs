@@ -1,29 +1,30 @@
+using FinCalc.DataStructures;
+
 namespace FinCalc.Calculate
 {
 	public partial class BaseIndicator
 	{		
-        public static Dictionary<string, double> Returns(Dictionary<string, double> prices)
+        public static HistoricalData Returns(HistoricalData prices)
 		{
-			Dictionary<string, double> returns = [];
-			string[] dates = prices.Keys.ToArray();
+			HistoricalData returns = new(prices.Name, prices.Length - 1, prices.Interval);
 			
-			for (int i = 0; i < prices.Count - 1; i++)
+			for (int i = 0; i < prices.Length - 1; i++)
 			{
-				returns[dates[i]] = prices[dates[i]] / prices[dates[i + 1]];
+				returns.Dates[i] = prices.Dates[i]; // OPTIMIZE
+				returns.Values[i] = prices.Values[i] / prices.Values[i + 1];
 			}
 			return returns;
 		}
 
-		static Dictionary<string, double> NormilizeReturns(Dictionary<string, double> returns)
+		public static double AnnualReturn(HistoricalData returns)
 		{
-			//add missing period
-			return returns;
-		}
-
-		public static double AnnualReturn(Dictionary<string, double> prices)
-		{//implement
-			string date = prices.Keys.ToArray()[0];
-			return prices[date];
+			double average = 1;
+			for (int i = 0; i < returns.Length; i++)
+			{
+				average *= returns.Values[i];
+			}
+			average = Math.Pow(average, 1d / returns.Length);
+			return 1 + (average - 1) * (365 / returns.Interval);
 		}
     }
 }
@@ -40,12 +41,12 @@ namespace FinCalc.Calculate
 			double totalGrowth = Math.Pow(1 + currentYearPriceChange, daysInYear / daysElapsed) - 1;
 			
 			//CAGR
-			for (int i = 0; i < past_years; i++)
+			for (int i = 0; i < pastYears; i++)
 			{
 				double previousYearPriceChange = json[firstQuarterIndex + 1][1].GetValue<double>() / json[firstQuarterIndex + 4][0].GetValue<double>();
 				totalGrowth *= 1 + previousYearPriceChange;
 			}
-			double cagr = Math.Pow(totalGrowth, 1 / (past_years + 1)) - 1;
+			double cagr = Math.Pow(totalGrowth, 1 / (pastYears + 1)) - 1;
 			
 			return cagr;
 

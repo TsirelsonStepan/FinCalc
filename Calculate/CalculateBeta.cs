@@ -1,3 +1,5 @@
+using FinCalc.DataStructures;
+
 namespace FinCalc.Calculate
 {
 	public partial class BaseIndicator
@@ -6,8 +8,13 @@ namespace FinCalc.Calculate
         {
             string note = "";
 
-            Dictionary<string, double> marketReturns = await MOEXAPI.Get.Prices("index", "IMOEX", 5);
-            Dictionary<string, double> returns = await MOEXAPI.Get.Prices("shares", id, 5);
+            HistoricalData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
+            HistoricalData returns = Returns(await MOEXAPI.Get.Prices("shares", id, 5));
+            if (marketReturns.Length != returns.Length)
+            {
+                returns = returns.FillMissing(marketReturns.Dates);
+                note = $"The set of prices for {id} was incomplete, some values were extrapolated";
+            }
 
             double meanReturn = returns.Values.Average();
             double meanMarketReturn = marketReturns.Values.Average();
@@ -15,22 +22,13 @@ namespace FinCalc.Calculate
             double sumXY = 0;
             double sumXX = 0;
 
-            double latestReturn = 0;
-            for (int j = 0; j < marketReturns.Count; j++)
+            for (int i = 0; i < marketReturns.Length; i++)
             {
-                if (!returns.ContainsKey(marketReturns.Keys.ToArray()[j]))
-                {
-                    returns[marketReturns.Keys.ToArray()[j]] = latestReturn;
-                    note += $"The set of prices for {id} was incomplete, some values were extrapolated";
-                }
-
-                double dx = returns.Values.ToArray()[j] - meanReturn;
-                double dy = marketReturns.Values.ToArray()[j] - meanMarketReturn;
+                double dx = returns.Values[i] - meanReturn;
+                double dy = marketReturns.Values[i] - meanMarketReturn;
 
                 sumXY += dx * dy;
                 sumXX += dx * dx;
-
-                latestReturn = returns.Values.ToArray()[j];
             }
             double slope = sumXY / sumXX;
             //double intercept = meanMarketReturn - slope * meanReturn;

@@ -12,8 +12,8 @@ async function calculatePortfolio() {
 }
 
 function displayCalculations(calculations) {
-    const wAPR = (calculations.weightedAveragePortfolioReturn * 100).toFixed(2) + "%";
-    const ePR = (calculations.expectedPortfolioReturn * 100).toFixed(2) + "%";
+    const wAPR = ((calculations.weightedAveragePortfolioReturn - 1) * 100).toFixed(2) + "%";
+    const ePR = ((calculations.expectedPortfolioReturn - 1) * 100).toFixed(2) + "%";
     const B = calculations.portfolioBeta;
 
     detailsPanel = document.getElementById("details-panel-1").querySelector(".stats-list");

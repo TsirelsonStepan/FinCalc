@@ -5,16 +5,10 @@ namespace FinCalc.DataStructures
 		Asset[] Assets { get; set; } = _assets;
 
 		public double? WeightedAveragePortfolioReturn { get; set; }
-		public string? NotesToWeightedAveragePortfolioReturn { get; set; }
-
 		public double? ExpectedPortfolioReturn { get; set; }
-		public string? NotesToExpectedPortfolioReturn { get; set; }
-
 		public double? PortfolioVariance { get; set; }
-		public string? NotesToPortfolioVariance { get; set; }
-		
 		public double? PortfolioBeta { get; set; }
-		public string? NotesToPortfolioBeta { get; set; }
+		public string Notes { get; set; } = "";
 
 		public void Verify()
 		{
@@ -35,7 +29,7 @@ namespace FinCalc.DataStructures
 				sumOfBetas += beta * Assets[i].Amount;
 				totalWeight += Assets[i].Amount;
 
-				NotesToPortfolioBeta += note + '\n';
+				Notes += note + '\n';
 			}
 			PortfolioBeta = sumOfBetas / totalWeight;
 		}
@@ -46,19 +40,25 @@ namespace FinCalc.DataStructures
 			double totalWeight = 0;
 			for (int i = 0; i < Assets.Length; i++)
 			{
-				double returns = Calculate.BaseIndicator.AnnualReturn(await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 5));
+				double returns = Calculate.BaseIndicator.AnnualReturn(
+					Calculate.BaseIndicator.Returns(
+						await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 1)));
 				
 				sumOfReturns += returns * Assets[i].Amount;
 				totalWeight += Assets[i].Amount;
 			}
-			PortfolioBeta = sumOfReturns / totalWeight;
+			WeightedAveragePortfolioReturn = sumOfReturns / totalWeight;
 		}
 
 		public async Task CalculateExpectedReturn()
 		{
-			double Rm = Calculate.BaseIndicator.AnnualReturn(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
+			double Rm = Calculate.BaseIndicator.AnnualReturn(
+				Calculate.BaseIndicator.Returns(
+					await MOEXAPI.Get.Prices("index", "IMOEX", 10)));
+			Rm -= 1;		
+			
 			double Rf = MOEXAPI.Get.RiskFreeRate;
-			ExpectedPortfolioReturn = Rf + (Rm - Rf) * PortfolioBeta;
+			ExpectedPortfolioReturn = 1 + Rf + (Rm - Rf) * PortfolioBeta;
 		}
 	}
 }

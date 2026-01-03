@@ -4,7 +4,7 @@ namespace FinCalc.MOEXAPI
 	{
 		private static readonly HttpClient Client = new();
 
-		public static double RiskFreeRate { get; private set; }
+		public static double RiskFreeRate { get; set; }
 	}
 }
 

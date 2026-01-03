@@ -2,37 +2,37 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class GetValues
 	{
-		public static async Task<Dictionary<string, double>> GetReturns(string marketType, string assetSecid, int past_years)
+		public static async Task<Dictionary<string, double>> GetReturns(string marketType, string assetSecid, int pastYears)
         {
-			DateTime period_beginning = DateTime.Today.AddYears(-past_years);
+			DateTime periodBeginning = DateTime.Today.AddYears(-pastYears);
 			
-			string url = $"https://iss.moex.com/iss/engines/stock/markets/shares/securities/{assetSecid}/candles.json?from={period_beginning:yyyy-MM-dd}&interval=7&iss.reverse=true";
+			string url = $"https://iss.moex.com/iss/engines/stock/markets/shares/securities/{assetSecid}/candles.json?from={periodBeginning:yyyy-MM-dd}&interval=7&iss.reverse=true";
 			string response = await HttpClient.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"] ?? throw new Exception("moex api error");
             
 			Dictionary<string, double> result = [];
 			for (int i = 0; i < json.AsArray().Count; i++)
             {
-				double price_change = json[i][1].GetValue<double>() / json[i][0].GetValue<double>();//[1] - close price, [0] - open
+				double priceChange = json[i][1].GetValue<double>() / json[i][0].GetValue<double>();//[1] - close price, [0] - open
 				//[7]end date
-                result[json[i][7].GetValue<string>()] = price_change;
+                result[json[i][7].GetValue<string>()] = priceChange;
             }
 			return result;
         }
 
-		public static async Task<double> GetReturn(string marketType, string assetSecid, int past_years)
+		public static async Task<double> GetReturn(string marketType, string assetSecid, int pastYears)
 		{
 			//search lmited to engine=stock and market=shares
 			string url = $"https://iss.moex.com/iss/engines/stock/markets/shares/securities/{assetSecid}/candles.json?interval=4&iss.reverse=true";
 			string response = await HttpClient.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"] ?? throw new Exception("moex api error");
 
-			double result = CalculateReturn(json, past_years);
+			double result = CalculateReturn(json, pastYears);
 
 			return result;
 		}
 		
-		private static double CalculateReturn(JsonNode json, int past_years)
+		private static double CalculateReturn(JsonNode json, int pastYears)
 		{
 			int daysInYear = DateTime.IsLeapYear(DateTime.Today.Year) ? 366 : 365;
 			int daysElapsed = (DateTime.Today - new DateTime(DateTime.Today.Year, 1, 1)).Days + 1;
@@ -45,12 +45,12 @@ namespace FinCalc.MOEXAPI
 			double totalGrowth = Math.Pow(1 + currentYearPriceChange, daysInYear / daysElapsed) - 1;
 			
 			//CAGR
-			for (int i = 0; i < past_years; i++)
+			for (int i = 0; i < pastYears; i++)
 			{
 				double previousYearPriceChange = json[firstQuarterIndex + 1][1].GetValue<double>() / json[firstQuarterIndex + 4][0].GetValue<double>();
 				totalGrowth *= 1 + previousYearPriceChange;
 			}
-			double cagr = Math.Pow(totalGrowth, 1 / (past_years + 1)) - 1;
+			double cagr = Math.Pow(totalGrowth, 1 / (pastYears + 1)) - 1;
 			
 			return cagr;
 
@@ -80,12 +80,12 @@ namespace FinCalc.MOEXAPI
 			
 			string response = await client.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response);
-			JsonNode? candles_data = json?["candles"]?["data"];
-			double latest_price = candles_data[0][1].GetValue<double>();
-			double year_ago_price = candles_data[3][0].GetValue<double>(); //add handle in case not enough periods
-			double price_change = (latest_price - year_ago_price) / year_ago_price;
+			JsonNode? candlesData = json?["candles"]?["data"];
+			double latestPrice = candlesData[0][1].GetValue<double>();
+			double yearAgoPrice = candlesData[3][0].GetValue<double>(); //add handle in case not enough periods
+			double priceChange = (latestPrice - yearAgoPrice) / yearAgoPrice;
 
-			return price_change;
+			return priceChange;
 		}
 		public static async Task<double> GetReturnOnMarket()
 		{
@@ -95,10 +95,10 @@ namespace FinCalc.MOEXAPI
 			string url = $"https://iss.moex.com/iss/engines/stock/markets/index/securities/IMOEX/candles.json?interval=4&iss.reverse=true&from={oneYearAgo}";
 			string response = await client.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"];
-			double last_value = json[0][1].GetValue<double>(); //close prise in last year
-			double previous_value = json[3][0].GetValue<double>(); //open prise in previous year
+			double lastValue = json[0][1].GetValue<double>(); //close prise in last year
+			double previousValue = json[3][0].GetValue<double>(); //open prise in previous year
 			
-			return last_value / previous_value;
+			return lastValue / previousValue;
 		}
 
 

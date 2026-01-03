@@ -1,8 +1,10 @@
+using FinCalc.DataStructures;
+
 namespace FinCalc.MOEXAPI
 {
 	public static partial class Get
     {
-        public static async Task<Dictionary<string, double>> Prices(string market, string id, int years)
+        public static async Task<HistoricalData> Prices(string market, string id, int years)
         {
             DateTime start = DateTime.Today.AddYears(-years);
 			
@@ -10,11 +12,13 @@ namespace FinCalc.MOEXAPI
 			string response = await Client.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"] ?? throw new UnexpectedMoexResponce(response);
             
-			Dictionary<string, double> result = [];
-			for (int i = 0; i < json.AsArray().Count; i++)
+            int length = json.AsArray().Count;
+			HistoricalData result = new(id, length, 7);
+			for (int i = 0; i < length; i++)
             {
                 //[7] - end date, [1] - close price
-                result[json[i][7].GetValue<string>()] = json[i][1].GetValue<double>();
+                result.Dates[i] = json[i][7].GetValue<string>();
+                result.Values[i] = json[i][1].GetValue<double>();
             }
 			return result;
         }

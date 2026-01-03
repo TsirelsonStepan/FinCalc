@@ -23,19 +23,19 @@ namespace FinCalc.MOEXAPI
 			}
 
 			JsonNode? json = JsonNode.Parse(response);
-			JsonArray companies_data = json["securities"]["data"].AsArray();
-			Asset[] companies = new Asset[companies_data.Count];
+			JsonArray companiesData = json["securities"]["data"].AsArray();
+			Asset[] companies = new Asset[companiesData.Count];
 
-			for (int i = 0; i < companies_data.Count; i++)
+			for (int i = 0; i < companiesData.Count; i++)
 			{
-				JsonArray company_data = companies_data[i].AsArray();
+				JsonArray companyData = companiesData[i].AsArray();
                 Asset company = new()
                 {
-                    Secid = company_data[0].GetValue<string>(),
-                    Shortname = company_data[1].GetValue<string>(),
-                    Name = company_data[3].GetValue<string>(),
-                    //Engine = company_data[11].GetValue<string>().Split('_')[0],
-                    //Market = company_data[11].GetValue<string>().Split('_')[1]
+                    Secid = companyData[0].GetValue<string>(),
+                    Shortname = companyData[1].GetValue<string>(),
+                    Name = companyData[3].GetValue<string>(),
+                    //Engine = companyData[11].GetValue<string>().Split('_')[0],
+                    //Market = companyData[11].GetValue<string>().Split('_')[1]
                 };
                 companies[i] = company;
 			}

@@ -12,9 +12,9 @@ public class CalculatePortfolioController : ControllerBase
     public async Task<IActionResult> CalculatePortfolio([FromBody] Asset[] assets)
     {
         Portfolio portfolio = new(assets);
-        await FinCalc.MOEXAPI.Get.RFRate();
 
         portfolio.Verify();
+        await FinCalc.MOEXAPI.Get.RFRate();
         await portfolio.CalcualteWeightedAverageReturn();
         await portfolio.CalculateBeta();
         await portfolio.CalculateExpectedReturn();
