@@ -4,11 +4,15 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.Strict;
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/", "v1");
+});
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
