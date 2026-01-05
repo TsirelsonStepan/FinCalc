@@ -1,16 +1,33 @@
-/* ---------- Global ---------- */
 body {
     margin: 0;
     padding: 0;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 16px;
     display: flex;
+    flex-direction: column;
     height: 100vh;
-    background-color: #0f172a; /* dark blue background */
+    background-color: #0f172a;
     color: #e5e7eb;
 }
 
-/* ---------- Sidebar ---------- */
+a {
+    color: #38bdf8;
+    text-decoration: none;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+a:hover {
+    background-color: rgba(56, 189, 248, 0.15);
+    text-decoration: underline;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
 .sidebar {
     width: 380px;
     background: #020617;
@@ -19,10 +36,21 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
     gap: 16px;
 }
 
-/* Card-style sections */
+.info {
+    height: 40px;
+    background: #020617;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
 .assets-list,
 .search-section {
     background: #020617;
@@ -34,14 +62,12 @@ body {
     gap: 10px;
 }
 
-/* Labels */
 label {
     font-size: 14px;
     font-weight: 600;
     color: #cbd5f5;
 }
 
-/* ---------- Inputs ---------- */
 .input-field,
 .asset-amount-input {
     padding: 10px;
@@ -64,7 +90,6 @@ label {
     border-color: #38bdf8;
 }
 
-/* ---------- Buttons ---------- */
 button {
     padding: 10px 12px;
     border-radius: 8px;
@@ -87,7 +112,6 @@ button:active {
     box-shadow: none;
 }
 
-/* Small buttons */
 .delete-btn,
 .add-btn {
     padding: 6px 10px;
@@ -100,7 +124,6 @@ button:active {
     background: #334155;
 }
 
-/* ---------- Asset items ---------- */
 .asset-item {
     background: #020617;
     padding: 10px;
@@ -115,24 +138,22 @@ button:active {
     border-color: #38bdf8;
 }
 
-/* ---------- Main content ---------- */
-.main {
+.content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
     padding: 20px;
     gap: 10px;
 }
 
-/* Section header */
-.main > p {
+.content > p {
     font-size: 18px;
     font-weight: 600;
     color: #e5e7eb;
     margin-bottom: 10px;
 }
 
-/* ---------- Groups ---------- */
 .group {
     border-radius: 12px;
     background: #020617;
@@ -149,13 +170,11 @@ button:active {
     border-color: #38bdf8;
 }
 
-/* Group title */
 .group-title {
     flex: 1;
     font-weight: 600;
 }
 
-/* Collapse icon */
 .collapse-icon {
     width: 26px;
     height: 26px;
@@ -173,7 +192,6 @@ button:active {
     transform: rotate(90deg);
 }
 
-/* ---------- Details panel ---------- */
 .details-panel {
     border-radius: 12px;
     border: 1px solid #1e293b;
@@ -183,12 +201,10 @@ button:active {
     gap: 20px;
 }
 
-/* Stats list */
 .stats-list {
     flex: 2;
 }
 
-/* Image holder */
 .graph-holder {
     flex: 1;
     border-radius: 12px;

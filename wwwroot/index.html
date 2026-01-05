@@ -9,23 +9,33 @@
 </head>
 
 <body>
-  <div class="sidebar">
-    <div class="assets-list">
-      <label>Selected assets</label>
-      <button id="calculate-btn">Calculate for this assets</button>
+  <div class="main">
+    <div class="sidebar">
+      <div class="assets-list">
+        <label>Selected assets</label>
+        <button id="calculate-btn">Calculate for this assets</button>
+      </div>
+  
+      <div class="search-section">
+        <label>Search assets</label>
+        <input type="text" id="search-input" class="input-field" placeholder="Type asset name...">
+        <button id="search-btn">Search</button>
+  
+        <div id="search-results"></div>
+      </div>
     </div>
-
-    <div class="search-section">
-      <label>Search assets</label>
-      <input type="text" id="search-input" class="input-field" placeholder="Type asset name...">
-      <button id="search-btn">Search</button>
-
-      <div id="search-results"></div>
+  
+    <div class="content">
+  
     </div>
   </div>
 
-  <div class="main">
-
+  <div class="info">
+    <label>Portfolio Calculator by Stephan Tsirelson (Pet-project)</label>
+    <a href="https://github.com/TsirelsonStepan/FinCalc">This Project</a> | 
+    <a href="https://github.com/TsirelsonStepan">My Github</a> | 
+    <a href="https://www.linkedin.com/in/stephan-tsirelson-046598293/">My LinkedIn</a>
+    
   </div>
   
   <script src="js/toggle_main_groups.js"></script>

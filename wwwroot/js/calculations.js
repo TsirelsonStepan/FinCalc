@@ -18,7 +18,7 @@ function displayCalculations(calculations) {
 	const historicalValues = calculations.portfolioHistoricData;
 	const beta = calculations.portfolioBeta;
 
-	document.querySelector('.main').innerHTML = "";
+	document.querySelector('.content').innerHTML = "";
 	createReturnRatiosGroup(weightedAverageReturn, expectedReturn);
 	createGraphGroup(historicalDates, historicalValues);
 
@@ -39,7 +39,7 @@ function createGraphGroup(dates, values) {
 		</div>
 	</div>`;
 
-	document.querySelector('.main').innerHTML += graphFill;
+	document.querySelector('.content').innerHTML += graphFill;
 	const valuesData = [];
 	values.forEach(value => {
 		valuesData.push({label: value.name, data: [...value.values].reverse()});
@@ -67,7 +67,7 @@ function createReturnRatiosGroup(wAPR, ePR) {
 		</div>
 	</div>`;
 
-	document.querySelector('.main').innerHTML += textFill;
+	document.querySelector('.content').innerHTML += textFill;
 }
 
 calculateButton.addEventListener("click", calculatePortfolio);
