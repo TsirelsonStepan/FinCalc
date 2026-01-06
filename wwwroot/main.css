@@ -51,6 +51,10 @@ a:hover {
     color: #94a3b8;
 }
 
+.info select {
+    margin-left: auto;
+}
+
 .assets-list,
 .search-section {
     background: #020617;
@@ -214,4 +218,29 @@ button:active {
     justify-content: center;
     align-items: center;
     color: #64748b;
+}
+
+.lang-select {
+    background-color: #020617;
+    color: #e5e7eb;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.lang-select:hover {
+    border-color: #38bdf8;
+}
+
+.lang-select:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.lang-select option {
+    background-color: #020617;
+    color: #e5e7eb;
 }

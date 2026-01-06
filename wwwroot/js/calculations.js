@@ -31,7 +31,7 @@ function createGraphGroup(dates, values) {
 	const graphFill = `
 	<div class="group" id="group-historical-data" data-target="details-panel-historical-data">
 		<div class="collapse-icon">▶</div>
-		<div class="group-title">Historical data</div>
+		<div data-i18n="historic_data" class="group-title"></div>
 	</div>
 	<div class="details-panel" id="details-panel-historical-data">
 		<div class="graph-holder">
@@ -40,6 +40,7 @@ function createGraphGroup(dates, values) {
 	</div>`;
 
 	document.querySelector('.content').innerHTML += graphFill;
+	applyTranslations(currentLang, document.querySelector('.content'));
 	const valuesData = [];
 	values.forEach(value => {
 		valuesData.push({label: value.name, data: [...value.values].reverse()});
@@ -58,12 +59,13 @@ function createReturnRatiosGroup(wAPR, ePR) {
 	const textFill = `        
 	<div class="group" id="group-return-ratios" data-target="details-panel-return-ratios">
 		<div class="collapse-icon">▶</div>
-		<div class="group-title">Return ratios</div>
+		<div data-i18n="return_ratios" class="group-title"></div>
 	</div>
 	<div class="details-panel" id="details-panel-return-ratios">
 		<div class="stats-list">
-			<p>Weighted Average Portfolio Return: ${wAPR}</p>
-			<p>Expected Portfolio Return: ${ePR}</p>
+			<span data-i18n="weighted_average_portfolio_return"></span>: ${wAPR}
+			<p></p>
+			<span data-i18n="expected_portfolio_return"></span>: ${ePR}
 		</div>
 	</div>`;
 
