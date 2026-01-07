@@ -1,12 +1,32 @@
 namespace FinCalc.DataStructures
 {
-	public readonly struct HistoricData(string name, int length, int interval)
+	public readonly struct HistoricData()
     {
-		public string Name { get; } = name;
-		public string[] Dates { get; } = new string[length];
-		public double[] Values { get; } = new double[length];
-		public int Interval { get; } = interval; //in days
-		public int Length { get; } = length;
+		public string Name { get; }
+		public string[] Dates { get; }
+		public double[] Values { get; }
+		public int Interval { get; }
+		public int Length { get; }
+		public HistoricData(string name, int length, int interval) : this()
+		{
+			Name = name;
+			Interval = interval; //in days
+			Length = length;
+			Dates = new string[length];
+			Values = new double[length];
+		}
+
+		public HistoricData(string name, int length, int interval, string[] dates, double[] values) : this()
+		{
+			if (dates == null || dates.Length == 0 || values == null || values.Length == 0) throw new Exception("Attempt to copy zero array in constructor");
+			Name = name;
+			Interval = interval; //in days
+			Length = length;
+			Dates = new string[length];
+			Values = new double[length];
+			dates.CopyTo(Dates, 0);
+			values.CopyTo(Values, 0);
+		}
 
 		public HistoricData FillMissing(string[] newDates)
 		{

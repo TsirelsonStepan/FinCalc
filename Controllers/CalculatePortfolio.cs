@@ -16,6 +16,7 @@ public class CalculatePortfolioController : ControllerBase
         portfolio.Verify();
         await FinCalc.MOEXAPI.Get.RFRate();
         await portfolio.CalculatePriceHistory();
+        portfolio.CalculateHistoricAveragePrice();
         await portfolio.CalcualteWeightedAverageReturn();
         await portfolio.CalculateBeta();
         await portfolio.CalculateExpectedReturn();

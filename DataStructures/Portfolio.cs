@@ -9,6 +9,7 @@ namespace FinCalc.DataStructures
 		public double? PortfolioVariance { get; set; }
 		public double? PortfolioBeta { get; set; }
 		public HistoricData[] PortfolioHistoricData { get; set; } = [];
+		public HistoricData PortfolioAverageHistoricData { get; set; }
 		public string Notes { get; set; } = "";
 
 		public void Verify()
@@ -27,6 +28,11 @@ namespace FinCalc.DataStructures
 				assetsHistoricData[i] = await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 1);
 			}
 			PortfolioHistoricData = assetsHistoricData;
+		}
+
+		public void CalculateHistoricAveragePrice()
+		{
+			PortfolioAverageHistoricData = Calculate.BaseIndicator.HistoricAveragePrice(PortfolioHistoricData);
 		}
 
 		public async Task CalculateBeta()
