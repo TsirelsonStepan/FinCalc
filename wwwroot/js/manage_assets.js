@@ -10,8 +10,7 @@ function addAsset(asset) {
 
 	item.innerHTML = `
 		<span>${asset.shortname}</span>
-		<input type="number"
-			class="asset-amount-input">
+		<input type="number" class="asset-amount-input">
 		<span>rub.</span>
 		<button class="delete-btn">X</button>
 	`;

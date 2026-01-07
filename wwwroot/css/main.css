@@ -22,76 +22,10 @@ a:hover {
     text-decoration: underline;
 }
 
-.main {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-}
-
-.sidebar {
-    width: 380px;
-    background: #020617;
-    border-right: 1px solid #1e293b;
-    padding: 16px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    gap: 16px;
-}
-
-.info {
-    height: 40px;
-    background: #020617;
-    border-top: 1px solid #1e293b;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    font-size: 16px;
-    color: #94a3b8;
-}
-
-.info select {
-    margin-left: auto;
-}
-
-.assets-list,
-.search-section {
-    background: #020617;
-    border: 1px solid #1e293b;
-    border-radius: 12px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 label {
     font-size: 14px;
     font-weight: 600;
     color: #cbd5f5;
-}
-
-.input-field,
-.asset-amount-input {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    background: #020617;
-    color: #e5e7eb;
-    caret-color: #38bdf8;
-}
-
-.input-field::placeholder {
-    color: #64748b;
-}
-
-.input-field:focus,
-.asset-amount-input:focus {
-    outline: none;
-    border-color: #38bdf8;
 }
 
 button {
@@ -116,30 +50,10 @@ button:active {
     box-shadow: none;
 }
 
-.delete-btn,
-.add-btn {
-    padding: 6px 10px;
-    background: #1e293b;
-    border: 1px solid #334155;
-}
-
-.delete-btn:hover,
-.add-btn:hover {
-    background: #334155;
-}
-
-.asset-item {
-    background: #020617;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    cursor: pointer;
-    transition: background 0.1s ease, border-color 0.1s ease;
-}
-
-.asset-item:hover {
-    background: #020617;
-    border-color: #38bdf8;
+.main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
 }
 
 .content {
@@ -220,27 +134,29 @@ button:active {
     color: #64748b;
 }
 
-.lang-select {
-    background-color: #020617;
-    color: #e5e7eb;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 14px;
-    cursor: pointer;
+.info {
+    height: 40px;
+    background: #020617;
+    border-top: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 16px;
+    color: #94a3b8;
 }
 
-.lang-select:hover {
-    border-color: #38bdf8;
+.info select {
+    margin-left: auto;
 }
 
-.lang-select:focus {
-    outline: none;
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-.lang-select option {
-    background-color: #020617;
-    color: #e5e7eb;
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }

@@ -34,6 +34,11 @@ function renderSearchResults(assets) {
 		item.innerHTML = `
 			<span>${asset.shortname}</span>
 			<button class="add-btn">Add</button>
+			<span class="tooltip">ℹ️
+				<span class="tooltip-text">
+					${asset.description}
+				</span>
+			</span>
 		`;
 
 		item.querySelector(".add-btn").addEventListener("click", () => {

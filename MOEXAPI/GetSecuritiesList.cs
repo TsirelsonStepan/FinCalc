@@ -34,6 +34,7 @@ namespace FinCalc.MOEXAPI
                     Secid = companyData[0].GetValue<string>(),
                     Shortname = companyData[1].GetValue<string>(),
                     Name = companyData[3].GetValue<string>(),
+					Description = companyData[7].GetValue<string>(),
                     //Engine = companyData[11].GetValue<string>().Split('_')[0],
                     //Market = companyData[11].GetValue<string>().Split('_')[1]
                 };
