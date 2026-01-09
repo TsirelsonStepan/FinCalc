@@ -6,9 +6,10 @@ namespace FinCalc.MOEXAPI
     {
         public static async Task<HistoricData> Prices(string market, string id, int years)
         {
+            int interval = 7;
             DateTime start = DateTime.Today.AddYears(-years);
 			
-			string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{id}/candles.json?from={start:yyyy-MM-dd}&interval=7&iss.reverse=true";
+			string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{id}/candles.json?from={start:yyyy-MM-dd}&interval={interval}&iss.reverse=true";
 			string response = await Client.GetStringAsync(url);
 			JsonNode? json = JsonNode.Parse(response)["candles"]["data"] ?? throw new UnexpectedMoexResponce(response);
             

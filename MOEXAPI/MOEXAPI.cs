@@ -3,8 +3,6 @@ namespace FinCalc.MOEXAPI
 	public static partial class Get
 	{
 		private static readonly HttpClient Client = new();
-
-		public static double RiskFreeRate { get; set; }
 	}
 }
 

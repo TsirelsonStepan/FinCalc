@@ -2,12 +2,15 @@ namespace FinCalc.DataStructures
 {	
 	public partial class Portfolio(Asset[] _assets)
 	{
-		Asset[] Assets { get; set; } = _assets;
+		private Asset[] Assets { get; } = _assets;
 
 		public double? WeightedAveragePortfolioReturn { get; set; }
 		public double? ExpectedPortfolioReturn { get; set; }
 		public double? PortfolioVariance { get; set; }
 		public double? PortfolioBeta { get; set; }
+
+		public double RiskFreeRate { get; private set; }
+		public HistoricData BenchmarkHistoricData { get; private set; }
 		public HistoricData[] PortfolioHistoricData { get; set; } = [];
 		public HistoricData PortfolioAverageHistoricData { get; set; }
 		public string Notes { get; set; } = "";
@@ -18,6 +21,15 @@ namespace FinCalc.DataStructures
 			double totalAmount = 0;
 			foreach (Asset asset in Assets) totalAmount += asset.Amount;
 			if (totalAmount <= 0) throw new PortfolioSizeIsZero();
+		}
+
+		public async Task AssignBenchmark(string market, string name)
+		{
+			BenchmarkHistoricData = await MOEXAPI.Get.Prices(market, name, 1);
+		}
+		public async Task SetRiskFreeRate()
+		{
+			RiskFreeRate = await MOEXAPI.Get.RFRate();
 		}
 
 		public async Task CalculatePriceHistory()
@@ -32,7 +44,7 @@ namespace FinCalc.DataStructures
 
 		public void CalculateHistoricAveragePrice()
 		{
-			PortfolioAverageHistoricData = Calculate.BaseIndicator.HistoricAveragePrice(PortfolioHistoricData);
+			PortfolioAverageHistoricData = Calculate.BaseIndicator.HistoricAveragePrice(Assets, PortfolioHistoricData, BenchmarkHistoricData);
 		}
 
 		public async Task CalculateBeta()
@@ -74,8 +86,7 @@ namespace FinCalc.DataStructures
 					await MOEXAPI.Get.Prices("index", "IMOEX", 10)));
 			Rm -= 1;		
 			
-			double Rf = MOEXAPI.Get.RiskFreeRate;
-			ExpectedPortfolioReturn = 1 + Rf + (Rm - Rf) * PortfolioBeta;
+			ExpectedPortfolioReturn = 1 + RiskFreeRate + (Rm - RiskFreeRate) * PortfolioBeta;
 		}
 	}
 }

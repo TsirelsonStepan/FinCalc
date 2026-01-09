@@ -14,20 +14,19 @@ async function calculatePortfolio() {
 function displayCalculations(calculations) {
 	const weightedAverageReturn = ((calculations.weightedAveragePortfolioReturn - 1) * 100).toFixed(2) + "%";
 	const expectedReturn = ((calculations.expectedPortfolioReturn - 1) * 100).toFixed(2) + "%";
-	const historicalDates = calculations.portfolioAverageHistoricData.dates;
-	const historicalValues = calculations.portfolioAverageHistoricData.values;
+	const historicData = calculations.portfolioAverageHistoricData;
 	const beta = calculations.portfolioBeta;
 
 	document.querySelector('.content').innerHTML = "";
 	createReturnRatiosGroup(weightedAverageReturn, expectedReturn);
-	createGraphGroup(historicalDates, historicalValues);
+	createGraphGroup(historicData);
 
 	Array.from(document.getElementsByClassName('group')).forEach(group => {
 		group.addEventListener('click', () => manageGroups(group));
 	});
 }
 
-function createGraphGroup(dates, values) {
+function createGraphGroup(data) {
 	const graphFill = `
 	<div class="group" id="group-historical-data" data-target="details-panel-historical-data">
 		<div class="collapse-icon">▶</div>
@@ -49,8 +48,8 @@ function createGraphGroup(dates, values) {
 	new Chart("myChart", {
 		type: "line",
 		data: {
-			labels: [...dates].reverse(),
-			datasets: [{ label: values.name, data: [...values].reverse() }]//Data
+			labels: [...data.dates].reverse(),
+			datasets: [{ label: data.name, data: [...data.values].reverse() }]//Data
 		}
 	});
 }

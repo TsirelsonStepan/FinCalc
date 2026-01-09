@@ -2,9 +2,9 @@ namespace FinCalc.DataStructures
 {
 	public readonly struct HistoricData()
     {
-		public string Name { get; }
-		public string[] Dates { get; }
-		public double[] Values { get; }
+		public string Name { get; } = "";
+		public string[] Dates { get; } = [];
+		public double[] Values { get; } = [];
 		public int Interval { get; }
 		public int Length { get; }
 		public HistoricData(string name, int length, int interval) : this()

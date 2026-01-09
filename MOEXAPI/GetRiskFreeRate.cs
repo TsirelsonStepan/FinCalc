@@ -2,13 +2,13 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class Get
 	{
-		public static async Task RFRate()
+		public static async Task<double> RFRate()
         {
 			string url = $"https://iss.moex.com/iss/engines/stock/zcyc.json";
 			string response = await Client.GetStringAsync(url);
 			//[3] selects 1-year maturity, [3] selects value ([2] - maturity in years, [0] and [1]  date and time)
 			double result = JsonNode.Parse(response)["yearyields"]["data"][3][3].GetValue<double>() / 100;
-			RiskFreeRate =  result;
+			return result;
         }
 	}
 }
