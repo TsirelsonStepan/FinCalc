@@ -30,10 +30,6 @@ const translations = {
     },
 };
 
-function getBrowserLanguage() {
-    return navigator.language.split("-")[0];
-}
-
 function applyTranslations(lang, root = document) {
     const dict = translations[lang] || translations.en;
 
@@ -50,5 +46,5 @@ document.getElementById("lang-select").addEventListener("change", e => {
     localStorage.setItem("lang", e.target.value);
 });
 
-let currentLang = localStorage.getItem("lang") || getBrowserLanguage();
+let currentLang = localStorage.getItem("lang");
 applyTranslations(currentLang);

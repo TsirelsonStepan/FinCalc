@@ -9,10 +9,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/", "v1");
-});
+app.UseSwaggerUI();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
