@@ -6,12 +6,19 @@ const translations = {
         search: "Search",
         historic_data: "Historic Data",
         return_ratios: "Return Ratios",
+        no_search_query_mes: "Please enter search query",
+        only_one_symbol_query_mes: "Query should contain at least 2 simbols",
+        searching_mes: "Searching...",
+        searching_error_mes: "Error loading results",
+        searching_no_assets_mes: "No assets found",
         weighted_average_portfolio_return: "Weighted Average Portfolio Return",
         expected_portfolio_return: "Expected Portfolio Return",
         info_label: "Portfolio Calculator by Stephan Tsirelson (Pet-project)",
         this_project: "This Project",
         my_github: "My Github",
-        my_linkedin: "My Linkedin"
+        my_linkedin: "My Linkedin",
+        my_cv: "My CV",
+
     },
 
     ru: {
@@ -21,17 +28,25 @@ const translations = {
         search: "Поиск",
         historic_data: "Исторические Значения",
         return_ratios: "Показатели Доходности",
+        no_search_query_mes: "Введите поисковой запрос",
+        only_one_symbol_query_mes: "Поисковой запрос должен содержать минимум 2 символа",
+        searching_mes: "Поиск...",
+        searching_error_mes: "Ошибка при выгрузке результатов",
+        searching_no_assets_mes: "По данному запросу ничего не найдено",
         weighted_average_portfolio_return: "Средневзвешенная Доходность Портфеля",
         expected_portfolio_return: "Ожидаемая Доходность Портфеля",        
         info_label: "Финансовый Калькулятор Инвестиционного Портфеля",
         this_project: "Этот Проект",
         my_github: "Мой Github",
-        my_linkedin: "Мой Linkedin"
+        my_linkedin: "Мой Linkedin",
+        my_cv: "Моё резюме"
     },
 };
 
-function applyTranslations(lang, root = document) {
-    const dict = translations[lang] || translations.en;
+function applyTranslations(root = document) {
+    const lang = localStorage.getItem("lang");
+    const dict = translations[lang];
+    document.getElementById("lang-select").value = lang;
 
     root.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
@@ -42,9 +57,8 @@ function applyTranslations(lang, root = document) {
 }
 
 document.getElementById("lang-select").addEventListener("change", e => {
-    applyTranslations(e.target.value);
     localStorage.setItem("lang", e.target.value);
+    applyTranslations();
 });
 
-let currentLang = localStorage.getItem("lang");
-applyTranslations(currentLang);
+applyTranslations();

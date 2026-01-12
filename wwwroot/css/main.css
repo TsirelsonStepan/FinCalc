@@ -54,6 +54,7 @@ button:active {
     flex: 1;
     display: flex;
     overflow: hidden;
+    height: 96%;
 }
 
 .content {
@@ -135,7 +136,7 @@ button:active {
 }
 
 .info {
-    height: 40px;
+    height: 4%;
     background: #020617;
     border-top: 1px solid #1e293b;
     display: flex;

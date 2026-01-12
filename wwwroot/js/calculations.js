@@ -1,4 +1,5 @@
 const calculateButton = document.getElementById("calculate-btn");
+const content = document.querySelector('.content');
 
 async function calculatePortfolio() {
 	const response = await fetch("/calculatePortfolio", {
@@ -12,12 +13,11 @@ async function calculatePortfolio() {
 }
 
 function displayCalculations(calculations) {
-	const weightedAverageReturn = ((calculations.weightedAveragePortfolioReturn - 1) * 100).toFixed(2) + "%";
-	const expectedReturn = ((calculations.expectedPortfolioReturn - 1) * 100).toFixed(2) + "%";
+	const weightedAverageReturn = calculations.weightedAveragePortfolioReturn;
+	const expectedReturn = calculations.expectedPortfolioReturn;
 	const historicData = calculations.portfolioAverageHistoricData;
-	const beta = calculations.portfolioBeta;
-
-	document.querySelector('.content').innerHTML = "";
+	
+	content.innerHTML = "";
 	createReturnRatiosGroup(weightedAverageReturn, expectedReturn);
 	createGraphGroup(historicData);
 
@@ -27,48 +27,34 @@ function displayCalculations(calculations) {
 }
 
 function createGraphGroup(data) {
-	const graphFill = `
-	<div class="group" id="group-historical-data" data-target="details-panel-historical-data">
-		<div class="collapse-icon">▶</div>
-		<div data-i18n="historic_data" class="group-title"></div>
-	</div>
-	<div class="details-panel" id="details-panel-historical-data">
-		<div class="graph-holder">
-			<canvas id="myChart"></canvas>
-		</div>
-	</div>`;
+	const wrapper = document.createElement("div");
+	wrapper.innerHTML = Templates.graph_group;
+	content.appendChild(wrapper);
+	applyTranslations(wrapper);
 
-	document.querySelector('.content').innerHTML += graphFill;
-	applyTranslations(currentLang, document.querySelector('.content'));
 	//const valuesData = [];
 	//values.forEach(value => {
 	//	valuesData.push({label: value.name, data: [...value.values].reverse()});
 	//});
 
-	new Chart("myChart", {
+	new Chart("chart-1", {
 		type: "line",
 		data: {
 			labels: [...data.dates].reverse(),
-			datasets: [{ label: data.name, data: [...data.values].reverse() }]//Data
+			datasets: [{ label: data.name, data: [...data.values].reverse() }]
 		}
 	});
 }
 
-function createReturnRatiosGroup(wAPR, ePR) {
-	const textFill = `        
-	<div class="group" id="group-return-ratios" data-target="details-panel-return-ratios">
-		<div class="collapse-icon">▶</div>
-		<div data-i18n="return_ratios" class="group-title"></div>
-	</div>
-	<div class="details-panel" id="details-panel-return-ratios">
-		<div class="stats-list">
-			<span data-i18n="weighted_average_portfolio_return"></span>: ${wAPR}
-			<p></p>
-			<span data-i18n="expected_portfolio_return"></span>: ${ePR}
-		</div>
-	</div>`;
+function createReturnRatiosGroup(weightedAveragePortfolioReturn, expectedPortfolioReturn) {
+	const wrapper = document.createElement("div");
+	wrapper.innerHTML = Templates.return_ratios_group;
 
-	document.querySelector('.content').innerHTML += textFill;
+	wrapper.querySelector("#wAPR").textContent = ((weightedAveragePortfolioReturn - 1) * 100).toFixed(2) + "%";
+	wrapper.querySelector("#ePR").textContent = ((expectedPortfolioReturn - 1) * 100).toFixed(2) + "%";
+
+	content.appendChild(wrapper);
+	applyTranslations(wrapper);
 }
 
 calculateButton.addEventListener("click", calculatePortfolio);

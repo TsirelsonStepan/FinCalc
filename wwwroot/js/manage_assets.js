@@ -1,33 +1,27 @@
-const assetsList = document.getElementsByClassName("assets-list")[0];
+const assetsList = document.getElementById("selected-assets");
 var selectedAssets = [];
 
 function addAsset(asset) {
 	if (selectedAssets.includes(asset)) return;
-	const item = document.createElement("div");
-	item.classList.add("asset-item");
-	item.id = asset.secid;
 	asset.amount = 0;
+	const wrapper = document.createElement("div");
+	wrapper.className = "selected-asset-item";
+	wrapper.innerHTML = Templates.selected_asset_item;
 
-	item.innerHTML = `
-		<span>${asset.shortname}</span>
-		<input type="number" class="asset-amount-input">
-		<span>rub.</span>
-		<button class="delete-btn">X</button>
-	`;
+	wrapper.querySelector("#short_name").textContent = asset.shortname;
 
-	const amountInput = item.querySelector(".asset-amount-input");
-
+	const amountInput = wrapper.querySelector(".asset-amount-input");
 	amountInput.addEventListener("input", () => {
 		const amount = amountInput.value.trim();
 		if (amount === "") asset.amount = 0;
 		else asset.amount = parseInt(amount);
 	});
 
-	item.querySelector(".delete-btn").addEventListener("click", () => {
+	wrapper.querySelector(".delete-btn").addEventListener("click", () => {
 		selectedAssets = selectedAssets.filter(x => x != asset);
-		item.remove();
+		wrapper.remove();
 	});
 
 	selectedAssets.push(asset);
-	assetsList.appendChild(item);
+	assetsList.appendChild(wrapper);
 }

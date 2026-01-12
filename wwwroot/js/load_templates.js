@@ -1,0 +1,16 @@
+const Templates = {};
+
+async function loadTemplates() {
+	Templates["graph_group"] = await fetch("/templates/graph_group.html").then(res => res.text());
+	Templates["return_ratios_group"] = await fetch("/templates/return_ratios_group.html").then(res => res.text());
+	Templates["selected_asset_item"] = await fetch("/templates/selected_asset_item.html").then(res => res.text());
+	Templates["search_result_item"] = await fetch("/templates/search_result_item.html").then(res => res.text());
+}
+loadTemplates();
+
+function loadFiles() {
+	var cv_file = "/files/Stephan Tsirelson. CV.pdf";
+	if (localStorage.getItem("lang") === "ru") cv_file = "/files/Цирельсон Степан. CV.pdf";
+	document.getElementById("cv_file").href = cv_file;
+}
+loadFiles();

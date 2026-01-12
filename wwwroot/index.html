@@ -16,32 +16,31 @@
 <body>
   <div class="main">
     <div class="sidebar">
+      <div class="assets-search">
+        <label data-i18n="search_assets"></label>
+        <input type="text" id="assets-search-input" placeholder="...">
+        <button data-i18n="search" id="search-btn"></button>
+  
+        <div id="search-results" class="scroll-box"></div>
+      </div>
+
       <div class="assets-list">
         <label data-i18n="selected_assets"></label>
         <button data-i18n="calculate_for_this_assets" id="calculate-btn"></button>
-      </div>
-  
-      <div class="search-section">
-        <label data-i18n="search_assets"></label>
-        <input type="text" id="search-input" class="input-field" placeholder="Type asset name...">
-        <button data-i18n="search" id="search-btn"></button>
-  
-        <div id="search-results">
-
-        </div>
+        
+        <div id="selected-assets" class="scroll-box"></div>
       </div>
     </div>
   
-    <div class="content">
-  
-    </div>
+    <div class="content"></div>
   </div>
 
   <div class="info">
     <label data-i18n="info_label"></label>
     <a data-i18n="this_project" href="https://github.com/TsirelsonStepan/FinCalc"></a> | 
     <a data-i18n="my_github" href="https://github.com/TsirelsonStepan"></a> | 
-    <a data-i18n="my_linkedin" href="https://www.linkedin.com/in/stephan-tsirelson-046598293/"></a>
+    <a data-i18n="my_linkedin" href="https://www.linkedin.com/in/stephan-tsirelson-046598293/"></a> |
+    <a data-i18n="my_cv" id="cv_file"></a>
     
     <select id="lang-select" class="lang-select">
       <option value="en">EN</option>
@@ -49,7 +48,9 @@
     </select>
   </div>
   
+  <script src="js/load_templates.js"></script>
   <script src="js/i18n.js"></script>
+
   <script src="js/toggle_main_groups.js"></script>
   <script src="js/search_assets.js"></script>
   <script src="js/manage_assets.js"></script>
