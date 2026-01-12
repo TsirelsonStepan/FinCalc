@@ -1,0 +1,7 @@
+services:
+  fincalc:
+    image: fincalc-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./wwwroot:/app/wwwroot
