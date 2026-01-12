@@ -57,7 +57,7 @@ input:focus {
 .search-result-item,
 .selected-asset-item {
     display: grid;
-    grid-template-columns: 48% 20% 20% 10%;
+    grid-template-columns: 48% 40% 10%;
     justify-content: center;
     column-gap: 1%;
 }
