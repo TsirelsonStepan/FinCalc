@@ -5,6 +5,9 @@ async function loadTemplates() {
 	Templates["return_ratios_group"] = await fetch("/templates/return_ratios_group.html").then(res => res.text());
 	Templates["selected_asset_item"] = await fetch("/templates/selected_asset_item.html").then(res => res.text());
 	Templates["search_result_item"] = await fetch("/templates/search_result_item.html").then(res => res.text());
+	
+	document.querySelector(".content").innerHTML = await fetch("/templates/initial_content_screen.html").then(res => res.text());
+	applyTranslations();
 }
 loadTemplates();
 
