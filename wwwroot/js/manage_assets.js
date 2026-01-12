@@ -20,7 +20,7 @@ function addAsset(newAsset) {
 	wrapper.className = "selected-asset-item";
 	wrapper.innerHTML = Templates.selected_asset_item;
 
-	wrapper.querySelector("#short_name").textContent = newAsset.shortname;
+	wrapper.querySelector("#shortname").textContent = newAsset.shortname;
 
 	const amountInput = wrapper.querySelector(".asset-amount-input");
 	amountInput.addEventListener("input", () => {

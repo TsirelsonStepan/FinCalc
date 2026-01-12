@@ -1,0 +1,42 @@
+{
+	"selected_assets": "Selected assets",
+	"calculate_for_this_assets": "Calculate for these assets",
+	"search_assets": "Search Assets",
+	"search": "Search",
+
+	"historic_data": "Historic Data",
+	"return_ratios": "Return Ratios",
+
+	"no_search_query_mes": "Please enter search query",
+	"only_one_symbol_query_mes": "Query should contain at least 2 simbols",
+	"searching_mes": "Searching...",
+	"searching_error_mes": "Error loading results",
+	"searching_no_assets_mes": "No assets found",
+
+	"weighted_average_portfolio_return": "Weighted Average Portfolio Return",
+	"expected_portfolio_return": "Expected Portfolio Return",
+
+	"info_label": "Portfolio Calculator by Stephan Tsirelson (Pet-project)",
+	"this_project": "This Project",
+	"my_github": "My Github",
+	"my_linkedin": "My Linkedin",
+	"my_cv": "My CV",
+
+	"intro_title": "Welcome To Portfolio Calculator",
+	"intro_lead": "This tool helps you build an asset portfolio and calculate financial metrics based on historical data.",
+	"intro_footer": "Start by searching for assets on the left.",
+
+	"intro_search_title": "1. Search assets",
+	"intro_search_text": "Use the left panel to search for financial instruments by name or ticker. Click 'Add' to include them in your portfolio.",
+
+	"intro_list_title": "2. Selected assets",
+	"intro_list_text": "Selected assets appear below. Adjust quantities and click 'Calculate' to see portfolio statistics and charts.",
+
+	"selected_items_header_name": "name",
+	"selected_items_header_input": "amount",
+
+	"chart_description_1": "This chart presents total value of the portfolio (the sum of the most recent close price for each asset multiplied by respective amount). The interval of datapoints is 1 week and period presented is exactly one year (or 52 weeks) preceding latest available datapoint",
+
+	"weighted_average_portfolio_return_description": "Calculated as average of annualized weekly returns on each asset for the last year, weighted by their value in respective time periods.",
+	"expected_portfolio_return_description": "Calculated using CAPM, where market premium (for IMOEX) is calculated based on 10-year period of consecutive weekly returns, that where then averaged using geometric compounding and annualized.\nBeta coefficient was calcualted similarly, using weekly returns on portfolio assets for the last 5 years. Weighted average of each asset beta comprised portfolio beta.\n Risk free rate was taken from CBR as YTM of government zero-coupon bonds with 1-year maturity."
+}

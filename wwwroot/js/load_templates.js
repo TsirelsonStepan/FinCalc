@@ -15,6 +15,6 @@ loadTemplates();
 function loadFiles() {
 	var cv_file = "/files/Stephan Tsirelson. CV.pdf";
 	if (localStorage.getItem("lang") === "ru") cv_file = "/files/Цирельсон Степан. CV.pdf";
-	document.getElementById("cv_file").href = cv_file;
+	document.getElementById("cv-file").href = cv_file;
 }
 loadFiles();

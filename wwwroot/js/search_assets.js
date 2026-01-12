@@ -41,7 +41,7 @@ function renderSearchResults(assets) {
 		const wrapper = document.createElement("div");
 		wrapper.className = "search-result-item";
 		wrapper.innerHTML = Templates.search_result_item;
-		wrapper.querySelector("#short_name").textContent = asset.shortname;
+		wrapper.querySelector("#shortname").textContent = asset.shortname;
 		//wrapper.querySelector("#secid").textContent = asset.secid;
 		
 		wrapper.querySelector(".add-btn").addEventListener("click", () => {
