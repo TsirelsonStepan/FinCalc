@@ -32,6 +32,9 @@ const translations = {
 
         intro_list_title: "2. Selected assets",
         intro_list_text: "Selected assets appear below. Adjust quantities and click 'Calculate' to see portfolio statistics and charts.",
+
+        selected_items_header_name: "name",
+        selected_items_header_input: "amount",
     },
 
     ru: {
@@ -58,15 +61,18 @@ const translations = {
         my_linkedin: "Мой Linkedin",
         my_cv: "Моё резюме",
 
-        intro_title: "Добро пожаловать в Калькулятор Инвстиционного Портфеля",
+        intro_title: "Добро пожаловать в Калькулятор Инвестиционного Портфеля",
         intro_lead: "Этот инструмент поможет вам создать портфель активов и рассчитать финансовые показатели на основе исторических данных.",
         intro_footer: "Начните с поиска активов слева.",
 
         intro_search_title: "1. Поиск активов",
-        intro_search_text: "Используйте левую панель для поиска финансовых инструментов по названию или тикеру. Нажмите '+', чтобы включить их в свой портфель.",
+        intro_search_text: "Используйте левую верхнюю панель для поиска финансовых инструментов по названию или тикеру. Нажмите '+', чтобы включить их в свой портфель.",
 
         intro_list_title: "2. Выбранные активы",
-        intro_list_text: "Выбранные активы отображаются ниже. Отрегулируйте количество и нажмите 'Рассчитать', чтобы увидеть статистику и графики портфеля.",
+        intro_list_text: "Выбранные активы отображаются слева внизу. Отрегулируйте их количество и нажмите 'Рассчитать', чтобы увидеть статистику и графики портфеля.",
+
+        selected_items_header_name: "название",
+        selected_items_header_input: "шт.",
     },
 };
 

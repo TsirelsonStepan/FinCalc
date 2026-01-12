@@ -29,15 +29,14 @@ namespace FinCalc.MOEXAPI
 			for (int i = 0; i < companiesData.Count; i++)
 			{
 				JsonArray companyData = companiesData[i].AsArray();
-                Asset company = new()
-                {
-                    Secid = companyData[0].GetValue<string>(),
-                    Shortname = companyData[1].GetValue<string>(),
-                    Name = companyData[3].GetValue<string>(),
-					Description = companyData[7].GetValue<string>(),
+                Asset company = new(
+                    companyData[0].GetValue<string>(), //secid
+                    companyData[1].GetValue<string>(), //shortname
+                    companyData[3].GetValue<string>(), //name
+					companyData[7].GetValue<string>() //description
                     //Engine = companyData[11].GetValue<string>().Split('_')[0],
                     //Market = companyData[11].GetValue<string>().Split('_')[1]
-                };
+				);
                 companies[i] = company;
 			}
 

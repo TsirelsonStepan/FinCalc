@@ -1,13 +1,14 @@
 namespace FinCalc.DataStructures
 {
-	public readonly struct HistoricData()
+	public class HistoricData
     {
 		public string Name { get; } = "";
 		public string[] Dates { get; } = [];
 		public double[] Values { get; } = [];
-		public int Interval { get; }
-		public int Length { get; }
-		public HistoricData(string name, int length, int interval) : this()
+		public int Interval { get; } = 0;
+		public int Length { get; } = 0;
+
+		public HistoricData(string name, int length, int interval)
 		{
 			Name = name;
 			Interval = interval; //in days
@@ -16,14 +17,9 @@ namespace FinCalc.DataStructures
 			Values = new double[length];
 		}
 
-		public HistoricData(string name, int length, int interval, string[] dates, double[] values) : this()
+		public HistoricData(string name, int length, int interval, string[] dates, double[] values) : this(name, length, interval)
 		{
 			if (dates == null || dates.Length == 0 || values == null || values.Length == 0) throw new Exception("Attempt to copy zero array in constructor");
-			Name = name;
-			Interval = interval; //in days
-			Length = length;
-			Dates = new string[length];
-			Values = new double[length];
 			dates.CopyTo(Dates, 0);
 			values.CopyTo(Values, 0);
 		}

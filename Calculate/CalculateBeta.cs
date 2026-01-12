@@ -4,16 +4,13 @@ namespace FinCalc.Calculate
 {
 	public partial class BaseIndicator
 	{
-		public static async Task<(double, string)> Beta(string id)
+		static async Task<double> Beta(string id)
         {
-            string note = "";
-
             HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
             HistoricData returns = Returns(await MOEXAPI.Get.Prices("shares", id, 5));
             if (marketReturns.Length != returns.Length)
             {
                 returns = returns.FillMissing(marketReturns.Dates);
-                note = $"The set of prices for {id} was incomplete, some values were extrapolated";
             }
 
             double meanReturn = returns.Values.Average();
@@ -33,7 +30,21 @@ namespace FinCalc.Calculate
             double slope = sumXY / sumXX;
             //double intercept = meanMarketReturn - slope * meanReturn;
 
-            return (slope, note);
+            return slope;
+        }
+
+        public static async Task<double> PortfolioBeta(AssetInPortfolio[] assets)
+        {
+			double sumOfBetas = 0;
+			double totalWeight = 0;
+			for (int i = 0; i < assets.Length; i++)
+			{
+				double beta = await Beta(assets[i].Asset.Secid);
+				
+				sumOfBetas += beta * assets[i].Amount;
+				totalWeight += assets[i].Amount;
+			}
+			return sumOfBetas / totalWeight;
         }
 	}
 }

@@ -5,7 +5,7 @@ async function calculatePortfolio() {
 	const response = await fetch("/calculatePortfolio", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(selectedAssets),
+		body: JSON.stringify(selectedArr),
 	});
 	if (!response.ok) throw new Error(response.status);
 	const calculations = await response.json();

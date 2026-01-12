@@ -1,27 +1,42 @@
-const assetsList = document.getElementById("selected-assets");
-var selectedAssets = [];
+const selectedAssets = document.getElementById("selected-assets");
+const assetsList = selectedAssets.parentElement;
+var selectedArr = [];
 
-function addAsset(asset) {
-	if (selectedAssets.includes(asset)) return;
-	asset.amount = 0;
+function addAsset(newAsset) {
+	selectedArr.forEach(element => {
+		if (element.asset === newAsset) return;
+	});
+	const assetInPortfolio = { asset: newAsset, amount: 0 };
+
+	if (selectedArr.length === 0) {
+		const topRaw = document.createElement("div");
+		topRaw.className = "selected-asset-item";
+		topRaw.innerHTML = Templates.selected_items_header;
+		applyTranslations(topRaw);
+		assetsList.insertBefore(topRaw, selectedAssets);
+	}
+
 	const wrapper = document.createElement("div");
 	wrapper.className = "selected-asset-item";
 	wrapper.innerHTML = Templates.selected_asset_item;
 
-	wrapper.querySelector("#short_name").textContent = asset.shortname;
+	wrapper.querySelector("#short_name").textContent = newAsset.shortname;
 
 	const amountInput = wrapper.querySelector(".asset-amount-input");
 	amountInput.addEventListener("input", () => {
 		const amount = amountInput.value.trim();
-		if (amount === "") asset.amount = 0;
-		else asset.amount = parseInt(amount);
+		if (amount === "") assetInPortfolio.amount = 0;
+		else assetInPortfolio.amount = parseInt(amount);
 	});
 
 	wrapper.querySelector(".delete-btn").addEventListener("click", () => {
-		selectedAssets = selectedAssets.filter(x => x != asset);
+		selectedArr = selectedArr.filter(x => x.asset != newAsset);
+		if (selectedArr.length === 0) {
+			assetsList.querySelector(".selected-asset-item").remove();
+		}
 		wrapper.remove();
 	});
 
-	selectedAssets.push(asset);
-	assetsList.appendChild(wrapper);
+	selectedArr.push(assetInPortfolio);
+	selectedAssets.appendChild(wrapper);
 }

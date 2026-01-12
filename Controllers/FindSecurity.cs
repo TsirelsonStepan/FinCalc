@@ -11,6 +11,7 @@ public class GetSecuritiesController : ControllerBase
     [ProducesResponseType(typeof(Asset[]), StatusCodes.Status200OK)]
     public async Task<ActionResult<Asset[]>> FindSecurity([FromQuery] string partialName)
     {
-        return Ok(await FinCalc.MOEXAPI.Get.SecuritiesList(partialName));
+        Asset[] assets = await FinCalc.MOEXAPI.Get.SecuritiesList(partialName);
+        return Ok(assets);
     }
 }

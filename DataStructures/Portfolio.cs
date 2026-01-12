@@ -1,92 +1,57 @@
 namespace FinCalc.DataStructures
 {	
-	public partial class Portfolio(Asset[] _assets)
+	partial class Portfolio
 	{
-		private Asset[] Assets { get; } = _assets;
+		private AssetInPortfolio[] Assets { get; }
 
-		public double? WeightedAveragePortfolioReturn { get; set; }
-		public double? ExpectedPortfolioReturn { get; set; }
-		public double? PortfolioVariance { get; set; }
-		public double? PortfolioBeta { get; set; }
+		public double? WeightedAveragePortfolioReturn { get; }
+		public double? ExpectedPortfolioReturn { get; }
+		public double? PortfolioVariance { get; }
+		public double? PortfolioBeta { get; }
+		public double RiskFreeRate { get; }
+		public HistoricData BenchmarkHistoricData { get; }
+		public HistoricData[] PortfolioHistoricData { get; } = [];
+		public HistoricData PortfolioAverageHistoricData { get; }
 
-		public double RiskFreeRate { get; private set; }
-		public HistoricData BenchmarkHistoricData { get; private set; }
-		public HistoricData[] PortfolioHistoricData { get; set; } = [];
-		public HistoricData PortfolioAverageHistoricData { get; set; }
-		public string Notes { get; set; } = "";
 
-		public void Verify()
+		private Portfolio(AssetInPortfolio[] _assets, HistoricData Benchmark, double RFRate, HistoricData[] historicData, double beta, double wAPR, double capm)
 		{
-			//total amount > 0
-			double totalAmount = 0;
-			foreach (Asset asset in Assets) totalAmount += asset.Amount;
-			if (totalAmount <= 0) throw new PortfolioSizeIsZero();
+			VerifyAssets(_assets);
+			Assets = _assets;
+			BenchmarkHistoricData = Benchmark;
+			RiskFreeRate = RFRate;
+			PortfolioHistoricData = historicData;
+			WeightedAveragePortfolioReturn = wAPR;
+			ExpectedPortfolioReturn = capm;
+
+			PortfolioAverageHistoricData = Calculate.BaseIndicator.HistoricPortfolioValue(_assets, PortfolioHistoricData, Benchmark);
+			PortfolioBeta = beta;
 		}
 
-		public async Task AssignBenchmark(string market, string name)
+		public static async Task<Portfolio> CreateAsync(AssetInPortfolio[] _assets)
 		{
-			BenchmarkHistoricData = await MOEXAPI.Get.Prices(market, name, 1);
-		}
-		public async Task SetRiskFreeRate()
-		{
-			RiskFreeRate = await MOEXAPI.Get.RFRate();
-		}
-
-		public async Task CalculatePriceHistory()
-		{
-			HistoricData[] assetsHistoricData = new HistoricData[Assets.Length];
-			for (int i = 0; i < Assets.Length; i++)
+			HistoricData[] historicData = new HistoricData[_assets.Length];
+			for (int i = 0; i < _assets.Length; i++)
 			{
-				assetsHistoricData[i] = await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 1);
+				historicData[i] = await MOEXAPI.Get.Prices("shares", _assets[i].Asset.Secid, 1);
 			}
-			PortfolioHistoricData = assetsHistoricData;
+			HistoricData benchmark = await MOEXAPI.Get.Prices("index", "IMOEX", 1);
+			double rfrate = await MOEXAPI.Get.RFRate();
+
+			double beta = await Calculate.BaseIndicator.PortfolioBeta(_assets);
+			double wAPR = await Calculate.BaseIndicator.WeightedAverageReturn(_assets);
+			double capm = await Calculate.BaseIndicator.CAPM(beta, rfrate);
+
+			Portfolio portfolio = new(_assets, benchmark, rfrate, historicData, beta, wAPR, capm);
+			return portfolio;
 		}
 
-		public void CalculateHistoricAveragePrice()
+		public void VerifyAssets(AssetInPortfolio[] assets)
 		{
-			PortfolioAverageHistoricData = Calculate.BaseIndicator.HistoricAveragePrice(Assets, PortfolioHistoricData, BenchmarkHistoricData);
-		}
-
-		public async Task CalculateBeta()
-		{
-			double sumOfBetas = 0;
-			double totalWeight = 0;
-			for (int i = 0; i < Assets.Length; i++)
+			foreach (AssetInPortfolio asset in assets)
 			{
-				(double beta, string note) = await Calculate.BaseIndicator.Beta(Assets[i].Secid);
-				
-				sumOfBetas += beta * Assets[i].Amount;
-				totalWeight += Assets[i].Amount;
-
-				Notes += note + '\n';
+				if (asset.Amount <= 0) throw new PortfolioSizeIsZero();
 			}
-			PortfolioBeta = sumOfBetas / totalWeight;
-		}
-
-		public async Task CalcualteWeightedAverageReturn()
-		{
-			double sumOfReturns = 0;
-			double totalWeight = 0;
-			for (int i = 0; i < Assets.Length; i++)
-			{
-				double returns = Calculate.BaseIndicator.AnnualReturn(
-					Calculate.BaseIndicator.Returns(
-						await MOEXAPI.Get.Prices("shares", Assets[i].Secid, 1)));
-				
-				sumOfReturns += returns * Assets[i].Amount;
-				totalWeight += Assets[i].Amount;
-			}
-			WeightedAveragePortfolioReturn = sumOfReturns / totalWeight;
-		}
-
-		public async Task CalculateExpectedReturn()
-		{
-			double Rm = Calculate.BaseIndicator.AnnualReturn(
-				Calculate.BaseIndicator.Returns(
-					await MOEXAPI.Get.Prices("index", "IMOEX", 10)));
-			Rm -= 1;		
-			
-			ExpectedPortfolioReturn = 1 + RiskFreeRate + (Rm - RiskFreeRate) * PortfolioBeta;
 		}
 	}
 }
