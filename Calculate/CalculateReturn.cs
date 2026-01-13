@@ -6,7 +6,7 @@ namespace FinCalc.Calculate
 	{		
         public static HistoricData Returns(HistoricData prices)
 		{
-			HistoricData returns = new(prices.Name, prices.Length - 1, prices.Interval);
+			HistoricData returns = new(prices.Secid, prices.Length - 1, prices.Interval);
 			
 			for (int i = 0; i < prices.Length - 1; i++)
 			{
@@ -33,7 +33,7 @@ namespace FinCalc.Calculate
 			double totalWeight = 0;
 			for (int i = 0; i < assets.Length; i++)
 			{
-				double returns = AnnualReturn(Returns(await MOEXAPI.Get.Prices(assets[i].Market, assets[i].Secid, 1)));
+				double returns = AnnualReturn(Returns(await MOEXAPI.Get.Prices(assets[i].Market, assets[i].Secid)));
 				
 				sumOfReturns += returns * assets[i].Amount;
 				totalWeight += assets[i].Amount;
@@ -43,7 +43,7 @@ namespace FinCalc.Calculate
 
 		public static async Task<double> CAPM(double beta, double rfrate)
 		{
-			double rm = AnnualReturn(Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 10))) - 1;	
+			double rm = AnnualReturn(Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 90, 40))) - 1;	
 			return 1 + rfrate + (rm - rfrate) * beta;
 		}
     }

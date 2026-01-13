@@ -25,13 +25,24 @@ public class HistoricDataController : ControllerBase
 	}
 
 	[HttpGet]
-	[Route("historicPortfolioValue")]
+	[Route("totalHistoricValues")]
 	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData>> GetPortfolioValue([FromQuery] int period = 365)
+	public async Task<ActionResult<HistoricData>> GetPortfolioValue([FromQuery] int interval = 7, [FromQuery] int periods = 52)
 	{
 		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
 		Portfolio portfolio = Portfolio.Deserialize(json);
-		HistoricData historicValue = portfolio.PortfolioAverageHistoricData;
+		HistoricData? historicValue = await portfolio.GetTotalHistoricValues(interval, periods);
 		return Ok(historicValue);
+	}
+
+	[HttpGet]
+	[Route("assetsHistoricPrices")]
+	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
+	public async Task<ActionResult<double>> GetAssetsHistoricPrices([FromQuery] int interval = 7, [FromQuery] int periods = 52)
+	{
+		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
+		Portfolio portfolio = Portfolio.Deserialize(json);
+		HistoricData[] historicPrices = await portfolio.GetAssetsHistoricPrices(interval, periods);
+		return Ok(historicPrices);
 	}
 }

@@ -6,8 +6,8 @@ namespace FinCalc.Calculate
 	{
 		static async Task<double> Beta(AssetInPortfolio asset)
         {
-            HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
-            HistoricData returns = Returns(await MOEXAPI.Get.Prices(asset.Market, asset.Secid, 5));
+            HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 7, 52 * 5));
+            HistoricData returns = Returns(await MOEXAPI.Get.Prices(asset.Market, asset.Secid, 7, 52 * 5));
             if (marketReturns.Length != returns.Length)
             {
                 returns = returns.FillMissing(marketReturns.Dates);

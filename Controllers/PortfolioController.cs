@@ -48,5 +48,5 @@ public class PortfolioController : ControllerBase
 		Portfolio portfolio = Portfolio.Deserialize(json);
 
 		return Ok(portfolio.ExpectedPortfolioReturn);
-	}    
+	}
 }

@@ -4,7 +4,7 @@ namespace FinCalc.DataStructures
     {
 		public HistoricData() {}
 		
-		public string Name { get; set; } = "";
+		public string Secid { get; set; } = "";
 		public string[] Dates { get; set; } = [];
 		public double[] Values { get; set; } = [];
 		public int Interval { get; set; } = 0;
@@ -12,7 +12,7 @@ namespace FinCalc.DataStructures
 
 		public HistoricData(string name, int length, int interval)
 		{
-			Name = name;
+			Secid = name;
 			Interval = interval; //in days
 			Length = length;
 			Dates = new string[length];
@@ -28,7 +28,7 @@ namespace FinCalc.DataStructures
 
 		public HistoricData FillMissing(string[] newDates)
 		{
-			HistoricData newData = new(Name, newDates.Length, Interval);
+			HistoricData newData = new(Secid, newDates.Length, Interval);
 			if (newDates.Length <= Length) return this;
 			double lastValue = Values[0];
 			int added_values = 0;
@@ -37,8 +37,8 @@ namespace FinCalc.DataStructures
 				newData.Dates[i - added_values] = newDates[i];
 				if (Dates[i - added_values] == newDates[i])
 				{
-					newData.Values[i] = Values[i];
-					lastValue = Values[i];
+					newData.Values[i] = Values[i - added_values];
+					lastValue = Values[i - added_values];
 				}
 				else
 				{

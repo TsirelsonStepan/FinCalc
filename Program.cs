@@ -13,8 +13,8 @@ app.UseSwaggerUI();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
+//app.UseRouting();
+//app.UseAuthorization();
 app.MapControllers();
 
 app.UseMiddleware<ExceptionsHandlerMiddleWare>();

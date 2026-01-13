@@ -20,19 +20,19 @@ async function createGraphGroup() {
 	content.appendChild(wrapper);
 	const group = wrapper.querySelector(".group")
 
-	const response = await fetch("/historicPortfolioValue");
+	const response = await fetch("/totalHistoricValues?intereval=7&periods=200");
 	if (!response.ok) throw new Error(response.status);
 	const data = await response.json();
 	//const valuesData = [];
 	//values.forEach(value => {
-		//	valuesData.push({label: value.name, data: [...value.values].reverse()});
+		//	valuesData.push({label: value.secid, data: [...value.values].reverse()});
 		//});
 	
 	new Chart("chart-1", {
 		type: "line",
 		data: {
 			labels: [...data.dates].reverse(),
-			datasets: [{ label: data.name, data: [...data.values].reverse() }]
+			datasets: [{ label: data.secid, data: [...data.values].reverse() }]
 		}
 	});
 	
