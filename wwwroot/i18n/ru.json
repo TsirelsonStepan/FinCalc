@@ -1,8 +1,9 @@
 {
 	"selected_assets": "Выбранные Активы",
 	"calculate_for_this_assets": "Расчитать для этих активов",
-	"search_assets": "Найти активы",
-	"search": "Поиск",
+	"asset_search_label": "Найти",
+	"asset_search_type_shares": "Акции",
+	"asset_search_type_indexes": "Индексы",
 
 	"historic_data": "Исторические Значения",
 	"return_ratios": "Показатели Доходности",

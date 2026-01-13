@@ -2,11 +2,11 @@ const selectedAssets = document.getElementById("selected-assets");
 const assetsList = selectedAssets.parentElement;
 var selectedArr = [];
 
-function addAsset(newAsset) {
+function addAsset(asset) {
+	const newAsset = {market: currentActiveSegment.dataset.type, secid: asset.secid, amount: 0};
 	selectedArr.forEach(element => {
-		if (element.asset === newAsset) return;
+		if (element.secid === newAsset.secid) return;
 	});
-	const assetInPortfolio = { asset: newAsset, amount: 0 };
 
 	if (selectedArr.length === 0) {
 		const topRaw = document.createElement("div");
@@ -20,23 +20,23 @@ function addAsset(newAsset) {
 	wrapper.className = "selected-asset-item";
 	wrapper.innerHTML = Templates.selected_asset_item;
 
-	wrapper.querySelector("#shortname").textContent = newAsset.shortname;
+	wrapper.querySelector("#shortname").textContent = asset.shortname;
 
 	const amountInput = wrapper.querySelector(".asset-amount-input");
 	amountInput.addEventListener("input", () => {
 		const amount = amountInput.value.trim();
-		if (amount === "") assetInPortfolio.amount = 0;
-		else assetInPortfolio.amount = parseInt(amount);
+		if (amount === "") newAsset.amount = 0;
+		else newAsset.amount = parseInt(amount);
 	});
 
 	wrapper.querySelector(".delete-btn").addEventListener("click", () => {
-		selectedArr = selectedArr.filter(x => x.asset != newAsset);
+		selectedArr = selectedArr.filter(x => x.secid != asset.secid);
 		if (selectedArr.length === 0) {
 			assetsList.querySelector(".selected-asset-item").remove();
 		}
 		wrapper.remove();
 	});
 
-	selectedArr.push(assetInPortfolio);
+	selectedArr.push(newAsset);
 	selectedAssets.appendChild(wrapper);
 }

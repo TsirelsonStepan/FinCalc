@@ -4,9 +4,9 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class Get
 	{
-		public static async Task<Asset[]> SecuritiesList(string query)
+		public static async Task<Asset[]> SecuritiesList(string query, string market)
 		{
-			string url = $"https://iss.moex.com/iss/securities.json?q={query}&is_trading=1&engine=stock&market=shares";
+			string url = $"https://iss.moex.com/iss/securities.json?q={query}&is_trading=1&engine=stock&market={market}";
 			string response;
 
 			try
@@ -30,10 +30,10 @@ namespace FinCalc.MOEXAPI
 			{
 				JsonArray companyData = companiesData[i].AsArray();
                 Asset company = new(
-                    companyData[0].GetValue<string>(), //secid
-                    companyData[1].GetValue<string>(), //shortname
-                    companyData[3].GetValue<string>(), //name
-					companyData[7].GetValue<string>() //description
+                    companyData[0]?.GetValue<string>() ?? "No Secid", //secid
+                    companyData[1]?.GetValue<string>() ?? "No Shortname", //shortname
+                    companyData[3]?.GetValue<string>() ?? "No Name", //name
+					companyData[7]?.GetValue<string>() ?? "No Description" //description
                     //Engine = companyData[11].GetValue<string>().Split('_')[0],
                     //Market = companyData[11].GetValue<string>().Split('_')[1]
 				);

@@ -20,12 +20,14 @@ namespace FinCalc.DataStructures
 	public class AssetInPortfolio
 	{
 		public AssetInPortfolio() {}
-		public Asset Asset { get; set; } = null!;
+		public string Secid { get; set; } = "";
+		public string Market { get; set; } = "";
 		public double Amount { get; set; } = 0;
 
-		public AssetInPortfolio(Asset _asset, double _amount) : this()
+		public AssetInPortfolio(string _secid, double _amount, string _market) : this()
 		{
-			Asset = _asset;
+			Market = _market;
+			Secid = _secid;
 			Amount = _amount;			
 		}
 	}

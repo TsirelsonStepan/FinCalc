@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/chart.css">
   <link rel="stylesheet" href="/css/return_ratios_group.css">
+  <link rel="stylesheet" href="/css/asset_search.css">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -19,9 +20,17 @@
   <div class="main">
     <div class="sidebar">
       <div class="assets-search">
-        <label data-i18n="search_assets"></label>
+        <div class="asset-search-header">
+          <label class="asset-search-label" data-i18n="asset_search_label"></label>
+
+          <div class="asset-segment-switch" id="asset-type-switch">
+            <button class="asset-search-segment active" data-type="shares" data-i18n="asset_search_type_shares"></button>
+            <button class="asset-search-segment" data-type="index" data-i18n="asset_search_type_indexes"></button>
+          </div>
+        </div>
+
         <input type="text" id="assets-search-input" placeholder="...">
-        <button data-i18n="search" id="search-btn"></button>
+        <button data-i18n="asset_search_label" id="search-btn"></button>
   
         <div id="search-results" class="scroll-box"></div>
       </div>

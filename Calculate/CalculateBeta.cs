@@ -4,10 +4,10 @@ namespace FinCalc.Calculate
 {
 	public partial class BaseIndicator
 	{
-		static async Task<double> Beta(string id)
+		static async Task<double> Beta(AssetInPortfolio asset)
         {
             HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 5));
-            HistoricData returns = Returns(await MOEXAPI.Get.Prices("shares", id, 5));
+            HistoricData returns = Returns(await MOEXAPI.Get.Prices(asset.Market, asset.Secid, 5));
             if (marketReturns.Length != returns.Length)
             {
                 returns = returns.FillMissing(marketReturns.Dates);
@@ -39,7 +39,7 @@ namespace FinCalc.Calculate
 			double totalWeight = 0;
 			for (int i = 0; i < assets.Length; i++)
 			{
-				double beta = await Beta(assets[i].Asset.Secid);
+				double beta = await Beta(assets[i]);
 				
 				sumOfBetas += beta * assets[i].Amount;
 				totalWeight += assets[i].Amount;

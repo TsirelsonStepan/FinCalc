@@ -33,7 +33,7 @@ namespace FinCalc.Calculate
 			double totalWeight = 0;
 			for (int i = 0; i < assets.Length; i++)
 			{
-				double returns = AnnualReturn(Returns(await MOEXAPI.Get.Prices("shares", assets[i].Asset.Secid, 1)));
+				double returns = AnnualReturn(Returns(await MOEXAPI.Get.Prices(assets[i].Market, assets[i].Secid, 1)));
 				
 				sumOfReturns += returns * assets[i].Amount;
 				totalWeight += assets[i].Amount;

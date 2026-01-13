@@ -18,7 +18,7 @@ async function searchAssets() {
 	searchResults.innerHTML = `<p data-i18n="searching_mes"></p>`;
 	applyTranslations(assetsSearch);
 	
-	const response = await fetch(`/getSecuritiesList?partialName=${query}`);
+	const response = await fetch(`/getSecuritiesList?partialName=${query}&market=${currentActiveSegment.dataset.type}`);
 	if (!response.ok) {
 		searchResults.innerHTML = `<p data-i18n="searching_error_mes"></p>`;
 		applyTranslations(assetsSearch);
@@ -76,3 +76,14 @@ searchInput.addEventListener("keydown", function(e) {
 const tooltip = document.createElement("div");
 tooltip.className = "tooltip-text";
 document.querySelector(".main").appendChild(tooltip);
+
+const assetSearchSegments = document.querySelectorAll(".asset-search-segment");
+var currentActiveSegment = assetSearchSegments[0];
+assetSearchSegments.forEach(seg => {
+	seg.addEventListener("click", () => {
+		currentActiveSegment.classList.remove("active");
+		seg.classList.add("active");
+		currentActiveSegment = seg;
+		searchResults.innerHTML = "";
+	});
+});

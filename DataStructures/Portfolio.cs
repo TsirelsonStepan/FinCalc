@@ -33,7 +33,7 @@ namespace FinCalc.DataStructures
 			HistoricData[] historicData = new HistoricData[_assets.Length];
 			for (int i = 0; i < _assets.Length; i++)
 			{
-				historicData[i] = await MOEXAPI.Get.Prices("shares", _assets[i].Asset.Secid, 1);
+				historicData[i] = await MOEXAPI.Get.Prices(_assets[i].Market, _assets[i].Secid, 1);
 			}
 			HistoricData benchmark = await MOEXAPI.Get.Prices("index", "IMOEX", 1);
 			double rfrate = await MOEXAPI.Get.RFRate();

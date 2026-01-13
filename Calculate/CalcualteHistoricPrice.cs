@@ -20,7 +20,7 @@ namespace FinCalc.Calculate
 			Dictionary<string, double> assetsAmounts = [];
 			for (int i = 0; i < portfolio.Length; i++)
 			{
-				assetsAmounts[portfolio[i].Asset.Secid] = portfolio[i].Amount;
+				assetsAmounts[portfolio[i].Secid] = portfolio[i].Amount;
 			}
 			
 			HistoricData averageData = new("Portfolio", commonLength, commonInterval);

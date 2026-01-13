@@ -1,0 +1,34 @@
+.asset-search-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #cbd5f5;
+    font-size: 16px;
+}
+
+.asset-segment-switch {
+    display: flex;
+    background: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.asset-search-segment {
+    padding: 4px 12px;
+    font-size: 14px;
+    background: transparent;
+    color: #94a3b8;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.asset-search-segment:hover {
+    color: #e0e7ff;
+}
+
+.asset-search-segment.active {
+    background: #1e40af;
+    color: #ffffff;
+}
