@@ -2,14 +2,14 @@ using FinCalc.DataStructures;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("getSecuritiesList")]
+[Route("search")]
 [Produces("application/json")]
-[Consumes("application/json")]
-public class GetSecuritiesController : ControllerBase
+[Consumes("application/json")]                        
+public class SearchController : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(Asset[]), StatusCodes.Status200OK)]
-    public async Task<ActionResult<Asset[]>> FindSecurity([FromQuery] string partialName, [FromQuery] string market)
+    public async Task<ActionResult<Asset[]>> GET([FromQuery] string partialName, [FromQuery] string market)
     {
         Asset[] assets = await FinCalc.MOEXAPI.Get.SecuritiesList(partialName, market);
         return Ok(assets);

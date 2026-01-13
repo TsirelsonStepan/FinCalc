@@ -1,17 +1,21 @@
+using System.Text.Json;
+
 namespace FinCalc.DataStructures
 {	
-	partial class Portfolio
+	public class Portfolio
 	{
-		private AssetInPortfolio[] Assets { get; }
+		public Portfolio() {}
 
-		public double? WeightedAveragePortfolioReturn { get; }
-		public double? ExpectedPortfolioReturn { get; }
-		public double? PortfolioVariance { get; }
-		public double? PortfolioBeta { get; }
-		public double RiskFreeRate { get; }
-		public HistoricData BenchmarkHistoricData { get; }
-		public HistoricData[] PortfolioHistoricData { get; } = [];
-		public HistoricData PortfolioAverageHistoricData { get; }
+		public AssetInPortfolio[] Assets { get; set; } = [];
+
+		public double? WeightedAveragePortfolioReturn { get; set; }
+		public double? ExpectedPortfolioReturn { get; set; }
+		public double? PortfolioVariance { get; set; }
+		public double? PortfolioBeta { get; set; }
+		public double? RiskFreeRate { get; set; }
+		public HistoricData? BenchmarkHistoricData { get; set; }
+		public HistoricData[] PortfolioHistoricData { get; set; } = [];
+		public HistoricData? PortfolioAverageHistoricData { get; set; }
 
 
 		private Portfolio(AssetInPortfolio[] _assets, HistoricData Benchmark, double RFRate, HistoricData[] historicData, double beta, double wAPR, double capm)
@@ -50,8 +54,22 @@ namespace FinCalc.DataStructures
 		{
 			foreach (AssetInPortfolio asset in assets)
 			{
-				if (asset.Amount <= 0) throw new PortfolioSizeIsZero();
+				if (asset.Amount <= 0) throw new PortfolioSizeIsZero("One of the assets in portfolio was not positive");
 			}
+		}
+
+        static readonly JsonSerializerOptions options = new()
+        {
+			PropertyNameCaseInsensitive = true
+		};
+
+		public static Portfolio Deserialize(string portfolio)
+		{
+			return JsonSerializer.Deserialize<Portfolio>(portfolio, options) ?? throw new PortfolioSizeIsZero("portfolio json deserializaion failed");
+		}
+		public static string Serialize(Portfolio portfolio)
+		{
+			return JsonSerializer.Serialize(portfolio, options);
 		}
 	}
 }

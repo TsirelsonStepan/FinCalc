@@ -2,11 +2,13 @@ namespace FinCalc.DataStructures
 {
 	public class HistoricData
     {
-		public string Name { get; } = "";
-		public string[] Dates { get; } = [];
-		public double[] Values { get; } = [];
-		public int Interval { get; } = 0;
-		public int Length { get; } = 0;
+		public HistoricData() {}
+		
+		public string Name { get; set; } = "";
+		public string[] Dates { get; set; } = [];
+		public double[] Values { get; set; } = [];
+		public int Interval { get; set; } = 0;
+		public int Length { get; set; } = 0;
 
 		public HistoricData(string name, int length, int interval)
 		{

@@ -1,42 +1,33 @@
 const calculateButton = document.getElementById("calculate-btn");
 const content = document.querySelector('.content');
 
-async function calculatePortfolio() {
-	const response = await fetch("/calculatePortfolio", {
+async function displayCalculations() {
+	const response = await fetch("/portfolio", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(selectedArr),
 	});
 	if (!response.ok) throw new Error(response.status);
-	const calculations = await response.json();
-	displayCalculations(calculations);
-}
 
-function displayCalculations(calculations) {
-	const weightedAverageReturn = calculations.weightedAveragePortfolioReturn;
-	const expectedReturn = calculations.expectedPortfolioReturn;
-	const historicData = calculations.portfolioAverageHistoricData;
-	
 	content.innerHTML = "";
-	createReturnRatiosGroup(weightedAverageReturn, expectedReturn);
-	createGraphGroup(historicData);
-
-	Array.from(document.getElementsByClassName('group')).forEach(group => {
-		group.addEventListener('click', () => manageGroups(group));
-	});
+	await createReturnRatiosGroup();
+	await createGraphGroup();
 }
 
-function createGraphGroup(data) {
+async function createGraphGroup() {
 	const wrapper = document.createElement("div");
 	wrapper.innerHTML = Templates.graph_group;
 	content.appendChild(wrapper);
-	applyTranslations(wrapper);
+	const group = wrapper.querySelector(".group")
 
+	const response = await fetch("/historicPortfolioValue");
+	if (!response.ok) throw new Error(response.status);
+	const data = await response.json();
 	//const valuesData = [];
 	//values.forEach(value => {
-	//	valuesData.push({label: value.name, data: [...value.values].reverse()});
-	//});
-
+		//	valuesData.push({label: value.name, data: [...value.values].reverse()});
+		//});
+	
 	new Chart("chart-1", {
 		type: "line",
 		data: {
@@ -44,17 +35,30 @@ function createGraphGroup(data) {
 			datasets: [{ label: data.name, data: [...data.values].reverse() }]
 		}
 	});
-}
-
-function createReturnRatiosGroup(weightedAveragePortfolioReturn, expectedPortfolioReturn) {
-	const wrapper = document.createElement("div");
-	wrapper.innerHTML = Templates.return_ratios_group;
-
-	wrapper.querySelector("#wAPR").textContent = ((weightedAveragePortfolioReturn - 1) * 100).toFixed(2) + "%";
-	wrapper.querySelector("#ePR").textContent = ((expectedPortfolioReturn - 1) * 100).toFixed(2) + "%";
-
-	content.appendChild(wrapper);
+	
+	group.addEventListener('click', () => manageGroups(group));
 	applyTranslations(wrapper);
 }
 
-calculateButton.addEventListener("click", calculatePortfolio);
+async function createReturnRatiosGroup() {
+	const wrapper = document.createElement("div");
+	wrapper.innerHTML = Templates.return_ratios_group;
+	content.appendChild(wrapper);
+	const group = wrapper.querySelector(".group")
+	
+	const responseWAPR = await fetch("/WAPR");
+	if (!responseWAPR.ok) throw new Error(responseWAPR.status);
+	const WAPR = await responseWAPR.json();
+	
+	const responseEPR = await fetch("/EPR");
+	if (!responseEPR.ok) throw new Error(responseEPR.status);
+	const EPR = await responseEPR.json();
+	
+	wrapper.querySelector("#wAPR").textContent = ((WAPR - 1) * 100).toFixed(2) + "%";
+	wrapper.querySelector("#ePR").textContent = ((EPR - 1) * 100).toFixed(2) + "%";
+	
+	group.addEventListener('click', () => manageGroups(group));
+	applyTranslations(wrapper);
+}
+
+calculateButton.addEventListener("click", displayCalculations);
