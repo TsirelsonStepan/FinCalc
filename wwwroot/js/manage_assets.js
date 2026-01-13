@@ -3,10 +3,9 @@ const assetsList = selectedAssets.parentElement;
 var selectedArr = [];
 
 function addAsset(asset) {
+    if (selectedArr.find(e => e.secid === asset.secid)) return;
+
 	const newAsset = {market: currentActiveSegment.dataset.type, secid: asset.secid, amount: 0};
-	selectedArr.forEach(element => {
-		if (element.secid === newAsset.secid) return;
-	});
 
 	if (selectedArr.length === 0) {
 		const topRaw = document.createElement("div");

@@ -13,19 +13,23 @@ class ExceptionsHandlerMiddleWare
 		{
 			await _next(context);
 		}
-		catch (PortfolioSizeIsZero)
+		catch (PortfolioSizeIsZero e)
 		{
 			context.Response.StatusCode = 400;
-			await context.Response.WriteAsJsonAsync(new { error = "The provided sum of amounts of assets is equal to 0." });
-			//await context.Response.WriteAsJsonAsync(new { error = e.Message });
+			await context.Response.WriteAsJsonAsync(new { error = e.Message });
 		}
 		catch (UnexpectedMoexResponce e)
 		{
 			context.Response.StatusCode = 400;
 			await context.Response.WriteAsJsonAsync(new { error = e.Message });
 		}
+		catch (Exception e)
+		{
+			context.Response.StatusCode = 500;
+			await context.Response.WriteAsJsonAsync(new { error = e.Message });
+		}
 	}
 }
 
-class PortfolioSizeIsZero : Exception {}
+class PortfolioSizeIsZero(string message) : Exception(message) {}
 class UnexpectedMoexResponce(string message) : Exception(message) {}
