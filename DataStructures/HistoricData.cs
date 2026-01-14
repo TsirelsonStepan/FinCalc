@@ -5,48 +5,21 @@ namespace FinCalc.DataStructures
 		public HistoricData() {}
 		
 		public string Secid { get; set; } = "";
-		public string[] Dates { get; set; } = [];
+		public int[] Dates { get; set; } = [];
 		public double[] Values { get; set; } = [];
-		public int Interval { get; set; } = 0;
-		public int Length { get; set; } = 0;
 
-		public HistoricData(string name, int length, int interval)
+		public HistoricData(string name, int periods)
 		{
 			Secid = name;
-			Interval = interval; //in days
-			Length = length;
-			Dates = new string[length];
-			Values = new double[length];
+			Dates = new int[periods];
+			Values = new double[periods];
 		}
 
-		public HistoricData(string name, int length, int interval, string[] dates, double[] values) : this(name, length, interval)
+		public HistoricData(string name, int periods, string[] dates, double[] values) : this(name, periods)
 		{
 			if (dates == null || dates.Length == 0 || values == null || values.Length == 0) throw new Exception("Attempt to copy zero array in constructor");
 			dates.CopyTo(Dates, 0);
 			values.CopyTo(Values, 0);
-		}
-
-		public HistoricData FillMissing(string[] newDates)
-		{
-			HistoricData newData = new(Secid, newDates.Length, Interval);
-			if (newDates.Length <= Length) return this;
-			double lastValue = Values[0];
-			int added_values = 0;
-			for (int i = 0; i < newDates.Length; i++)
-			{
-				newData.Dates[i - added_values] = newDates[i];
-				if (Dates[i - added_values] == newDates[i])
-				{
-					newData.Values[i] = Values[i - added_values];
-					lastValue = Values[i - added_values];
-				}
-				else
-				{
-					newData.Values[i] = lastValue;
-					added_values++;
-				}
-			}
-			return newData;
 		}
     }
 }

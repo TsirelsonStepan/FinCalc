@@ -1,6 +1,6 @@
 namespace FinCalc.MOEXAPI
 {
-	public static partial class Get
+	public static partial class GetFromMOEXAPI
 	{
 		private static readonly HttpClient Client = new();
 	}

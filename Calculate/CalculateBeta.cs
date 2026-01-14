@@ -1,27 +1,25 @@
 using FinCalc.DataStructures;
 
-namespace FinCalc.Calculate
+namespace FinCalc.Calculator
 {
-	public partial class BaseIndicator
+	public partial class Calculate
 	{
-		static async Task<double> Beta(AssetInPortfolio asset)
+		public static async Task<double> Beta(HistoricData assetReturns, HistoricData marketReturns)
         {
-            HistoricData marketReturns = Returns(await MOEXAPI.Get.Prices("index", "IMOEX", 7, 52 * 5));
-            HistoricData returns = Returns(await MOEXAPI.Get.Prices(asset.Market, asset.Secid, 7, 52 * 5));
-            if (marketReturns.Length != returns.Length)
+            if (marketReturns.Values.Length != assetReturns.Values.Length)
             {
-                returns = returns.FillMissing(marketReturns.Dates);
+                throw new Exception("The length or asset vaues does not match the length of market values");
             }
 
-            double meanReturn = returns.Values.Average();
+            double meanReturn = assetReturns.Values.Average();
             double meanMarketReturn = marketReturns.Values.Average();
 
             double sumXY = 0;
             double sumXX = 0;
 
-            for (int i = 0; i < marketReturns.Length; i++)
+            for (int i = 0; i < marketReturns.Values.Length; i++)
             {
-                double dx = returns.Values[i] - meanReturn;
+                double dx = assetReturns.Values[i] - meanReturn;
                 double dy = marketReturns.Values[i] - meanMarketReturn;
 
                 sumXY += dx * dy;
@@ -31,20 +29,6 @@ namespace FinCalc.Calculate
             //double intercept = meanMarketReturn - slope * meanReturn;
 
             return slope;
-        }
-
-        public static async Task<double> PortfolioBeta(AssetInPortfolio[] assets)
-        {
-			double sumOfBetas = 0;
-			double totalWeight = 0;
-			for (int i = 0; i < assets.Length; i++)
-			{
-				double beta = await Beta(assets[i]);
-				
-				sumOfBetas += beta * assets[i].Amount;
-				totalWeight += assets[i].Amount;
-			}
-			return sumOfBetas / totalWeight;
         }
 	}
 }

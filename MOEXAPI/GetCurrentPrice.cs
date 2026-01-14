@@ -1,8 +1,6 @@
-using FinCalc.DataStructures;
-
 namespace FinCalc.MOEXAPI
 {
-	public static partial class Get
+	public static partial class GetFromMOEXAPI
     {
         public static async Task<double> CurrentPrice(string id)
         {
