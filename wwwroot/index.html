@@ -11,52 +11,52 @@
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/chart.css">
   <link rel="stylesheet" href="/css/return_ratios_group.css">
-  <link rel="stylesheet" href="/css/asset_search.css">
+  <link rel="stylesheet" href="/css/switch_select.css">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
   <div class="main">
-    <div class="sidebar">
-      <div class="assets-search">
-        <div class="asset-search-header">
-          <label class="asset-search-label" data-i18n="asset_search_label"></label>
+	<div class="sidebar">
+	  <div class="assets-search">
+		<div class="assets-search-switch">
+		  <label class="assets-search-switch-label" data-i18n="assets_search_switch_label"></label>
 
-          <div class="asset-segment-switch" id="asset-type-switch">
-            <button class="asset-search-segment active" data-type="shares" data-i18n="asset_search_type_shares"></button>
-            <button class="asset-search-segment" data-type="index" data-i18n="asset_search_type_indexes"></button>
-          </div>
-        </div>
+		  <div class="asset-search-switch-segment">
+			<button class="assets-search-switch-option active" data-type="shares" data-i18n="asset_search_switch_shares"></button>
+			<button class="assets-search-switch-option" data-type="index" data-i18n="asset_search_switch_indexes"></button>
+		  </div>
+		</div>
 
-        <input type="text" id="assets-search-input" placeholder="...">
-        <button data-i18n="asset_search_label" id="search-btn"></button>
+		<input type="text" id="assets-search-input" placeholder="...">
+		<button data-i18n="assets_search_switch_label" id="search-btn"></button>
   
-        <div id="search-results" class="scroll-box"></div>
-      </div>
+		<div id="search-results" class="scroll-box"></div>
+	  </div>
 
-      <div class="assets-list">
-        <label data-i18n="selected_assets"></label>
-        <button data-i18n="calculate_for_this_assets" id="calculate-btn"></button>
-        
-        <div id="selected-assets" class="scroll-box"></div>
-      </div>
-    </div>
+	  <div class="assets-list">
+		<label data-i18n="selected_assets"></label>
+		<button data-i18n="calculate_for_this_assets" id="calculate-btn"></button>
+		
+		<div id="selected-assets" class="scroll-box"></div>
+	  </div>
+	</div>
   
-    <div class="content"></div>
+	<div class="content"></div>
   </div>
 
   <div class="info">
-    <label data-i18n="info_label"></label>
-    <a data-i18n="this_project" href="https://github.com/TsirelsonStepan/FinCalc"></a> | 
-    <a data-i18n="my_github" href="https://github.com/TsirelsonStepan"></a> | 
-    <a data-i18n="my_linkedin" href="https://www.linkedin.com/in/stephan-tsirelson-046598293/"></a> |
-    <a data-i18n="my_cv" id="cv-file"></a>
-    
-    <select id="lang-select" class="lang-select">
-      <option value="en">EN</option>
-      <option value="ru">RU</option>
-    </select>
+	<label data-i18n="info_label"></label>
+	<a data-i18n="this_project" href="https://github.com/TsirelsonStepan/FinCalc"></a> | 
+	<a data-i18n="my_github" href="https://github.com/TsirelsonStepan"></a> | 
+	<a data-i18n="my_linkedin" href="https://www.linkedin.com/in/stephan-tsirelson-046598293/"></a> |
+	<a data-i18n="my_cv" id="cv-file"></a>
+	
+	<select id="lang-select" class="lang-select">
+	  <option value="en">EN</option>
+	  <option value="ru">RU</option>
+	</select>
   </div>
   
   <script src="js/load_templates.js"></script>

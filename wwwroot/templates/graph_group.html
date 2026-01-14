@@ -1,12 +1,22 @@
 <div class="group" id="group-historical-data" data-target="details-panel-historical-data">
-    <div class="collapse-icon">▶</div>
-    <div data-i18n="historic_data" class="group-title"></div>
+	<div class="collapse-icon">▶</div>
+	<div data-i18n="historic_data" class="group-title"></div>
 </div>
 <div class="details-panel" id="details-panel-historical-data">
-    <div class="graph-holder">
-        <canvas class="chart" id="chart-1"></canvas>
-    </div>
-    <div>
-        <p class="chart-description" id="chart-description-1" data-i18n="chart_description_1"></p>
-    </div>
+	<div>
+		<div class="chart-periods-switch">
+		  <label class="chart-periods-switch-label" data-i18n="chart_periods_switch_label"></label>
+
+		  <div class="chart-periods-switch-segment">
+			<button class="chart-periods-switch-option active" data-freq=7 data-i18n="chart_periods_switch_week"></button>
+			<button class="chart-periods-switch-option" data-freq=90 data-i18n="chart_periods_switch_quarter"></button>
+		  </div>
+		</div>
+	</div>
+	<div class="graph-holder">
+		<canvas class="chart" id="chart-1"></canvas>
+	</div>
+	<div>
+		<p class="chart-description" id="chart-description-1" data-i18n="chart_description_1"></p>
+	</div>
 </div>

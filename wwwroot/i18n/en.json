@@ -1,9 +1,9 @@
 {
 	"selected_assets": "Selected assets",
 	"calculate_for_this_assets": "Calculate for these assets",
-	"asset_search_label": "Search",
-	"asset_search_type_shares": "Shares",
-	"asset_search_type_indexes": "Indexes",
+	"assets_search_switch_label": "Search",
+	"asset_search_switch_shares": "Shares",
+	"asset_search_switch_indexes": "Indexes",
 
 
 	"historic_data": "Historic Data",
@@ -40,5 +40,9 @@
 	"chart_description_1": "This chart presents total value of the portfolio (the sum of the most recent close price for each asset multiplied by respective amount). The interval of datapoints is 1 week and period presented is exactly one year (or 52 weeks) preceding latest available datapoint",
 
 	"weighted_average_portfolio_return_description": "Calculated as average of annualized weekly returns on each asset for the last year, weighted by their value in respective time periods.",
-	"expected_portfolio_return_description": "Calculated using CAPM, where market premium (for IMOEX) is calculated based on 10-year period of consecutive weekly returns, that where then averaged using geometric compounding and annualized.\nBeta coefficient was calcualted similarly, using weekly returns on portfolio assets for the last 5 years. Weighted average of each asset beta comprised portfolio beta.\n Risk free rate was taken from CBR as YTM of government zero-coupon bonds with 1-year maturity."
+	"expected_portfolio_return_description": "Calculated using CAPM, where market premium (for IMOEX) is calculated based on 10-year period of consecutive weekly returns, that where then averaged using geometric compounding and annualized.\nBeta coefficient was calcualted similarly, using weekly returns on portfolio assets for the last 5 years. Weighted average of each asset beta comprised portfolio beta.\n Risk free rate was taken from CBR as YTM of government zero-coupon bonds with 1-year maturity.",
+
+	"chart_periods_switch_label": "Frequency",
+	"chart_periods_switch_week": "week",
+	"chart_periods_switch_quarter": "quarter"
 }

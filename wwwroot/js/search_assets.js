@@ -77,9 +77,9 @@ const tooltip = document.createElement("div");
 tooltip.className = "tooltip-text";
 document.querySelector(".main").appendChild(tooltip);
 
-const assetSearchSegments = document.querySelectorAll(".asset-search-segment");
-var currentActiveSegment = assetSearchSegments[0];
-assetSearchSegments.forEach(seg => {
+const assetTypeSwitches = document.querySelectorAll(".assets-search-switch-option");
+var currentActiveSegment = assetTypeSwitches[0];
+assetTypeSwitches.forEach(seg => {
 	seg.addEventListener("click", () => {
 		currentActiveSegment.classList.remove("active");
 		seg.classList.add("active");

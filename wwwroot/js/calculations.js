@@ -20,25 +20,47 @@ async function createGraphGroup() {
 	content.appendChild(wrapper);
 	const group = wrapper.querySelector(".group")
 
+	const frequencySwitches = wrapper.querySelectorAll(".chart-periods-switch-option");
+	currentFrequency = frequencySwitches[0];
+	frequencySwitches.forEach(seg => {
+		seg.addEventListener("click", async () => {
+			currentFrequency.classList.remove("active");
+			seg.classList.add("active");
+			wrapper.querySelector(".chart").innerHTML = "";
+			
+			[labels, data] = await getChartData(true, seg.dataset.freq);
+			mainChart.data.labels = labels;
+			mainChart.data.datasets = data;
+			mainChart.update();
+
+			currentFrequency = seg;
+		});
+	});
+	
+	[labels, data] = await getChartData();
+	mainChart = new Chart("chart-1", {
+		type: "line",
+		data: {
+			labels: labels,
+			datasets: data,
+		}
+	});
+
+	group.addEventListener('click', () => manageGroups(group));
+	applyTranslations(wrapper);	
+}
+
+async function getChartData(update = false, freq = 7) {
 	//const response = await fetch("/totalHistoricValues");
-	const response = await fetch("/assetsHistoricPrices");
+	const response = await fetch(`/assetsHistoricPrices?freq=${freq}&update=${update}`);
 	if (!response.ok) throw new Error(response.status);
 	const assetsData = await response.json();
 	const data = [];
 	assetsData.forEach(value => {
 			data.push({label: value.secid, data: [...value.values].reverse()});
 		});
-	
-	new Chart("chart-1", {
-		type: "line",
-		data: {
-			labels: [...assetsData[0].dates].reverse(),
-			datasets: data,
-		}
-	});
-	
-	group.addEventListener('click', () => manageGroups(group));
-	applyTranslations(wrapper);
+	labels = [...assetsData[0].dates].reverse();
+	return [labels, data];
 }
 
 async function createReturnRatiosGroup() {
