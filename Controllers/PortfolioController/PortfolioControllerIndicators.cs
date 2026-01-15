@@ -34,7 +34,8 @@ public partial class PortfolioController : ControllerBase
 		{
 			double rfrate = await GetFromMOEXAPI.RFRate();
 			double PortfolioBeta = await portfolio.GetBeta();
-			portfolio.ExpectedReturn = Calculate.CAPM(await GetFromMOEXAPI.Prices("index", "IMOEX", 90, 40), PortfolioBeta, rfrate);
+			double marketAnnualReturn = await GetFromMOEXAPI.AverageAnnualReturn("index", "IMOEX", 90, 40);
+			portfolio.ExpectedReturn = 1 + rfrate + (marketAnnualReturn - 1 - rfrate) * PortfolioBeta;
 		}
 
 		return Ok(portfolio.ExpectedReturn);

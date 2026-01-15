@@ -3,14 +3,24 @@
 	<div data-i18n="historic_data" class="group-title"></div>
 </div>
 <div class="details-panel" id="details-panel-historical-data">
-	<div>
-		<div class="chart-periods-switch">
-		  <label class="chart-periods-switch-label" data-i18n="chart_periods_switch_label"></label>
+	<div class="chart-switches">
+		<div class="chart-frequency-switch">
+		  <label class="chart-frequency-switch-label" data-i18n="chart_frequency_switch_label"></label>
 
-		  <div class="chart-periods-switch-segment">
-			<button class="chart-periods-switch-option active" data-freq=7 data-i18n="chart_periods_switch_week"></button>
-			<button class="chart-periods-switch-option" data-freq=90 data-i18n="chart_periods_switch_quarter"></button>
+		  <div class="chart-frequency-switch-segment">
+			  	<button class="chart-frequency-switch-option" data-freq=1 data-i18n="chart_frequency_switch_daily"></button>
+			  	<button class="chart-frequency-switch-option" data-freq=7 data-i18n="chart_frequency_switch_weekly"></button>
+				<button class="chart-frequency-switch-option" data-freq=30 data-i18n="chart_frequency_switch_monthly"></button>
 		  </div>
+		</div>
+		<div class="chart-period-switch">
+		  	<label class="chart-period-switch-label" data-i18n="chart_period_switch_label"></label>
+
+		  	<div class="chart-period-switch-segment">
+			  	<button class="chart-period-switch-option" data-period=365 data-i18n="chart_period_switch_year"></button>
+				<button class="chart-period-switch-option" data-period=730 data-i18n="chart_period_switch_2years"></button>
+				<button class="chart-period-switch-option" data-period=1100 data-i18n="chart_period_switch_3years"></button>
+		  	</div>
 		</div>
 	</div>
 	<div class="graph-holder">

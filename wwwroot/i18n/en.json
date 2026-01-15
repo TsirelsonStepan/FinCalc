@@ -42,7 +42,15 @@
 	"weighted_average_portfolio_return_description": "Calculated as average of annualized weekly returns on each asset for the last year, weighted by their value in respective time periods.",
 	"expected_portfolio_return_description": "Calculated using CAPM, where market premium (for IMOEX) is calculated based on 10-year period of consecutive weekly returns, that where then averaged using geometric compounding and annualized.\nBeta coefficient was calcualted similarly, using weekly returns on portfolio assets for the last 5 years. Weighted average of each asset beta comprised portfolio beta.\n Risk free rate was taken from CBR as YTM of government zero-coupon bonds with 1-year maturity.",
 
-	"chart_periods_switch_label": "Frequency",
-	"chart_periods_switch_week": "week",
-	"chart_periods_switch_quarter": "quarter"
+	"chart_frequency_switch_label": "Frequency",
+	"chart_frequency_switch_daily": "Daily",
+	"chart_frequency_switch_weekly": "Weekly",
+	"chart_frequency_switch_monthly": "Monthly",
+	"chart_frequency_switch_quarterly": "Quarterly",
+
+	"chart_period_switch_label": "Period",
+	"chart_period_switch_quarter": "Quarter",
+	"chart_period_switch_year": "Year",
+	"chart_period_switch_2years": "2 Years",
+	"chart_period_switch_3years": "3 Years"
 }

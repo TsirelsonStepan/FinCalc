@@ -7,6 +7,8 @@ namespace FinCalc.MOEXAPI
 }
 
 /*
+Metadaa - https://iss.moex.com/iss/index
+
 https://iss.moex.com/iss/index
 https://iss.moex.com/iss/reference/
 

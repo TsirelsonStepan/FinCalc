@@ -1,4 +1,11 @@
-.chart-periods-switch,
+.chart-switches {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+}
+
+.chart-period-switch,
+.chart-frequency-switch,
 .assets-search-switch {
     display: flex;
     align-items: center;
@@ -7,7 +14,8 @@
     font-size: 16px;
 }
 
-.chart-periods-switch-segment,
+.chart-period-switch-segment,
+.chart-frequency-switch-segment,
 .asset-search-switch-segment {
     display: flex;
     background: #020617;
@@ -15,7 +23,8 @@
     border-radius: 999px;
     overflow: hidden;
 }
-.chart-periods-switch-option,
+.chart-period-switch-option,
+.chart-frequency-switch-option,
 .assets-search-switch-option {
     padding: 4px 12px;
     font-size: 14px;
@@ -26,12 +35,14 @@
     transition: all 0.2s ease;
 }
 
-.chart-periods-switch-option:hover,
+.chart-period-switch-option:hover,
+.chart-frequency-switch-option:hover,
 .assets-search-switch-option:hover {
     color: #e0e7ff;
 }
 
-.chart-periods-switch-option.active,
+.chart-period-switch-option.active,
+.chart-frequency-switch-option.active,
 .assets-search-switch-option.active {
     background: #1e40af;
     color: #ffffff;

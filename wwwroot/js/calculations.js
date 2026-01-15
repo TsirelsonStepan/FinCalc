@@ -20,15 +20,16 @@ async function createGraphGroup() {
 	content.appendChild(wrapper);
 	const group = wrapper.querySelector(".group")
 
-	const frequencySwitches = wrapper.querySelectorAll(".chart-periods-switch-option");
-	currentFrequency = frequencySwitches[0];
+	const frequencySwitches = wrapper.querySelectorAll(".chart-frequency-switch-option");
+	currentFrequency = frequencySwitches[1];
+	currentFrequency.classList.add("active");
 	frequencySwitches.forEach(seg => {
 		seg.addEventListener("click", async () => {
 			currentFrequency.classList.remove("active");
 			seg.classList.add("active");
 			wrapper.querySelector(".chart").innerHTML = "";
 			
-			[labels, data] = await getChartData(true, seg.dataset.freq);
+			[labels, data] = await getChartData(true, seg.dataset.freq, currentPeriod.dataset.period);
 			mainChart.data.labels = labels;
 			mainChart.data.datasets = data;
 			mainChart.update();
@@ -36,8 +37,26 @@ async function createGraphGroup() {
 			currentFrequency = seg;
 		});
 	});
+
+	const periodSwitches = wrapper.querySelectorAll(".chart-period-switch-option");
+	currentPeriod = periodSwitches[0];
+	currentPeriod.classList.add("active");
+	periodSwitches.forEach(seg => {
+		seg.addEventListener("click", async () => {
+			currentPeriod.classList.remove("active");
+			seg.classList.add("active");
+			wrapper.querySelector(".chart").innerHTML = "";
+			
+			[labels, data] = await getChartData(true, currentFrequency.dataset.freq, seg.dataset.period);
+			mainChart.data.labels = labels;
+			mainChart.data.datasets = data;
+			mainChart.update();
+
+			currentPeriod = seg;
+		});
+	});
 	
-	[labels, data] = await getChartData();
+	[labels, data] = await getChartData(false, currentFrequency.dataset.freq, currentPeriod.dataset.period);
 	mainChart = new Chart("chart-1", {
 		type: "line",
 		data: {
@@ -50,9 +69,9 @@ async function createGraphGroup() {
 	applyTranslations(wrapper);	
 }
 
-async function getChartData(update = false, freq = 7) {
+async function getChartData(update, freq, period) {
 	//const response = await fetch("/totalHistoricValues");
-	const response = await fetch(`/assetsHistoricPrices?freq=${freq}&update=${update}`);
+	const response = await fetch(`/assetsHistoricPrices?freq=${freq}&update=${update}&period=${Math.trunc(period/freq)}`);
 	if (!response.ok) throw new Error(response.status);
 	const assetsData = await response.json();
 	const data = [];
