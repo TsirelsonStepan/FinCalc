@@ -3,16 +3,21 @@ using FinCalc.DataStructures;
 namespace FinCalc.Calculator
 {
 	public partial class Calculate
-	{		
+	{
+		//Returns only non-null values, as null values of prices are transformed into return = 1, assumed no changes
         public static HistoricData Returns(HistoricData prices)
 		{
 			int newLength = prices.Dates.Length - 1;
-			HistoricData returns = new(prices.Secid, newLength);
+			HistoricData returns = new(prices.Name, newLength, prices.Frequency, prices.Period - prices.Frequency);
 			
 			for (int i = 0; i < newLength; i++)
 			{
 				returns.Dates[i] = prices.Dates[i];
-				returns.Values[i] = prices.Values[i] / prices.Values[i + 1];
+				if (prices.Values[i] == null || prices.Values[i + 1] == null)
+				{
+					returns.Values[i] = 0;
+				}
+				else returns.Values[i] = prices.Values[i] / prices.Values[i + 1] - 1;
 			}
 			return returns;
 		}

@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+
 namespace FinCalc.MOEXAPI
 {
 	public static partial class GetFromMOEXAPI

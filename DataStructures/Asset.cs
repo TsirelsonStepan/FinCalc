@@ -24,7 +24,7 @@ namespace FinCalc.DataStructures
 		public string Market { get; set; } = "";
 		public double Amount { get; set; } = 0;
 
-		public AssetInPortfolio(string _secid, double _amount, string _market) : this()
+		public AssetInPortfolio(string _market, string _secid, double _amount) : this()
 		{
 			Market = _market;
 			Secid = _secid;

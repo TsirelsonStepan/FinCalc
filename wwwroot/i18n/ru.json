@@ -51,5 +51,7 @@
 	"chart_period_switch_quarter": "Квартал",
 	"chart_period_switch_year": "Год",
 	"chart_period_switch_2years": "2 Года",
-	"chart_period_switch_3years": "3 Года"
+	"chart_period_switch_3years": "3 Года",
+	"chart_period_switch_4years": "4 Года",
+	"chart_period_switch_5years": "5 Лет"
 }

@@ -23,6 +23,11 @@ class ExceptionsHandlerMiddleWare
 			context.Response.StatusCode = 400;
 			await context.Response.WriteAsJsonAsync(new { error = e.Message });
 		}
+		catch (HistoricDataLengthIsDifferent e)
+		{
+			context.Response.StatusCode = 500;
+			await context.Response.WriteAsJsonAsync(new { error = e.Message });			
+		}
 		catch (Exception e)
 		{
 			context.Response.StatusCode = 500;
@@ -33,3 +38,4 @@ class ExceptionsHandlerMiddleWare
 
 class PortfolioSizeIsZero(string message) : Exception(message) {}
 class UnexpectedMoexResponce(string message) : Exception(message) {}
+class HistoricDataLengthIsDifferent(string message) : Exception(message) {}

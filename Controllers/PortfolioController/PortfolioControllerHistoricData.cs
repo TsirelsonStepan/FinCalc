@@ -1,5 +1,4 @@
 using FinCalc.DataStructures;
-using FinCalc.Calculator;
 using FinCalc.MOEXAPI;
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 public partial class PortfolioController : ControllerBase
 {
 	[HttpGet]
-	[Route("WAPR")]
-	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-	public async Task<ActionResult<double>> GetWARP([FromQuery] bool update, [FromQuery] int freq, [FromQuery] int length)
+	[Route("totalHistoricValues")]
+	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
+	public async Task<ActionResult<HistoricData>> GetPortfolioValue([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
 	{
 		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
 		Portfolio portfolio = Portfolio.Deserialize(json);
@@ -22,19 +21,19 @@ public partial class PortfolioController : ControllerBase
 		{
 			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
 
-	        portfolio.WeightedAverageReturn = portfolio.GetWeightedAverageReturn();
+			portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
 
 			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
 		}
-		else if (portfolio.WeightedAverageReturn == null) throw new Exception("Portfolio was not initialized properly. WeightedAverageReturn is unassigned");
-
-		return Ok(portfolio.WeightedAverageReturn);
+		else if(portfolio.TotalHistoricValues == null) throw new Exception("Portfolio was not initialized properly. TotalHistoricValues == null");
+		
+		return Ok(portfolio.TotalHistoricValues);
 	}
 
 	[HttpGet]
-	[Route("EPR")]
+	[Route("assetsHistoricPrices")]
 	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-	public async Task<ActionResult<double>> GetEPR([FromQuery] bool update, [FromQuery] int freq, [FromQuery] int length)
+	public async Task<ActionResult<double>> GetAssetsHistoricPrices([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
 	{
 		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
 		Portfolio portfolio = Portfolio.Deserialize(json);
@@ -46,17 +45,11 @@ public partial class PortfolioController : ControllerBase
 		if (update)
 		{
 			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
-			portfolio.Beta = portfolio.GetBeta();
-
-			portfolio.ExpectedReturn = portfolio.GetCAPM(
-				portfolio.RiskFreeRate ?? throw new Exception("Portfolio was not initialized properly. RiskFreeRate == null"),
-				portfolio.Beta ?? throw new Exception("Portfolio was not initialized properly. Beta == null"),
-				Calculate.AnnualizeReturns(Calculate.Returns(portfolio.HistoricBenchmarkPrices ?? throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null"))));
-
+			
 			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
 		}
-		else if (portfolio.ExpectedReturn == null) throw new Exception("Portfolio was not initialized properly. ExpectedReturn == null");
-
-		return Ok(portfolio.ExpectedReturn);
+		else if (portfolio.AssetsHistoricPrices == null) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices == null");
+		
+		return Ok(portfolio.AssetsHistoricPrices);
 	}
 }

@@ -4,12 +4,15 @@ namespace FinCalc.Calculator
 {
 	public partial class Calculate
 	{
-		public static async Task<double> Beta(HistoricData assetReturns, double meanAssetReturns, HistoricData marketReturns, double meanMarketReturns)
+		public static double Beta(HistoricData assetReturns, HistoricData marketReturns)
         {
             if (marketReturns.Values.Length != assetReturns.Values.Length)
             {
-                throw new Exception("The length or asset vaues does not match the length of market values");
+                throw new HistoricDataLengthIsDifferent("During calculations of Beta, length of asset HistoricData was not equal to length of market HistoricData. Behaviour for this case is in development.");
             }
+
+            double meanAssetReturns = assetReturns.Values.Average() ?? throw new Exception("null values in returns HistoricalData prevented Beta() function from calculating meanRetuen");
+            double meanMarketReturns = marketReturns.Values.Average() ?? throw new Exception("null values in returns HistoricalData prevented Beta() function from calculating meanRetuen");
 
             double sumXY = 0;
             double sumXX = 0;
@@ -17,8 +20,8 @@ namespace FinCalc.Calculator
             for (int i = 0; i < marketReturns.Values.Length; i++)
             {
                 if (assetReturns.Values[i] == null || marketReturns.Values[i] == null) continue;
-                double dx = assetReturns.Values[i] ?? 1 - meanAssetReturns;
-                double dy = marketReturns.Values[i] ?? 1 - meanMarketReturns;
+                double dx = assetReturns.Values[i] ?? 0 - meanAssetReturns;
+                double dy = marketReturns.Values[i] ?? 0 - meanMarketReturns;
 
                 sumXY += dx * dy;
                 sumXX += dx * dx;

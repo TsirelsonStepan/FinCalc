@@ -1,10 +1,11 @@
 using FinCalc.DataStructures;
+using System.Text.Json.Nodes;
 
 namespace FinCalc.MOEXAPI
 {
 	public static partial class GetFromMOEXAPI
 	{
-		public static async Task<HistoricData> Prices(string market, string id, int freq = 7, int period = 52)
+		public static async Task<HistoricData> Prices(string market, string id, int freq = 7, int period = 52, bool strictSize=true)
 		{
 			Dictionary<int, int> daysToInterval = new()
 			{
@@ -61,7 +62,11 @@ namespace FinCalc.MOEXAPI
 				daysCounter += freq;
 			}
 			dates[0] = 0;
-			HistoricData result = new(id, indexCounter, dates, values);
+			HistoricData result;
+			
+			if (strictSize) result = new(id, period, freq, freq * period, dates, values);
+			else result = new(id, indexCounter, freq, totalLengthDays, dates, values);
+			
 			return result;
 		}
 	}

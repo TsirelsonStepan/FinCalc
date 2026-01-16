@@ -1,26 +1,9 @@
-using FinCalc.MOEXAPI;
-
 namespace FinCalc.DataStructures
 {	
 	public partial class Portfolio
 	{
-		public async Task<HistoricData[]> GetAssetsHistoricPrices(int freq = 7, int period = 52)
+		public HistoricData GetTotalHistoricValues()
 		{
-			
-			HistoricData[] historicData = new HistoricData[Assets.Length];
-			for (int i = 0; i < Assets.Length; i++)
-			{
-				historicData[i] = await GetFromMOEXAPI.Prices(Assets[i].Market, Assets[i].Secid, freq, period);
-			}
-			return historicData;
-		}
-
-		public async Task<HistoricData> GetTotalHistoricValues(int freq = 7, int period = 52)
-		{
-			HistoricData[] historicPrices;
-			if (AssetsHistoricPrices.Length == 0) historicPrices = await GetAssetsHistoricPrices(freq, period);
-			else historicPrices = AssetsHistoricPrices;
-
 			Dictionary<string, double> AssetAmountPairs = [];
 			for (int i = 0; i < Assets.Length; i++)
 			{
@@ -28,22 +11,26 @@ namespace FinCalc.DataStructures
 			}
 
 			int longestSeries = 0;
-			for (int i = 0; i < historicPrices.Length; i++)
+			int commonFreq = AssetsHistoricPrices[0].Frequency;
+			int longestPeriod = 0;
+			for (int i = 0; i < AssetsHistoricPrices.Length; i++)
 			{
-				longestSeries = Math.Max(longestSeries, historicPrices[i].Values.Length);
+				if (AssetsHistoricPrices[i].Frequency != commonFreq) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
+				longestSeries = Math.Max(longestSeries, AssetsHistoricPrices[i].Values.Length);
+				longestPeriod = Math.Max(longestPeriod, AssetsHistoricPrices[i].Period);
 			}
 
-			HistoricData totalValues = new("Portfolio", longestSeries);
+			HistoricData totalValues = new("Portfolio", longestSeries, commonFreq, longestPeriod);
 			for (int i = 0; i < longestSeries; i++)
 			{
 				double totalValue = 0;
 				for (int j = 0; j < Assets.Length; j++)
 				{
-					if (i >= historicPrices[j].Values.Length) continue;
-					totalValue += historicPrices[j].Values[i] ?? 0 * AssetAmountPairs[historicPrices[j].Secid];
+					if (i >= AssetsHistoricPrices[j].Values.Length) continue;
+					totalValue += AssetsHistoricPrices[j].Values[i] ?? 0 * AssetAmountPairs[AssetsHistoricPrices[j].Name];
 				}
 				totalValues.Values[i] = totalValue;
-				totalValues.Dates[i] = BenchmarkHistoricData.Dates[i];
+				totalValues.Dates[i] = HistoricBenchmarkPrices.Dates[i];
 			}
 			return totalValues;
 		}

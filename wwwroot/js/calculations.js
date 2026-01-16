@@ -71,12 +71,12 @@ async function createGraphGroup() {
 
 async function getChartData(update, freq, period) {
 	//const response = await fetch("/totalHistoricValues");
-	const response = await fetch(`/assetsHistoricPrices?freq=${freq}&update=${update}&period=${Math.trunc(period/freq)}`);
+	const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.trunc(period/freq)}`);
 	if (!response.ok) throw new Error(response.status);
 	const assetsData = await response.json();
 	const data = [];
 	assetsData.forEach(value => {
-			data.push({label: value.secid, data: [...value.values].reverse()});
+			data.push({label: value.name, data: [...value.values].reverse()});
 		});
 	labels = [...assetsData[0].dates].reverse();
 	return [labels, data];

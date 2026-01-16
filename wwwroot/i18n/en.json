@@ -52,5 +52,7 @@
 	"chart_period_switch_quarter": "Quarter",
 	"chart_period_switch_year": "Year",
 	"chart_period_switch_2years": "2 Years",
-	"chart_period_switch_3years": "3 Years"
+	"chart_period_switch_3years": "3 Years",
+	"chart_period_switch_4years": "4 Years",
+	"chart_period_switch_5years": "5 Years"
 }

@@ -1,8 +1,10 @@
+using System.Text.Json.Nodes;
+
 namespace FinCalc.MOEXAPI
 {
 	public static partial class GetFromMOEXAPI
 	{
-		public static async Task<double> RFRate()
+		public static async Task<double> RiskFreeRate()
         {
 			string url = $"https://iss.moex.com/iss/engines/stock/zcyc.json";
 			string response = await Client.GetStringAsync(url);
