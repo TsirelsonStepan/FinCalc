@@ -24,12 +24,13 @@ namespace FinCalc.MOEXAPI
 			}
 
 			JsonNode? json = JsonNode.Parse(response);
-			JsonArray companiesData = json["securities"]["data"].AsArray();
+			JsonArray companiesData = json?["securities"]?["data"]?.AsArray() ?? throw new Exception("companiesData in Get.SecuritiesList == null");
 			Asset[] companies = new Asset[companiesData.Count];
 
 			for (int i = 0; i < companiesData.Count; i++)
 			{
-				JsonArray companyData = companiesData[i].AsArray();
+				JsonArray? companyData = companiesData[i]?.AsArray();
+				if (companyData == null) continue;
                 Asset company = new(
                     companyData[0]?.GetValue<string>() ?? "No Secid", //secid
                     companyData[1]?.GetValue<string>() ?? "No Shortname", //shortname

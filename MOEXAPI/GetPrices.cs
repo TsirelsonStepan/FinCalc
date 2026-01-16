@@ -25,12 +25,22 @@ namespace FinCalc.MOEXAPI
 			
 			while (totalLengthDays < period)
 			{
-				string newUrl = url + $"&start={finalJson.Count}";
+				string newUrl = url + $"&start={finalJson?.Count}";
 				string response = await Client.GetStringAsync(newUrl);
-				JsonArray addJson = JsonNode.Parse(response)["candles"]["data"].AsArray() ?? throw new UnexpectedMoexResponce(response);
-				foreach (JsonNode? item in addJson) finalJson.Add(item.DeepClone());
-				date = finalJson.Last()[7].GetValue<string>().Split(' ')[0].Split('-');
-				lastDate = new(Convert.ToInt16(date[0]), Convert.ToInt16(date[1]), Convert.ToInt16(date[2]));				
+				JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponce(response);
+				foreach (JsonNode? item in addJson) finalJson?.Add(item?.DeepClone());
+				JsonNode? dateNode = finalJson?.Last()?[7];
+				if (dateNode != null)
+				{
+					date = dateNode.GetValue<string>().Split(' ')[0].Split('-');
+					lastDate = new(Convert.ToInt16(date[0]), Convert.ToInt16(date[1]), Convert.ToInt16(date[2]));
+				}
+				else
+				{
+					lastDate = start;
+
+				}
+
 				totalLengthDays = Convert.ToInt16((today - lastDate).TotalDays);
 				if (addJson.Count < 500) break; //500 sees to be limit on one time data retrieval 
 			}
@@ -43,14 +53,24 @@ namespace FinCalc.MOEXAPI
 			
 			while (daysCounter < totalLengthDays)
 			{
-				string[] currentDateStr = finalJson[indexCounter - addedValues][7].GetValue<string>().Split(' ')[0].Split('-');
-				DateTime currentDate = new(Convert.ToInt16(currentDateStr[0]), Convert.ToInt16(currentDateStr[1]), Convert.ToInt16(currentDateStr[2]));
-				int currentDaysPassed = (int)(today - currentDate).TotalDays;
+				JsonNode? currentDateNode = finalJson?[indexCounter - addedValues]?[7];
+				int currentDaysPassed;
+				if (currentDateNode != null)
+				{
+					string[] currentDateStr = currentDateNode.GetValue<string>().Split(' ')[0].Split('-');
+					DateTime currentDate = new(Convert.ToInt16(currentDateStr[0]), Convert.ToInt16(currentDateStr[1]), Convert.ToInt16(currentDateStr[2]));
+					currentDaysPassed = (int)(today - currentDate).TotalDays;
+				}
+				else
+				{
+					currentDaysPassed = daysCounter;
+				}
+
 				if (currentDaysPassed - daysCounter < freq)
 				{
 					daysCounter = currentDaysPassed;
 					dates[indexCounter] = daysCounter;
-					values[indexCounter] = finalJson[indexCounter - addedValues][1].GetValue<double>();
+					values[indexCounter] = finalJson?[indexCounter - addedValues]?[1]?.GetValue<double>();
 				}
 				else
 				{

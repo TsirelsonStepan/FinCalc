@@ -37,7 +37,7 @@ public partial class PortfolioController : ControllerBase
 	[HttpGet]
 	[Route("portfolio")]
 	[ProducesResponseType(typeof(Portfolio), StatusCodes.Status200OK)]
-	public async Task<ActionResult<Portfolio>> GET()
+	public ActionResult<Portfolio> GET()
 	{
 		Portfolio portfolio = Portfolio.Deserialize(System.IO.File.ReadAllText("./stored_portfolio.json"));
 

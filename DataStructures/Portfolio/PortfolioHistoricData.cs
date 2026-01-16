@@ -4,6 +4,7 @@ namespace FinCalc.DataStructures
 	{
 		public HistoricData GetTotalHistoricValues()
 		{
+			if (HistoricBenchmarkPrices == null) throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null");
 			Dictionary<string, double> AssetAmountPairs = [];
 			for (int i = 0; i < Assets.Length; i++)
 			{
