@@ -22,7 +22,6 @@ namespace FinCalc.DataStructures
 			}
 
 			HistoricData totalValues = new("Portfolio", longestSeries, commonFreq, longestPeriod);
-			int startDate = 0;
 			for (int i = 0; i < longestSeries; i++)
 			{
 				double totalValue = 0;
@@ -32,7 +31,7 @@ namespace FinCalc.DataStructures
 					totalValue += (AssetsHistoricPrices[j].Values[i] ?? 0) * AssetAmountPairs[AssetsHistoricPrices[j].Name];
 				}
 				totalValues.Values[i] = totalValue;
-				totalValues.Dates[i] = startDate += commonFreq;//HistoricBenchmarkPrices.Dates[i];
+				totalValues.Dates[i] = AssetsHistoricPrices[0].Dates[i];//HistoricBenchmarkPrices.Dates[i];
 			}
 			totalValues.RealDates = totalValues.GetRealDates();
 			return totalValues;

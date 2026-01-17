@@ -11,9 +11,10 @@
     gap: 16px;
 }
 
+.other-assets-list,
 .assets-list,
 .assets-search {
-    flex: 1;
+    flex: 2;
     background: #020617;
     border: 1px solid #1e293b;
     border-radius: 12px;
@@ -21,8 +22,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: 50%;
     min-height: 0;
+}
+
+.other-assets-list,
+.assets-list {
+    flex: 1;
 }
 
 input {
@@ -43,23 +48,32 @@ input:focus {
 }
 
 .delete-btn,
-.add-btn {
+.add-to-other-btn,
+.add-to-portfolio-btn {
     padding: 6px 10px;
     background: #1e293b;
     border: 1px solid #334155;
 }
 
 .delete-btn:hover,
-.add-btn:hover {
+.add-to-other-btn,
+.add-to-portfolio-btn:hover {
     background: #334155;
 }
 
 .search-result-item,
+.other-selected-asset-item,
 .selected-asset-item {
     display: grid;
-    grid-template-columns: 68% 20% 10%;
+    grid-template-columns: 68% 10% 10% 10%;
     justify-content: center;
     column-gap: 1%;
+}
+.selected-asset-item {
+    grid-template-columns: 68% 20% 10%;
+}
+.other-selected-asset-item {
+    grid-template-columns: 90% 10%;
 }
 
 .asset-value-input,

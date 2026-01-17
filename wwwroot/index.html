@@ -2,51 +2,60 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Financial Portfolio Calculator</title>
-  
-  <link rel="stylesheet" href="/css/lang.css">
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/sidebar.css">
-  <link rel="stylesheet" href="/css/chart.css">
-  <link rel="stylesheet" href="/css/return_ratios_group.css">
-  <link rel="stylesheet" href="/css/switch_select.css">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Financial Portfolio Calculator</title>
+	
+	<link rel="stylesheet" href="/css/lang.css">
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/sidebar.css">
+	<link rel="stylesheet" href="/css/chart.css">
+	<link rel="stylesheet" href="/css/return_ratios_group.css">
+	<link rel="stylesheet" href="/css/switch_select.css">
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-  <div class="main">
-	<div class="sidebar">
-	  <div class="assets-search">
-		<div class="assets-search-switch">
-		  <label class="assets-search-switch-label" data-i18n="assets_search_switch_label"></label>
+	<div class="main">
+		<div class="sidebar">
 
-		  <div class="asset-search-switch-segment">
-			<button class="assets-search-switch-option active" data-type="shares" data-i18n="asset_search_switch_shares"></button>
-			<button class="assets-search-switch-option" data-type="index" data-i18n="asset_search_switch_indexes"></button>
-		  </div>
+			<div class="assets-search">
+				<div class="assets-search-switch">
+					<label class="assets-search-switch-label" data-i18n="assets_search_switch_label"></label>
+
+					<div class="asset-search-switch-segment">
+						<button class="assets-search-switch-option active" data-type="shares" data-i18n="asset_search_switch_shares"></button>
+						<button class="assets-search-switch-option" data-type="index" data-i18n="asset_search_switch_indexes"></button>
+					</div>
+				</div>
+
+				<input type="text" id="assets-search-input" placeholder="...">
+				<button data-i18n="assets_search_switch_label" id="search-btn"></button>
+			
+				<div id="search-results" class="scroll-box"></div>
+			</div>
+
+			<div class="assets-list">
+				<label data-i18n="selected_assets"></label>
+			
+				<div id="selected-assets" class="scroll-box"></div>
+			</div>
+
+			<div class="other-assets-list">
+				<label data-i18n="other_selected_assets"></label>
+				
+				<div id="other-selected-assets" class="scroll-box"></div>
+			</div>
+			
+			<button data-i18n="calculate_for_this_assets" id="calculate-btn"></button>
+
 		</div>
-
-		<input type="text" id="assets-search-input" placeholder="...">
-		<button data-i18n="assets_search_switch_label" id="search-btn"></button>
-  
-		<div id="search-results" class="scroll-box"></div>
-	  </div>
-
-	  <div class="assets-list">
-		<label data-i18n="selected_assets"></label>
-		<button data-i18n="calculate_for_this_assets" id="calculate-btn"></button>
 		
-		<div id="selected-assets" class="scroll-box"></div>
-	  </div>
+		<div class="content"></div>
 	</div>
-  
-	<div class="content"></div>
-  </div>
 
-  <div class="info">
+	<div class="info">
 	<label data-i18n="info_label"></label>
 	<a data-i18n="this_project" href="https://github.com/TsirelsonStepan/FinCalc"></a> | 
 	<a data-i18n="my_github" href="https://github.com/TsirelsonStepan"></a> | 
@@ -54,20 +63,20 @@
 	<a data-i18n="my_cv" id="cv-file"></a>
 	
 	<select id="lang-select" class="lang-select">
-	  <option value="en">EN</option>
-	  <option value="ru">RU</option>
+		<option value="en">EN</option>
+		<option value="ru">RU</option>
 	</select>
-  </div>
-  
-  <script src="js/load_templates.js"></script>
-  <script src="i18n/i18n.js"></script>
+	</div>
+	
+	<script src="js/load_templates.js"></script>
+	<script src="i18n/i18n.js"></script>
 
-  <script src="js/toggle_main_groups.js"></script>
-  <script src="js/search_assets.js"></script>
-  <script src="js/manage_assets.js"></script>
-  <script src="js/calculations.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
+	<script src="js/toggle_main_groups.js"></script>
+	<script src="js/search_assets.js"></script>
+	<script src="js/manage_assets.js"></script>
+	<script src="js/calculations.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
 
 </body>
 

@@ -12,9 +12,10 @@ public class HistoricDataController : ControllerBase
 	[HttpGet]
 	[Route("historicAssetPrices")]
 	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData>> GetAssetPrices([FromQuery] string secid, [FromQuery] string market, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	public async Task<ActionResult<HistoricData>> GetAssetPrices([FromQuery] string market, [FromQuery] string secid, [FromQuery] int freq = 7, [FromQuery] int length = 52)
 	{
 		HistoricData historicPrices = await GetFromMOEXAPI.Prices(market, secid, freq, length);
+		historicPrices.RealDates = historicPrices.GetRealDates();
 		return Ok(historicPrices);
 	}
 
@@ -24,6 +25,7 @@ public class HistoricDataController : ControllerBase
 	public async Task<ActionResult<HistoricData>> GetAssetReturns([FromQuery] string market, [FromQuery] string secid, [FromQuery] int freq = 7, [FromQuery] int length = 52)
 	{
 		HistoricData historicReturns = Calculate.Returns(await GetFromMOEXAPI.Prices(market, secid, freq, length));
+		historicReturns.RealDates = historicReturns.GetRealDates();
 		return Ok(historicReturns);
 	}
 }

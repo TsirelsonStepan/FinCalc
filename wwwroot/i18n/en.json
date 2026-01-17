@@ -1,10 +1,10 @@
 {
 	"selected_assets": "Selected assets",
+	"other_selected_assets": "Other selected assets",
 	"calculate_for_this_assets": "Calculate for these assets",
 	"assets_search_switch_label": "Search",
 	"asset_search_switch_shares": "Shares",
 	"asset_search_switch_indexes": "Indexes",
-
 
 	"historic_data": "Historic Data",
 	"return_ratios": "Return Ratios",

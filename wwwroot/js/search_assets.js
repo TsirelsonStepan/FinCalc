@@ -44,8 +44,11 @@ function renderSearchResults(assets) {
 		wrapper.querySelector("#shortname").textContent = asset.shortname;
 		//wrapper.querySelector("#secid").textContent = asset.secid;
 		
-		wrapper.querySelector(".add-btn").addEventListener("click", () => {
-			addAsset(asset);
+		wrapper.querySelector(".add-to-portfolio-btn").addEventListener("click", () => {
+			addAsset(asset, true);
+		});
+		wrapper.querySelector(".add-to-other-btn").addEventListener("click", () => {
+			addAsset(asset, false);
 		});
 
 		wrapper.querySelector(".tooltip").addEventListener("mouseover", e => {

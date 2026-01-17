@@ -71,20 +71,32 @@ async function createGraphGroup() {
 	});
 
 	group.addEventListener('click', () => manageGroups(group));
-	applyTranslations(wrapper);	
+	applyTranslations(wrapper);
 }
 
 async function getChartData(update, freq, period) {
-	const response = await fetch("/totalHistoricValues");
+	const data = [];
+
+	const response = await fetch(`/totalHistoricValues?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
 	//const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
 	if (!response.ok) throw new Error(response.status);
-	const assetsData = [await response.json()];
-	const data = [];
-	assetsData.forEach(value => {
-			data.push({label: value.name, data: [...value.values].reverse()});
-		});
-	labels = [...assetsData[0].realDates].reverse();
+	const portfolioData = await response.json();
+	data.push({label: portfolioData.name, data: [...portfolioData.values].reverse()});
+
+	for (let i = 0; i < otherSelectedArr.length; i++) {
+		const assetData = await getOtherAssetData(otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
+		data.push({label: assetData.name, data: [...assetData.values].reverse()});
+	}
+	
+	labels = [...portfolioData.realDates].reverse();
 	return [labels, data];
+}
+
+async function getOtherAssetData(market, secid, freq, period) {
+	const response = await fetch(`/historicAssetPrices?market=${market}&secid=${secid}&freq=${freq}&length=${Math.round(period/freq)}`);
+	if (!response.ok) throw new Error(response.status);
+	const assetData = await response.json()
+	return assetData;
 }
 
 async function createReturnRatiosGroup() {
