@@ -1,3 +1,4 @@
+/*
 using FinCalc.DataStructures;
 using FinCalc.Calculator;
 using FinCalc.MOEXAPI;
@@ -60,3 +61,4 @@ public partial class PortfolioController : ControllerBase
 		return Ok(portfolio.ExpectedReturn);
 	}
 }
+*/

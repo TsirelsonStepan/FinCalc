@@ -4,7 +4,7 @@ namespace FinCalc.DataStructures
 	{
 		public HistoricData GetTotalHistoricValues()
 		{
-			if (HistoricBenchmarkPrices == null) throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null");
+			//if (HistoricBenchmarkPrices == null) throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null");
 			Dictionary<string, double> AssetAmountPairs = [];
 			for (int i = 0; i < Assets.Length; i++)
 			{
@@ -22,17 +22,19 @@ namespace FinCalc.DataStructures
 			}
 
 			HistoricData totalValues = new("Portfolio", longestSeries, commonFreq, longestPeriod);
+			int startDate = 0;
 			for (int i = 0; i < longestSeries; i++)
 			{
 				double totalValue = 0;
 				for (int j = 0; j < Assets.Length; j++)
 				{
 					if (i >= AssetsHistoricPrices[j].Values.Length) continue;
-					totalValue += AssetsHistoricPrices[j].Values[i] ?? 0 * AssetAmountPairs[AssetsHistoricPrices[j].Name];
+					totalValue += (AssetsHistoricPrices[j].Values[i] ?? 0) * AssetAmountPairs[AssetsHistoricPrices[j].Name];
 				}
 				totalValues.Values[i] = totalValue;
-				totalValues.Dates[i] = HistoricBenchmarkPrices.Dates[i];
+				totalValues.Dates[i] = startDate += commonFreq;//HistoricBenchmarkPrices.Dates[i];
 			}
+			totalValues.RealDates = totalValues.GetRealDates();
 			return totalValues;
 		}
     }

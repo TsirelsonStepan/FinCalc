@@ -12,22 +12,19 @@ public partial class PortfolioController : ControllerBase
 	[HttpPost]
 	[Route("portfolio")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<ActionResult> POST([FromBody] AssetInPortfolio[] assets)
+	public async Task<ActionResult> POST([FromBody] AssetInPortfolio[] assets, [FromQuery] int freq, [FromQuery] int length)
 	{
-		int freq = 7;
-		int period = 52 * 5;
-
 		Portfolio portfolio = new(assets, new AssetInPortfolio("index", "IMOEX", 1));
-		portfolio = await AssignPortfolioValues.Whole(portfolio, freq, period);
+		portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
 
 		portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
-		portfolio.Beta = portfolio.GetBeta();
-		portfolio.WeightedAverageReturn = portfolio.GetWeightedAverageReturn();
-		portfolio.ExpectedReturn = portfolio.GetCAPM(
-			portfolio.RiskFreeRate ?? throw new Exception("Portfolio was not initialized properly. RiskFreeRate == null"),
-			portfolio.Beta ?? throw new Exception("Portfolio was not initialized properly. Beta == null"),
-			Calculate.AnnualizeReturns(Calculate.Returns(portfolio.HistoricBenchmarkPrices ?? throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null")))
-		);
+		//portfolio.Beta = portfolio.GetBeta();
+		//portfolio.WeightedAverageReturn = portfolio.GetWeightedAverageReturn();
+		//portfolio.ExpectedReturn = portfolio.GetCAPM(
+		//	portfolio.RiskFreeRate ?? throw new Exception("Portfolio was not initialized properly. RiskFreeRate == null"),
+		//	portfolio.Beta ?? throw new Exception("Portfolio was not initialized properly. Beta == null"),
+		//	Calculate.AnnualizeReturns(Calculate.Returns(portfolio.HistoricBenchmarkPrices ?? throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null")))
+		//);
 
 		System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
 

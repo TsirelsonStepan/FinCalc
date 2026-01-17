@@ -5,16 +5,16 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class GetFromMOEXAPI
 	{
-		public static async Task<HistoricData> Prices(string market, string id, int freq = 7, int period = 52, bool strictSize=true)
+		public static async Task<HistoricData> Prices(string market, string id, int freq = 7, int length = 52)
 		{
 			Dictionary<int, int> daysToInterval = new()
 			{
 				{1, 24},
 				{7, 7},
-				{30, 31},
+				{31, 31},
 				{90, 4},
 			};
-			DateTime start = DateTime.Today.AddDays(-freq * period);
+			DateTime start = DateTime.Today.AddDays(-freq * length);
 			
 			string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{id}/candles.json?from={start:yyyy-MM-dd}&interval={daysToInterval[freq]}&iss.reverse=true";
 			JsonArray finalJson = [];
@@ -23,7 +23,7 @@ namespace FinCalc.MOEXAPI
 			DateTime lastDate;
 			int totalLengthDays = 0;
 			
-			while (totalLengthDays < period)
+			while (totalLengthDays < length)
 			{
 				string newUrl = url + $"&start={finalJson?.Count}";
 				string response = await Client.GetStringAsync(newUrl);
@@ -38,22 +38,26 @@ namespace FinCalc.MOEXAPI
 				else
 				{
 					lastDate = start;
-
 				}
 
 				totalLengthDays = Convert.ToInt16((today - lastDate).TotalDays);
-				if (addJson.Count < 500) break; //500 sees to be limit on one time data retrieval 
+				if (addJson.Count < 500) break; //500 seems to be limit on one time data retrieval 
 			}
 
 			int addedValues = 0;
 			int daysCounter = 0;
-			int indexCounter = 0;
-			int[] dates = new int[period];
-			double?[] values = new double?[period];
+			int[] dates = new int[length];
+			double?[] values = new double?[length];
 			
-			while (daysCounter < totalLengthDays)
+			for (int i = 0; i < length; i++)
 			{
-				JsonNode? currentDateNode = finalJson?[indexCounter - addedValues]?[7];
+				if (i - addedValues >= finalJson?.Count)
+				{
+					dates[i] = daysCounter;
+					daysCounter += freq;
+					continue;
+				}
+				JsonNode? currentDateNode = finalJson?[i - addedValues]?[7];
 				int currentDaysPassed;
 				if (currentDateNode != null)
 				{
@@ -69,23 +73,20 @@ namespace FinCalc.MOEXAPI
 				if (currentDaysPassed - daysCounter < freq)
 				{
 					daysCounter = currentDaysPassed;
-					dates[indexCounter] = daysCounter;
-					values[indexCounter] = finalJson?[indexCounter - addedValues]?[1]?.GetValue<double>();
+					dates[i] = daysCounter;
+					values[i] = finalJson?[i - addedValues]?[1]?.GetValue<double>();
 				}
 				else
 				{
+					dates[i] = daysCounter;
 					addedValues++;
-					dates[indexCounter] = daysCounter;
-					values[indexCounter] = null;
 				}
-				indexCounter++;
 				daysCounter += freq;
 			}
 			dates[0] = 0;
 			HistoricData result;
 			
-			if (strictSize) result = new(id, period, freq, freq * period, dates, values);
-			else result = new(id, indexCounter, freq, totalLengthDays, dates, values);
+			result = new(id, length, freq, freq * length, dates, values);
 			
 			return result;
 		}

@@ -2,7 +2,9 @@ const calculateButton = document.getElementById("calculate-btn");
 const content = document.querySelector('.content');
 
 async function displayCalculations() {
-	const response = await fetch("/portfolio", {
+	const defaultFrequency = 7;
+	const defaultPeriod = 365;
+	const response = await fetch(`/portfolio?freq=${defaultFrequency}&length=${Math.round(defaultPeriod/defaultFrequency)}`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(selectedArr),
@@ -10,7 +12,7 @@ async function displayCalculations() {
 	if (!response.ok) throw new Error(response.status);
 
 	content.innerHTML = "";
-	await createReturnRatiosGroup();
+	//await createReturnRatiosGroup();
 	await createGraphGroup();
 }
 
@@ -57,6 +59,9 @@ async function createGraphGroup() {
 	});
 	
 	[labels, data] = await getChartData(false, currentFrequency.dataset.freq, currentPeriod.dataset.period);
+
+	Chart.defaults.elements.point.radius = 2;
+	Chart.defaults.elements.point.hoverRadius = 4;
 	mainChart = new Chart("chart-1", {
 		type: "line",
 		data: {
@@ -70,15 +75,15 @@ async function createGraphGroup() {
 }
 
 async function getChartData(update, freq, period) {
-	//const response = await fetch("/totalHistoricValues");
-	const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.trunc(period/freq)}`);
+	const response = await fetch("/totalHistoricValues");
+	//const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
 	if (!response.ok) throw new Error(response.status);
-	const assetsData = await response.json();
+	const assetsData = [await response.json()];
 	const data = [];
 	assetsData.forEach(value => {
 			data.push({label: value.name, data: [...value.values].reverse()});
 		});
-	labels = [...assetsData[0].dates].reverse();
+	labels = [...assetsData[0].realDates].reverse();
 	return [labels, data];
 }
 
