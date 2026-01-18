@@ -13,9 +13,5 @@ async function loadTemplates() {
 }
 loadTemplates();
 
-function loadFiles() {
-	var cv_file = "/files/Stephan Tsirelson. CV.pdf";
-	if (localStorage.getItem("lang") === "ru") cv_file = "/files/Цирельсон Степан. CV.pdf";
-	document.getElementById("cv-file").href = cv_file;
-}
-loadFiles();
+document.getElementById("cv-file-en").href = "/files/Stephan Tsirelson. CV.pdf";
+document.getElementById("cv-file-ru").href = "/files/Цирельсон Степан. CV.pdf";

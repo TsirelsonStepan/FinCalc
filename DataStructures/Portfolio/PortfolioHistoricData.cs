@@ -24,9 +24,14 @@ namespace FinCalc.DataStructures
 			HistoricData totalValues = new("Portfolio", longestSeries, commonFreq, longestPeriod);
 			for (int i = 0; i < longestSeries; i++)
 			{
-				double totalValue = 0;
+				double? totalValue = 0;
 				for (int j = 0; j < Assets.Length; j++)
 				{
+					if (AssetsHistoricPrices[j].Values[i] == null)
+					{
+						totalValue = null;
+						break;
+					}
 					if (i >= AssetsHistoricPrices[j].Values.Length) continue;
 					totalValue += (AssetsHistoricPrices[j].Values[i] ?? 0) * AssetAmountPairs[AssetsHistoricPrices[j].Name];
 				}

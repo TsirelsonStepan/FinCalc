@@ -67,6 +67,32 @@ async function createGraphGroup() {
 		data: {
 			labels: labels,
 			datasets: data,
+		},
+		options: {
+			scales: {
+				portfolio: {
+					type: "linear",
+					position: "left"
+				},
+				benchmark: {
+					type: "linear",
+					position: "right",
+					grid: {
+						drawOnChartArea: false
+					}
+				}
+			},
+			interaction: {
+				mode: "index",      // align by X label
+				intersect: false    // no need to hover the dot exactly
+			},
+			plugins: {
+				tooltip: {
+					backgroundColor: "#020617",
+					borderColor: "#1e40af",
+					borderWidth: 1
+				}
+			}
 		}
 	});
 
@@ -81,11 +107,11 @@ async function getChartData(update, freq, period) {
 	//const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
 	if (!response.ok) throw new Error(response.status);
 	const portfolioData = await response.json();
-	data.push({label: portfolioData.name, data: [...portfolioData.values].reverse()});
+	data.push({label: portfolioData.name, data: [...portfolioData.values].reverse(), yAxisID: "portfolio"});
 
 	for (let i = 0; i < otherSelectedArr.length; i++) {
 		const assetData = await getOtherAssetData(otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
-		data.push({label: assetData.name, data: [...assetData.values].reverse()});
+		data.push({label: assetData.name, data: [...assetData.values].reverse(), yAxisID: "benchmark"});
 	}
 	
 	labels = [...portfolioData.realDates].reverse();

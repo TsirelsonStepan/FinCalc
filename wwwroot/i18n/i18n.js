@@ -19,8 +19,6 @@ function applyTranslations(root = document) {
             el.textContent = dict[key];
         }
     });
-
-    loadFiles(); //each time the language chnages i need to update link to my cv so it is in aproppriate language
 }
 
 document.getElementById("lang-select").addEventListener("change", e => {

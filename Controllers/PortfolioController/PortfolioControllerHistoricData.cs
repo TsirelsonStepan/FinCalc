@@ -14,18 +14,13 @@ public partial class PortfolioController : ControllerBase
 		Portfolio portfolio = Portfolio.Deserialize(json);
 
 		//check pre-assign values
-		if (portfolio.Benchmark == null) throw new Exception("Portfolio was not initialized properly. No benchmark is assigned");
 		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
 
-		if (update)
-		{
-			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
+		if (update) portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
 
-			portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
+		portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
 
-			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
-		}
-		else if(portfolio.TotalHistoricValues == null) throw new Exception("Portfolio was not initialized properly. TotalHistoricValues == null");
+		System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
 		
 		return Ok(portfolio.TotalHistoricValues);
 	}
@@ -39,8 +34,8 @@ public partial class PortfolioController : ControllerBase
 		Portfolio portfolio = Portfolio.Deserialize(json);
 
 		//check pre-assign values
-		if (portfolio.Benchmark == null) throw new Exception("Portfolio was not initialized properly. No benchmark is assigned");
 		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
+		if (portfolio.AssetsHistoricPrices == null) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices is unassigned");
 
 		if (update)
 		{
@@ -48,7 +43,6 @@ public partial class PortfolioController : ControllerBase
 			
 			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
 		}
-		else if (portfolio.AssetsHistoricPrices == null) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices == null");
 		
 		return Ok(portfolio.AssetsHistoricPrices);
 	}

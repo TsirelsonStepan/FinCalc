@@ -4,13 +4,12 @@ namespace FinCalc.DataStructures
 {	
 	public partial class Portfolio
 	{
-        public double GetBeta()
+        public double GetBeta(HistoricData Benchmark)
         {
-			if (HistoricBenchmarkPrices == null) throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices is unassigned");
 			if (AssetsHistoricPrices.Length == 0) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices is unassigned");
 			double sumOfBetas = 0;
 			double totalWeight = 0;
-			HistoricData marketReturns = Calculate.Returns(HistoricBenchmarkPrices);
+			HistoricData marketReturns = Calculate.Returns(Benchmark);
 			double meanMarketReturn = Calculate.AnnualizeReturns(marketReturns);
 			for (int i = 0; i < Assets.Length; i++)
 			{

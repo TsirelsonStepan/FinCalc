@@ -1,6 +1,6 @@
 {
-	"selected_assets": "Выбранные Активы",
-	"other_selected_assets": "Прочие активы",
+	"selected_assets": "Портфель",
+	"other_selected_assets": "Бенчмарк",
 	"calculate_for_this_assets": "Расчитать для этих активов",
 	"assets_search_switch_label": "Найти",
 	"asset_search_switch_shares": "Акции",
@@ -22,7 +22,8 @@
 	"this_project": "Этот Проект",
 	"my_github": "Мой Github",
 	"my_linkedin": "Мой Linkedin",
-	"my_cv": "Моё резюме",
+	"my_cv_en": "Мое Резюме (eng)",
+	"my_cv_ru": "Мое Резюме",
 
 	"intro_title": "Добро пожаловать в Калькулятор Инвестиционного Портфеля",
 	"intro_lead": "Этот инструмент поможет вам создать портфель активов и рассчитать финансовые показатели на основе исторических данных.",

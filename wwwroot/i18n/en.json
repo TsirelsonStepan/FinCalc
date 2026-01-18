@@ -1,6 +1,6 @@
 {
-	"selected_assets": "Selected assets",
-	"other_selected_assets": "Other selected assets",
+	"selected_assets": "Portfolio",
+	"other_selected_assets": "Benchmark",
 	"calculate_for_this_assets": "Calculate for these assets",
 	"assets_search_switch_label": "Search",
 	"asset_search_switch_shares": "Shares",
@@ -22,7 +22,8 @@
 	"this_project": "This Project",
 	"my_github": "My Github",
 	"my_linkedin": "My Linkedin",
-	"my_cv": "My CV",
+	"my_cv_en": "My CV",
+	"my_cv_ru": "My CV (ru)",
 
 	"intro_title": "Welcome To Portfolio Calculator",
 	"intro_lead": "This tool helps you build an asset portfolio and calculate financial metrics based on historical data.",

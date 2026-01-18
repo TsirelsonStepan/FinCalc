@@ -38,6 +38,7 @@ input {
     background: #020617;
     color: #e5e7eb;
     caret-color: #38bdf8;
+    min-width: 0;
 }
 input::placeholder {
     color: #64748b;
@@ -99,7 +100,6 @@ input:focus {
     position: relative;
     cursor: default;
     color: #38bdf8;
-    font-size: 14px;
     margin-left: 6px;
 }
 
@@ -119,4 +119,9 @@ input:focus {
 .tooltip:hover .tooltip-text,
 .tooltip:focus-within .tooltip-text {
     opacity: 1;
+}
+
+.input-search-holder {
+    display: flex;
+    flex-direction: row;
 }

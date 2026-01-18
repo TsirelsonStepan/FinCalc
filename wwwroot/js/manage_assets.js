@@ -55,7 +55,9 @@ function addAsset(asset, toPortfolio) {
 		selectedAssets.appendChild(wrapper);
 	}
 	else {
+		otherSelectedArr = []; //remove later needed to prevent several benchmarks
 		otherSelectedArr.push(newAsset);
+		otherSelectedAssets.innerHTML = "";
 		otherSelectedAssets.appendChild(wrapper);
 	}
 }

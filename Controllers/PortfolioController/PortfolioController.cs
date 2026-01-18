@@ -1,4 +1,3 @@
-using FinCalc.Calculator;
 using FinCalc.DataStructures;
 using FinCalc.MOEXAPI;
 
@@ -14,7 +13,7 @@ public partial class PortfolioController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> POST([FromBody] AssetInPortfolio[] assets, [FromQuery] int freq, [FromQuery] int length)
 	{
-		Portfolio portfolio = new(assets, new AssetInPortfolio("index", "IMOEX", 1));
+		Portfolio portfolio = new(assets);
 		portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
 
 		portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
