@@ -4,13 +4,12 @@ namespace FinCalc.DataStructures
 {	
 	public partial class Portfolio
 	{
-        public double GetBeta(HistoricData Benchmark)
+        public double GetBeta(HistoricData benchmark)
         {
 			if (AssetsHistoricPrices.Length == 0) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices is unassigned");
 			double sumOfBetas = 0;
 			double totalWeight = 0;
-			HistoricData marketReturns = Calculate.Returns(Benchmark);
-			double meanMarketReturn = Calculate.AnnualizeReturns(marketReturns);
+			HistoricData marketReturns = Calculate.Returns(benchmark);
 			for (int i = 0; i < Assets.Length; i++)
 			{
             	HistoricData assetReturns = Calculate.Returns(AssetsHistoricPrices[i]);
@@ -39,9 +38,9 @@ namespace FinCalc.DataStructures
 			return wAPR;
 		}
 
-		public double GetCAPM(double RiskFreeRate, double Beta, double marketAnnualReturn)
+		public double GetCAPM(double riskFreeRate, double beta, double marketAnnualReturn)
 		{
-			return 1 + RiskFreeRate + (marketAnnualReturn - 1 - RiskFreeRate) * Beta;
+			return 1 + riskFreeRate + (marketAnnualReturn - 1 - riskFreeRate) * beta;
 		}
     }
 }

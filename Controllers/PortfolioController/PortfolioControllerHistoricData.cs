@@ -27,8 +27,8 @@ public partial class PortfolioController : ControllerBase
 
 	[HttpGet]
 	[Route("assetsHistoricPrices")]
-	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-	public async Task<ActionResult<double>> GetAssetsHistoricPrices([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	[ProducesResponseType(typeof(HistoricData[]), StatusCodes.Status200OK)]
+	public async Task<ActionResult<HistoricData[]>> GetAssetsHistoricPrices([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
 	{
 		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
 		Portfolio portfolio = Portfolio.Deserialize(json);

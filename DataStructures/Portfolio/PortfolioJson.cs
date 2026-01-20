@@ -8,9 +8,9 @@ namespace FinCalc.DataStructures
         {
 			PropertyNameCaseInsensitive = true
 		};
-		public static Portfolio Deserialize(string portfolio)
+		public static Portfolio Deserialize(string portfolioJson)
 		{
-			return JsonSerializer.Deserialize<Portfolio>(portfolio, options) ?? throw new PortfolioSizeIsZero("portfolio json deserializaion failed");
+			return JsonSerializer.Deserialize<Portfolio>(portfolioJson, options) ?? throw new PortfolioSizeIsZero("portfolio json deserializaion failed");
 		}
 		public static string Serialize(Portfolio portfolio)
 		{

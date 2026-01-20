@@ -11,7 +11,7 @@ public partial class PortfolioController : ControllerBase
 	[HttpPost]
 	[Route("portfolio")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<ActionResult> POST([FromBody] AssetInPortfolio[] assets, [FromQuery] int freq, [FromQuery] int length)
+	public async Task<ActionResult> CreatePortfolio([FromBody] AssetInPortfolio[] assets, [FromQuery] int freq, [FromQuery] int length)
 	{
 		Portfolio portfolio = new(assets);
 		portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
@@ -33,7 +33,7 @@ public partial class PortfolioController : ControllerBase
 	[HttpGet]
 	[Route("portfolio")]
 	[ProducesResponseType(typeof(Portfolio), StatusCodes.Status200OK)]
-	public ActionResult<Portfolio> GET()
+	public ActionResult<Portfolio> GetPortfolio()
 	{
 		Portfolio portfolio = Portfolio.Deserialize(System.IO.File.ReadAllText("./stored_portfolio.json"));
 

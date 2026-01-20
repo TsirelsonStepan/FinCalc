@@ -17,13 +17,13 @@ namespace FinCalc.DataStructures
 
 		public Portfolio() {}
 
-		public Portfolio(AssetInPortfolio[] _assets)
+		public Portfolio(AssetInPortfolio[] assets)
 		{
-			VerifyAssets(_assets);
-			Assets = _assets;
+			VerifyAssets(assets);
+			Assets = assets;
 		}
 
-		public void VerifyAssets(AssetInPortfolio[] assets)
+		private void VerifyAssets(AssetInPortfolio[] assets)
 		{
 			foreach (AssetInPortfolio asset in assets)
 			{
