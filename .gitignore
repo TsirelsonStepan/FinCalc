@@ -1,4 +1,5 @@
-/bin/
-/obj/
-.editorconfig
-Structure
+src/FinCalc/bin/
+src/FinCalc/obj/
+tests/FinCalc.Tests/bin/
+tests/FinCalc.Tests/obj/
+diagrams/Structure

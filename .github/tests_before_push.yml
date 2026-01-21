@@ -7,6 +7,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0'
-      - run: dotnet restore
-      - run: dotnet build --no-restore
-      - run: dotnet test --no-build
+
+      - run: dotnet restore src/FinCalc/FinCalc.csproj
+      - run: dotnet build src/FinCalc/FinCalc.csproj
+      - run: dotnet test tests/FinCalc.Tests/FinCalc.Tests.csproj

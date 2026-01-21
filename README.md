@@ -36,7 +36,7 @@ cd FinCalc
 docker build -t fincalc-app:latest .
 
 # Run container
-docker run -p 8080:8080 fincalc-app:latest
+docker run -p 80:8080 fincalc-app:latest
 ```
 
 ---

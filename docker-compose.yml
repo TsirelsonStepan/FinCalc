@@ -2,6 +2,6 @@ services:
   fincalc:
     image: fincalc-app
     ports:
-      - "8080:8080"
+      - "80:8080"
     volumes:
       - ./wwwroot:/app/wwwroot #for immediate update of frontend files (.js, .css, .html)
