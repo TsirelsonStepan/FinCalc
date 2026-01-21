@@ -1,0 +1,13 @@
+on: [push]
+
+jobs:
+  build-and-test:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - run: dotnet restore src/FinCalc/FinCalc.csproj
+      - run: dotnet build src/FinCalc/FinCalc.csproj
+      - run: dotnet test tests/FinCalc.Tests/FinCalc.Tests.csproj
