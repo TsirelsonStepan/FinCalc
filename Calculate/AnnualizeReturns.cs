@@ -11,7 +11,7 @@ namespace FinCalc.Calculator
 			{
 				average *= 1 + historicReturns.Values[i] ?? 0;
 			}
-			average = 1 + (Math.Pow(average, (double)(1d / historicReturns.Values.Length)) - 1) * (365d / historicReturns.Frequency);
+			average = (Math.Pow(average, 1d / historicReturns.Values.Length) - 1d) * (365d / historicReturns.Frequency);
 			return average;
 		}
     }

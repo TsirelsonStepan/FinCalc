@@ -31,7 +31,7 @@ namespace FinCalc.DataStructures
 			Dictionary<double, double> assetsReturnWeightPairs = [];
 			for (int i = 0; i < AssetsHistoricPrices.Length; i++)
 			{
-				double annualReturn = Calculate.AnnualizeReturns(Calculate.Returns(AssetsHistoricPrices[i]));
+				double annualReturn = 1 + Calculate.AnnualizeReturns(Calculate.Returns(AssetsHistoricPrices[i]));
 				assetsReturnWeightPairs[annualReturn] = assetsSecidWeigthPairs[AssetsHistoricPrices[i].Name];
 			}
 			double wAPR = Calculate.WeightedAverageReturn(assetsReturnWeightPairs);
