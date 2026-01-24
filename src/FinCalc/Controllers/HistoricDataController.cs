@@ -1,31 +1,29 @@
 using FinCalc.DataStructures;
-using FinCalc.Calculator;
+using FinCalc.Calculate;
 using FinCalc.MOEXAPI;
 
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Produces("application/json")]
-[Consumes("application/json")]
+[Route("api/historicData")]
 public class HistoricDataController : ControllerBase
 {
-	[HttpGet]
-	[Route("historicAssetPrices")]
+	[HttpGet("prices")]
 	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData>> GetAssetPrices([FromQuery] string market, [FromQuery] string secid, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	public async Task<ActionResult<HistoricData>> GetAssetPrices([FromQuery] string market, [FromQuery] string secid, [FromQuery] int frequency, [FromQuery] int period)
 	{
-		HistoricData historicPrices = await GetFromMOEXAPI.Prices(market, secid, freq, length);
-		historicPrices.RealDates = historicPrices.GetRealDates();
-		return Ok(historicPrices);
+		HistoricData historicPrices = await GetFromMOEXAPI.Prices(market, secid, frequency, period);
+
+		return Ok(new HistoricDataResponce(historicPrices));
 	}
 
-	[HttpGet]
-	[Route("historicAssetReturns")]
-	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData>> GetAssetReturns([FromQuery] string market, [FromQuery] string secid, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	[HttpGet("returns")]
+	[ProducesResponseType(typeof(Dictionary<string, double?>), StatusCodes.Status200OK)]
+	public async Task<ActionResult<Dictionary<string, double?>>> GetAssetReturns([FromQuery] string market, [FromQuery] string secid, [FromQuery] int frequency, [FromQuery] int period)
 	{
-		HistoricData historicReturns = Calculate.Returns(await GetFromMOEXAPI.Prices(market, secid, freq, length));
-		historicReturns.RealDates = historicReturns.GetRealDates();
-		return Ok(historicReturns);
+		HistoricData historicReturns = Historic.Returns(await GetFromMOEXAPI.Prices(market, secid, frequency, period));
+
+		return Ok(new HistoricDataResponce(historicReturns));
 	}
 }

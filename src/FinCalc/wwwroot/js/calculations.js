@@ -2,15 +2,6 @@ const calculateButton = document.getElementById("calculate-btn");
 const content = document.querySelector('.content');
 
 async function displayCalculations() {
-	const defaultFrequency = 7;
-	const defaultPeriod = 365;
-	const response = await fetch(`/portfolio?freq=${defaultFrequency}&length=${Math.round(defaultPeriod/defaultFrequency)}`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(selectedArr),
-	});
-	if (!response.ok) throw new Error(response.status);
-
 	content.innerHTML = "";
 	//await createReturnRatiosGroup();
 	await createGraphGroup();
@@ -31,7 +22,7 @@ async function createGraphGroup() {
 			seg.classList.add("active");
 			wrapper.querySelector(".chart").innerHTML = "";
 			
-			[labels, data] = await getChartData(true, seg.dataset.freq, currentPeriod.dataset.period);
+			[labels, data] = await getChartData(seg.dataset.freq, currentPeriod.dataset.period);
 			mainChart.data.labels = labels;
 			mainChart.data.datasets = data;
 			mainChart.update();
@@ -49,7 +40,7 @@ async function createGraphGroup() {
 			seg.classList.add("active");
 			wrapper.querySelector(".chart").innerHTML = "";
 			
-			[labels, data] = await getChartData(true, currentFrequency.dataset.freq, seg.dataset.period);
+			[labels, data] = await getChartData(currentFrequency.dataset.freq, seg.dataset.period);
 			mainChart.data.labels = labels;
 			mainChart.data.datasets = data;
 			mainChart.update();
@@ -58,7 +49,7 @@ async function createGraphGroup() {
 		});
 	});
 	
-	[labels, data] = await getChartData(false, currentFrequency.dataset.freq, currentPeriod.dataset.period);
+	[labels, data] = await getChartData(currentFrequency.dataset.freq, currentPeriod.dataset.period);
 
 	Chart.defaults.elements.point.radius = 2;
 	Chart.defaults.elements.point.hoverRadius = 4;
@@ -100,26 +91,29 @@ async function createGraphGroup() {
 	applyTranslations(wrapper);
 }
 
-async function getChartData(update, freq, period) {
+async function getChartData(freq, period) {
 	const data = [];
 
-	const response = await fetch(`/totalHistoricValues?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
-	//const response = await fetch(`/assetsHistoricPrices?update=${update}&freq=${freq}&length=${Math.round(period/freq)}`);
+	const response = await fetch(`/api/portfolio/historicData/values?frequency=${freq}&period=${period}`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(selectedArr)
+	});
 	if (!response.ok) throw new Error(response.status);
 	const portfolioData = await response.json();
-	data.push({label: portfolioData.name, data: [...portfolioData.values].reverse(), yAxisID: "portfolio"});
+	data.push({label: "Portfolio", data: [...portfolioData.values].reverse(), yAxisID: "portfolio"});
 
 	for (let i = 0; i < otherSelectedArr.length; i++) {
 		const assetData = await getOtherAssetData(otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
-		data.push({label: assetData.name, data: [...assetData.values].reverse(), yAxisID: "benchmark"});
+		data.push({label: otherSelectedArr[i].secid, data: [...assetData.values].reverse(), yAxisID: "benchmark"});
 	}
 	
-	labels = [...portfolioData.realDates].reverse();
+	labels = [...portfolioData.dates].reverse();
 	return [labels, data];
 }
 
 async function getOtherAssetData(market, secid, freq, period) {
-	const response = await fetch(`/historicAssetPrices?market=${market}&secid=${secid}&freq=${freq}&length=${Math.round(period/freq)}`);
+	const response = await fetch(`/api/historicData/prices?market=${market}&secid=${secid}&frequency=${freq}&period=${period}`);
 	if (!response.ok) throw new Error(response.status);
 	const assetData = await response.json()
 	return assetData;
