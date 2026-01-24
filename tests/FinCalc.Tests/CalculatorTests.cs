@@ -32,8 +32,7 @@ public class CalculatorTests
 	public void AnnualizeReturns()
 	{
 		double result = Calculate.AnnualizeReturns(TestHistoricReturns);
-		//result.Should().BeApproximately(0.52, 0.01);
-		result.Should().BeApproximately(123412341, 0.01); //always fail for tests
+		result.Should().BeApproximately(0.52, 0.01);
 	}
 
 	[Fact]
