@@ -1,37 +1,20 @@
 ﻿using FluentAssertions;
 
-using FinCalc.Calculator;
+using FinCalc.Calculate;
 using FinCalc.DataStructures;
 
 namespace FinCalc.Tests;
 
 public class CalculatorTests
 {
-    readonly HistoricData TestHistoricPrices = new()
-	{
-		Name = "TestPrices",
-		Dates = [0, 7, 14, 21, 28, 35],
-		RealDates = ["2026-01-21", "2026-01-14", "2026-01-07", "2025-12-31", "2025-12-24", "2025-12-17"],
-		Values = [1, 2, 1, 2, 1, 2],
-		Frequency = 7,
-		Period = 35
-	};
+    readonly HistoricData TestHistoricPrices = new("TestPrices", 7, 35, [0, 7, 14, 21, 28, 35], [1d, 2d, 1d, 2d, 1d, 2d]);
 
-    readonly HistoricData TestHistoricReturns = new()
-	{
-		Name = "TestReturns",
-		Dates = [0, 7, 14, 21, 28, 35],
-		RealDates = ["2026-01-21", "2026-01-14", "2026-01-07", "2025-12-31", "2025-12-24", "2025-12-17"],
-		Values = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01],
-		Frequency = 7,
-		Period = 35
-	};
-	
+    readonly HistoricData TestHistoricReturns = new("TestReturns", 7, 35, [0, 7, 14, 21, 28, 35], [0.01, 0.01, 0.01, 0.01, 0.01, 0.01]);
 
 	[Fact]
-	public void AnnualizeReturns()
+	public void AnnualReturns()
 	{
-		double result = Calculate.AnnualizeReturns(TestHistoricReturns);
+		double result = Indicator.AnnualReturns(TestHistoricReturns);
 		result.Should().BeApproximately(0.52, 0.01);
 	}
 
@@ -44,7 +27,7 @@ public class CalculatorTests
 	[Fact]
 	public void Returns()
 	{
-		HistoricData result = Calculate.Returns(TestHistoricPrices);
+		HistoricData result = Historic.Returns(TestHistoricPrices);
 		result.Name.Should().Be(TestHistoricPrices.Name);
 
 		for (int i = 0; i < 5; i++) result.Dates[i].Should().Be(TestHistoricPrices.Dates[i]);
