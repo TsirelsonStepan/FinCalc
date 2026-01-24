@@ -5,88 +5,88 @@ namespace FinCalc.MOEXAPI
 {
 	public static partial class GetFromMOEXAPI
 	{
-		public static async Task<HistoricData> Prices(string market, string id, int freq = 7, int length = 52)
+		public static async Task<HistoricData> Prices(string market, string id, int frequency, int period)
 		{
 			Dictionary<int, int> daysToInterval = new()
 			{
 				{1, 24},
 				{7, 7},
-				{31, 31},
+				{30, 31},
 				{90, 4},
 			};
-			DateTime start = DateTime.Today.AddDays(-freq * length);
+			//get period longer then desired by 1 freq (1 observation) to prevent missing early data
+			DateTime start = DateTime.Today.AddDays(-(period + frequency));
 			
-			string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{id}/candles.json?from={start:yyyy-MM-dd}&interval={daysToInterval[freq]}&iss.reverse=true";
+			string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{id}/candles.json?from={start:yyyy-MM-dd}&interval={daysToInterval[frequency]}&iss.reverse=true";
 			JsonArray finalJson = [];
 			DateTime today = DateTime.Today;
 			string[] date;
 			DateTime lastDate;
-			int totalLengthDays = 0;
+			int totalLengthDays = 0;//this is created in next loop but used later
 			
-			while (totalLengthDays < length)
+			//request batches of data until there no more data or desired period is covered
+			while (totalLengthDays < period)
 			{
-				string newUrl = url + $"&start={finalJson?.Count}";
+				//request and parse data
+				string newUrl = url + $"&start={finalJson!.Count}";
 				string response = await Client.GetStringAsync(newUrl);
 				JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponce(response);
-				foreach (JsonNode? item in addJson) finalJson?.Add(item?.DeepClone());
-				JsonNode? dateNode = finalJson?.Last()?[7];
-				if (dateNode != null)
-				{
-					date = dateNode.GetValue<string>().Split(' ')[0].Split('-');
-					lastDate = new(Convert.ToInt16(date[0]), Convert.ToInt16(date[1]), Convert.ToInt16(date[2]));
-				}
-				else
-				{
-					lastDate = start;
-				}
+				
+				//concat with previous data
+				foreach (JsonNode? item in addJson) finalJson!.Add(item?.DeepClone());
+				
+				//trust MOEX API not to return null nodes
+				JsonNode dateNode = finalJson!.Last()![7]!;
+
+				date = dateNode.GetValue<string>().Split(' ')[0].Split('-');
+				lastDate = new(Convert.ToInt16(date[0]), Convert.ToInt16(date[1]), Convert.ToInt16(date[2]));
 
 				totalLengthDays = Convert.ToInt16((today - lastDate).TotalDays);
-				if (addJson.Count < 500) break; //500 seems to be limit on one time data retrieval 
+				//500 seems to be limit on one time data retrieval, meaning if there is less the 500 it is the last batch
+				if (addJson.Count < 500) break;
 			}
 
 			int addedValues = 0;
 			int daysCounter = 0;
-			int[] dates = new int[length];
-			double?[] values = new double?[length];
+			int desiredLength = period / frequency;
+			int[] dates = new int[desiredLength];
+			double?[] values = new double?[desiredLength];
 			
-			for (int i = 0; i < length; i++)
+			for (int i = 0; i < desiredLength; i++)
 			{
+				//continue filling in null values if there is no more data left but desired period is not reached
 				if (i - addedValues >= finalJson?.Count)
 				{
 					dates[i] = daysCounter;
-					daysCounter += freq;
+					values[i] = null;
+					daysCounter += frequency;
 					continue;
 				}
-				JsonNode? currentDateNode = finalJson?[i - addedValues]?[7];
-				int currentDaysPassed;
-				if (currentDateNode != null)
-				{
-					string[] currentDateStr = currentDateNode.GetValue<string>().Split(' ')[0].Split('-');
-					DateTime currentDate = new(Convert.ToInt16(currentDateStr[0]), Convert.ToInt16(currentDateStr[1]), Convert.ToInt16(currentDateStr[2]));
-					currentDaysPassed = (int)(today - currentDate).TotalDays;
-				}
-				else
-				{
-					currentDaysPassed = daysCounter;
-				}
 
-				if (currentDaysPassed - daysCounter < freq)
+				//real (not expected) number of days passed
+				JsonNode currentDateNode = finalJson![i - addedValues]![7]!; //trusting MOEX again
+				string[] currentDateStr = currentDateNode.GetValue<string>().Split(' ')[0].Split('-');
+				DateTime currentDate = new(Convert.ToInt16(currentDateStr[0]), Convert.ToInt16(currentDateStr[1]), Convert.ToInt16(currentDateStr[2]));
+				int currentDaysPassed = (int)(today - currentDate).TotalDays;
+
+				//check if the real dates are not too far in the past meaning no values skipped and real dates correspond to expected (approximately)
+				if (currentDaysPassed - daysCounter < frequency)
 				{
 					daysCounter = currentDaysPassed;
+					//trust MOEX
+					values[i] = finalJson![i - addedValues]![1]!.GetValue<double>();
 					dates[i] = daysCounter;
-					values[i] = finalJson?[i - addedValues]?[1]?.GetValue<double>();
 				}
-				else
+				else //meaning real dates are too far in the past and need to fill in missed dates with nulls
 				{
 					dates[i] = daysCounter;
+					values[i] = null;
 					addedValues++;
 				}
-				daysCounter += freq;
+				daysCounter += frequency;
 			}
 			dates[0] = 0;
-			HistoricData result;
-			
-			result = new(id, length, freq, freq * length, dates, values);
+			HistoricData result = new(id, frequency, period, dates, values);
 			
 			return result;
 		}

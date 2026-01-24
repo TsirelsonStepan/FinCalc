@@ -1,49 +1,46 @@
+using FinCalc.Calculate;
 using FinCalc.DataStructures;
 using FinCalc.MOEXAPI;
 
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
+[Produces("application/json")]
+[Consumes("application/json")]
+[Route("api/portfolio/historicData")]
 public partial class PortfolioController : ControllerBase
 {
-	[HttpGet]
-	[Route("totalHistoricValues")]
-	[ProducesResponseType(typeof(HistoricData), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData>> GetPortfolioValue([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	[HttpPost("values")]
+	[ProducesResponseType(typeof(Dictionary<string, double?>), StatusCodes.Status200OK)]
+	public async Task<ActionResult<Dictionary<string, double?>>> GetPortfolioValue([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
 	{
-		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
-		Portfolio portfolio = Portfolio.Deserialize(json);
+		HistoricData[] assetPrices = await Helper(assets, timeSeries);
+		double[] amounts = new double[assets.Length];
+		for (int i = 0; i < assets.Length; i++) amounts[i] = assets[i].Amount;
+		HistoricData total = Historic.Total(assetPrices, amounts);
 
-		//check pre-assign values
-		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
-
-		if (update) portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
-
-		portfolio.TotalHistoricValues = portfolio.GetTotalHistoricValues();
-
-		System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
-		
-		return Ok(portfolio.TotalHistoricValues);
+		return Ok(new HistoricDataResponce(total));
 	}
 
-	[HttpGet]
-	[Route("assetsHistoricPrices")]
-	[ProducesResponseType(typeof(HistoricData[]), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricData[]>> GetAssetsHistoricPrices([FromQuery] bool update, [FromQuery] int freq = 7, [FromQuery] int length = 52)
+	[HttpPost("prices")]
+	[ProducesResponseType(typeof(HistoricDataResponce[]), StatusCodes.Status200OK)]
+	public async Task<ActionResult<HistoricDataResponce[]>> GetAssetsHistoricPrices([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
 	{
-		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
-		Portfolio portfolio = Portfolio.Deserialize(json);
+		HistoricData[] assetPrices = await Helper(assets, timeSeries);
+		HistoricDataResponce[] result = new HistoricDataResponce[assets.Length];
+		for (int i = 0; i < assets.Length; i++) result[i] = new HistoricDataResponce(assetPrices[i]);
 
-		//check pre-assign values
-		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
-		if (portfolio.AssetsHistoricPrices == null) throw new Exception("Portfolio was not initialized properly. AssetsHistoricPrices is unassigned");
+		return Ok(result);
+	}
 
-		if (update)
+	private async Task<HistoricData[]> Helper(AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
+	{
+		HistoricData[] result  = new HistoricData[assets.Length];
+		for (int i = 0; i < assets.Length; i++)
 		{
-			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
-			
-			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
+			HistoricData prices = await GetFromMOEXAPI.Prices(assets[i].Market, assets[i].Secid, timeSeries.Frequency, timeSeries.Period);
+			result[i] = prices;
 		}
-		
-		return Ok(portfolio.AssetsHistoricPrices);
+		return result;
 	}
 }

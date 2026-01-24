@@ -1,7 +1,8 @@
-on: [push]
+on: push
 
 jobs:
   build-and-test:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
