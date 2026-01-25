@@ -14,7 +14,7 @@ public class CalculatorTests
 	[Fact]
 	public void AnnualReturns()
 	{
-		double result = Indicator.AnnualReturns(TestHistoricReturns);
+		double result = Indicator.AnnualReturn(TestHistoricReturns);
 		result.Should().BeApproximately(0.52, 0.01);
 	}
 
