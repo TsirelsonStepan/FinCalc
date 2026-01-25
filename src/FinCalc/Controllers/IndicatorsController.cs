@@ -1,64 +1,71 @@
-/*
 using FinCalc.DataStructures;
-using FinCalc.Calculator;
-using FinCalc.MOEXAPI;
+using FinCalc.Calculate;
+using FinCalc.RemoteAPIs;
 
 using Microsoft.AspNetCore.Mvc;
 
-public partial class PortfolioController : ControllerBase
+[ApiController]
+[Produces("application/json")]
+[Consumes("application/json")]
+[Route("api/indicators")]
+public class IndicatorsController : ControllerBase
 {
-	[HttpGet]
-	[Route("WAPR")]
+	private readonly IRemoteAPI API = new MOEXAPI();
+
+	[HttpPost("war")]
 	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-	public async Task<ActionResult<double>> GetWARP([FromQuery] bool update, [FromQuery] int freq, [FromQuery] int length)
+	public async Task<ActionResult<double>> GetWAR([FromBody] AssetInPortfolio[] portfolio, [FromQuery] TimeSeriesRequest request)
 	{
-		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
-		Portfolio portfolio = Portfolio.Deserialize(json);
-
-		//check pre-assign values
-		if (portfolio.Benchmark == null) throw new Exception("Portfolio was not initialized properly. No benchmark is assigned");
-		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
-
-		if (update)
+		double[] annualReturns = new double[portfolio.Length];
+		double[] weights = new double[portfolio.Length];
+		for (int i = 0; i < portfolio.Length; i++)
 		{
-			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
-
-	        portfolio.WeightedAverageReturn = portfolio.GetWeightedAverageReturn();
-
-			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
+			HistoricData prices = await API.Prices(
+				portfolio[i].Market!,
+				portfolio[i].Secid!,
+				request.Frequency!.Value,
+				request.Period!.Value);
+			HistoricData returns = Historic.Returns(prices);
+			double annualReturn = Indicator.AnnualReturn(returns);
+			annualReturns[i] = annualReturn;
+			weights[i] = portfolio[i].Amount;
 		}
-		else if (portfolio.WeightedAverageReturn == null) throw new Exception("Portfolio was not initialized properly. WeightedAverageReturn is unassigned");
 
-		return Ok(portfolio.WeightedAverageReturn);
+		return Ok(Basic.WeightedAverage(annualReturns, weights));
 	}
 
-	[HttpGet]
-	[Route("EPR")]
+	[HttpPost("capm")]
 	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
-	public async Task<ActionResult<double>> GetEPR([FromQuery] bool update, [FromQuery] int freq, [FromQuery] int length)
+	public async Task<ActionResult<double>> GetCAPM([FromBody] CAPMRequest request)
 	{
-		string json = System.IO.File.ReadAllText("./stored_portfolio.json");
-		Portfolio portfolio = Portfolio.Deserialize(json);
+		int frequency = request.Benchmark!.TimeSeries!.Frequency!.Value;
+		int period = request.Benchmark!.TimeSeries!.Period!.Value;
+		HistoricData benchmarkPrices = await API.Prices(
+			request.Benchmark.Source!.Market!,
+			request.Benchmark.Secid!,
+			frequency,
+			period);
+		HistoricData benchmarkReturns = Historic.Returns(benchmarkPrices);
 
-		//check pre-assign values
-		if (portfolio.Benchmark == null) throw new Exception("Portfolio was not initialized properly. No benchmark is assigned");
-		if (portfolio.Assets.Length == 0) throw new Exception("Portfolio was not initialized properly. No assets are assigned");
-
-		if (update)
+		double[] betas = new double[request.Assets!.Length];
+		double[] weights = new double[request.Assets.Length];
+		for (int i = 0; i < request.Assets.Length; i++)
 		{
-			portfolio = await AssignPortfolioValues.Whole(portfolio, freq, length);
-			portfolio.Beta = portfolio.GetBeta();
-
-			portfolio.ExpectedReturn = portfolio.GetCAPM(
-				portfolio.RiskFreeRate ?? throw new Exception("Portfolio was not initialized properly. RiskFreeRate == null"),
-				portfolio.Beta ?? throw new Exception("Portfolio was not initialized properly. Beta == null"),
-				Calculate.AnnualizeReturns(Calculate.Returns(portfolio.HistoricBenchmarkPrices ?? throw new Exception("Portfolio was not initialized properly. HistoricBenchmarkPrices == null"))));
-
-			System.IO.File.WriteAllText("./stored_portfolio.json", Portfolio.Serialize(portfolio));
+			HistoricData prices = await API.Prices(
+				request.Assets[i].Market!,
+				request.Assets[i].Secid!,
+				frequency,
+				period);
+			HistoricData returns = Historic.Returns(prices);
+			double beta = Indicator.Beta(returns, benchmarkReturns);
+			betas[i] = beta;
+			weights[i] = request.Assets[i].Amount;
 		}
-		else if (portfolio.ExpectedReturn == null) throw new Exception("Portfolio was not initialized properly. ExpectedReturn == null");
+		double portfolioBeta = Basic.WeightedAverage(betas, weights);
+		double riskFreeRate = await API.RiskFreeRate();
 
-		return Ok(portfolio.ExpectedReturn);
+		double capm = riskFreeRate + portfolioBeta * (Indicator.AnnualReturn(benchmarkReturns) - riskFreeRate);
+
+		return Ok(capm);
 	}
 }
-*/

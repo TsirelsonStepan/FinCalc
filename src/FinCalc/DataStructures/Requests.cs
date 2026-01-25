@@ -1,3 +1,5 @@
+using FinCalc.DataStructures;
+
 using System.ComponentModel.DataAnnotations;
 
 //
@@ -60,4 +62,15 @@ public record Source
 		Api = api;
 		Market = market;
 	}
+}
+
+public record CAPMRequest
+{
+	[Required]
+	public AssetInPortfolio[]? Assets { get; set; }
+
+	[Required]
+	public HistoricDataRequest? Benchmark { get; set; }
+
+	public CAPMRequest() {}
 }

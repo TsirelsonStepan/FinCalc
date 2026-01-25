@@ -4,7 +4,7 @@ namespace FinCalc.Calculate;
 
 public static partial class Indicator
 {
-	public static double AnnualReturns(HistoricData historicReturns)
+	public static double AnnualReturn(HistoricData historicReturns)
 	{
 		double average = 1;
 		for (int i = 0; i < historicReturns.Dates.Length; i++)

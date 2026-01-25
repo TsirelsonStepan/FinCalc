@@ -16,7 +16,11 @@ public class HistoricDataController : ControllerBase
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetPrices([FromBody] HistoricDataRequest request)
 	{
-		HistoricData historicPrices = await API.Prices(request.Source!.Market!, request.Secid!, request.TimeSeries!.Frequency!.Value, request.TimeSeries.Period!.Value);
+		HistoricData historicPrices = await API.Prices(
+			request.Source!.Market!,
+			request.Secid!,
+			request.TimeSeries!.Frequency!.Value,
+			request.TimeSeries.Period!.Value);
 
 		return Ok(new HistoricDataResponce(historicPrices));
 	}
@@ -25,9 +29,14 @@ public class HistoricDataController : ControllerBase
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetReturns([FromBody] HistoricDataRequest request)
 	{
-		HistoricData historicReturns = Historic.Returns(await API.Prices(request.Source!.Market!, request.Secid!, request.TimeSeries!.Frequency!.Value, request.TimeSeries.Period!.Value));
+		HistoricData prices = await API.Prices(
+			request.Source!.Market!,
+			request.Secid!,
+			request.TimeSeries!.Frequency!.Value,
+			request.TimeSeries.Period!.Value);
+		HistoricData returns = Historic.Returns(prices);
 
-		return Ok(new HistoricDataResponce(historicReturns));
+		return Ok(new HistoricDataResponce(returns));
 	}
 
 	[HttpPost("portfolio/values")]
@@ -60,7 +69,11 @@ public class HistoricDataController : ControllerBase
 		HistoricData[] result  = new HistoricData[assets.Length];
 		for (int i = 0; i < assets.Length; i++)
 		{
-			HistoricData prices = await API.Prices(assets[i].Market!, assets[i].Secid!, timeSeries.Frequency!.Value, timeSeries.Period!.Value);
+			HistoricData prices = await API.Prices(
+				assets[i].Market!,
+				assets[i].Secid!,
+				timeSeries.Frequency!.Value,
+				timeSeries.Period!.Value);
 			result[i] = prices;
 		}
 		return result;
