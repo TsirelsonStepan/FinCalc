@@ -18,7 +18,7 @@ async function searchAssets() {
 	searchResults.innerHTML = `<p data-i18n="searching_mes"></p>`;
 	applyTranslations(assetsSearch);
 	
-	const response = await fetch(`/search?partialName=${query}&market=${currentActiveSegment.dataset.type}`);
+	const response = await fetch(`/search?partialName=${query}&source=${currentActiveSegment.dataset.type}`);
 	if (!response.ok) {
 		searchResults.innerHTML = `<p data-i18n="searching_error_mes"></p>`;
 		applyTranslations(assetsSearch);

@@ -1,10 +1,10 @@
-File.WriteAllText("./stored_portfolio.json", "");
-
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.Strict;
+	options.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.Strict;
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -15,8 +15,8 @@ app.UseSwaggerUI();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-//app.UseRouting();
-//app.UseAuthorization();
+
+app.UseRouting();
 app.MapControllers();
 
 app.UseMiddleware<ExceptionsHandlerMiddleWare>();

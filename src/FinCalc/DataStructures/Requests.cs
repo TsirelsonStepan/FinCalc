@@ -7,14 +7,12 @@ public record TimeSeriesRequest
 	//
 	// the frequency of observations 1 value per frequency in days (accept only 1, 7, 31, 90)
 	[Required][AllowedValues(1, 7, 30, 90, "1", "7", "30", "90")]
-	public int Frequency { get; set; }
+	public int? Frequency { get; set; }
 
 	//
 	// the time period in days (limited to values between 90 days and 5 years (365 * 5 days))
 	[Required][Range(90, 365 * 5)]
-	public int Period { get; set; }
-
-	public static TimeSeriesRequest Default { get; } = new(7, 365);
+	public int? Period { get; set; }
 
 	public TimeSeriesRequest() {}
 
@@ -30,9 +28,9 @@ public record TimeSeriesRequest
 public record HistoricDataRequest
 {
 	//
-	// the market security/asset is traded on (for now only for MOEX API)
-	[Required][MinLength(2)]
-	public string? Market { get; set; }
+	// the Source security/asset is traded on - combination of API and market(only for MOEX API)
+	[Required]
+	public Source? Source { get; set; }
 
 	//
 	// the SECurityID (for now only for MOEX API)
@@ -41,7 +39,25 @@ public record HistoricDataRequest
 
 	//
 	//
-	public TimeSeriesRequest TimeSeries { get; set; } = TimeSeriesRequest.Default;
+	[Required]
+	public TimeSeriesRequest? TimeSeries { get; set; }
 
 	public HistoricDataRequest() {}
+}
+
+public record Source
+{
+	[Required] [AllowedValues("MOEX", "AlphaVantage")]
+	public string? Api { get; set; }
+
+	[AllowedValues("shares", "index")]
+	public string? Market { get; set; }
+
+	public Source() {}
+
+	public Source(string api, string market)
+	{
+		Api = api;
+		Market = market;
+	}
 }

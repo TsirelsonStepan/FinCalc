@@ -94,7 +94,7 @@ async function createGraphGroup() {
 async function getChartData(freq, period) {
 	const data = [];
 
-	const response = await fetch(`/api/portfolio/historicData/values?frequency=${freq}&period=${period}`, {
+	const response = await fetch(`/api/historicData/portfolio/values?frequency=${freq}&period=${period}`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(selectedArr)
@@ -104,7 +104,7 @@ async function getChartData(freq, period) {
 	data.push({label: "Portfolio", data: [...portfolioData.values].reverse(), yAxisID: "portfolio"});
 
 	for (let i = 0; i < otherSelectedArr.length; i++) {
-		const assetData = await getOtherAssetData(otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
+		const assetData = await getOtherAssetData(otherSelectedArr[i].api, otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
 		data.push({label: otherSelectedArr[i].secid, data: [...assetData.values].reverse(), yAxisID: "benchmark"});
 	}
 	
@@ -112,8 +112,16 @@ async function getChartData(freq, period) {
 	return [labels, data];
 }
 
-async function getOtherAssetData(market, secid, freq, period) {
-	const response = await fetch(`/api/historicData/prices?market=${market}&secid=${secid}&frequency=${freq}&period=${period}`);
+async function getOtherAssetData(api, market, secid, freq, period) {
+	const response = await fetch(`/api/historicData/prices`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			source: {api: api, market: market},
+			secid: secid,
+			timeSeries: {frequency: parseInt(freq), period: parseInt(period)}
+		})
+	});
 	if (!response.ok) throw new Error(response.status);
 	const assetData = await response.json()
 	return assetData;

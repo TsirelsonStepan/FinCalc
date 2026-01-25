@@ -11,7 +11,7 @@ function addAsset(asset, toPortfolio) {
     if (toPortfolio && selectedArr.find(e => e.secid === asset.secid)) return;
 	else if (!toPortfolio && otherSelectedArr.find(e => e.secid === asset.secid)) return;
 
-	const newAsset = {market: currentActiveSegment.dataset.type, secid: asset.secid, amount: 0};
+	const newAsset = { api: "MOEX", market: currentActiveSegment.dataset.type, secid: asset.secid, amount: 0 };
 
 	if (selectedArr.length === 0 && toPortfolio) {
 		const topRaw = document.createElement("div");

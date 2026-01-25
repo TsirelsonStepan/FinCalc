@@ -20,16 +20,18 @@ public struct Asset
 
 public struct AssetInPortfolio
 {
-	public string Market { get; set; } = "";
+	public string Api { get; set; } = "MOEX";
+	public string? Market { get; set; }
 	public string Secid { get; set; } = "";
 	public double Amount { get; set; } = 0;
 
 	public AssetInPortfolio() {}
 
-	public AssetInPortfolio(string market, string secid, double amount)
+	public AssetInPortfolio(string api, string? market, string secid, double amount)
 	{
+		Api = api;
 		Market = market;
 		Secid = secid;
-		Amount = amount;			
+		Amount = amount;
 	}
 }
