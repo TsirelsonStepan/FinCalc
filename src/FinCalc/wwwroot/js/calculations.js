@@ -60,22 +60,9 @@ async function createGraphGroup() {
 			datasets: data,
 		},
 		options: {
-			scales: {
-				portfolio: {
-					type: "linear",
-					position: "left"
-				},
-				benchmark: {
-					type: "linear",
-					position: "right",
-					grid: {
-						drawOnChartArea: false
-					}
-				}
-			},
-			interaction: {
-				mode: "index",      // align by X label
-				intersect: false    // no need to hover the dot exactly
+			interaction: {//for pop-up without precise hover on line
+				mode: "index",
+				intersect: false
 			},
 			plugins: {
 				tooltip: {
@@ -101,14 +88,29 @@ async function getChartData(freq, period) {
 	});
 	if (!response.ok) throw new Error(response.status);
 	const portfolioData = await response.json();
-	data.push({label: "Portfolio", data: [...portfolioData.values].reverse(), yAxisID: "portfolio"});
+
+	var realLength;
+    for (let i = portfolioData.data.values.length - 1; i >= 0; i--) {
+        if (portfolioData.data.values[i] !== null) {
+			realLength = i + 1;
+			break;
+		}
+    }
+	portfolioData.data.values.length = realLength;
+	portfolioData.data.dates.length = realLength;
+
+	data.push({label: "Portfolio", data: [...portfolioData.data.values].reverse()});
 
 	for (let i = 0; i < otherSelectedArr.length; i++) {
 		const assetData = await getOtherAssetData(otherSelectedArr[i].api, otherSelectedArr[i].market, otherSelectedArr[i].secid, freq, period);
-		data.push({label: otherSelectedArr[i].secid, data: [...assetData.values].reverse(), yAxisID: "benchmark"});
+		assetData.values.length = realLength;
+		assetData.dates.length = realLength;
+		assetData.values = assetData.values.map(x => x * (portfolioData.data.values[realLength - 1] / assetData.values[realLength - 1]));
+
+		data.push({label: otherSelectedArr[i].secid, data: [...assetData.values].reverse()});
 	}
 	
-	labels = [...portfolioData.dates].reverse();
+	labels = [...portfolioData.data.dates].reverse();
 	return [labels, data];
 }
 
