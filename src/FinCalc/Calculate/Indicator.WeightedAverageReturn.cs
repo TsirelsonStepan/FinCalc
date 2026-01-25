@@ -1,18 +1,18 @@
 namespace FinCalc.Calculate;
 
-public static partial class Indicator
+public static partial class Basic
 {
-	public static double WeightedAverageReturn(Dictionary<double, double> assetsAnnualReturnToWeights)
+	public static double WeightedAverage(double[] values, double[] weights)
 	{
-		double sumOfReturns = 0;
+		double sumOfValues = 0;
 		double totalWeight = 0;
 
-		foreach (KeyValuePair<double, double> item in assetsAnnualReturnToWeights)
+		for (int i = 0; i < values.Length; i++)
 		{
-			sumOfReturns += item.Key * item.Value;
-			totalWeight += item.Value;
+			sumOfValues += values[i] * weights[i];
+			totalWeight += weights[i];
 		}
 
-		return sumOfReturns / totalWeight;
+		return sumOfValues / totalWeight;
 	}
 }

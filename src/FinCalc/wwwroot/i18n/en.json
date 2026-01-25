@@ -41,7 +41,7 @@
 	"chart_description_1": "This chart presents total value of the portfolio (the sum of the most recent close price for each asset multiplied by respective amount). The interval of datapoints is 1 week and period presented is exactly one year (or 52 weeks) preceding latest available datapoint",
 
 	"weighted_average_portfolio_return_description": "Calculated as average of annualized weekly returns on each asset for the last year, weighted by their value in respective time periods.",
-	"expected_portfolio_return_description": "Calculated using CAPM, where market premium (for IMOEX) is calculated based on 10-year period of consecutive weekly returns, that where then averaged using geometric compounding and annualized.\nBeta coefficient was calcualted similarly, using weekly returns on portfolio assets for the last 5 years. Weighted average of each asset beta comprised portfolio beta.\n Risk free rate was taken from CBR as YTM of government zero-coupon bonds with 1-year maturity.",
+	"expected_portfolio_return_description": "Calculated using CAPM, where premium for selected benchmark is multiplied by beta-coefficient that represents slope of linear regression between returns on each asset in portfolio and returns on benchmark.",
 
 	"chart_frequency_switch_label": "Frequency",
 	"chart_frequency_switch_daily": "Daily",
@@ -55,5 +55,7 @@
 	"chart_period_switch_2years": "2 Years",
 	"chart_period_switch_3years": "3 Years",
 	"chart_period_switch_4years": "4 Years",
-	"chart_period_switch_5years": "5 Years"
+	"chart_period_switch_5years": "5 Years",
+
+	"annual_return_for_period": "Annual return for the last "
 }

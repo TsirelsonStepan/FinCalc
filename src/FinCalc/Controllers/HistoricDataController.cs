@@ -16,7 +16,11 @@ public class HistoricDataController : ControllerBase
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetPrices([FromBody] HistoricDataRequest request)
 	{
-		HistoricData historicPrices = await API.Prices(request.Source!.Market!, request.Secid!, request.TimeSeries!.Frequency!.Value, request.TimeSeries.Period!.Value);
+		HistoricData historicPrices = await API.Prices(
+			request.Source!.Market!,
+			request.Secid!,
+			request.TimeSeries!.Frequency!.Value,
+			request.TimeSeries.Period!.Value);
 
 		return Ok(new HistoricDataResponce(historicPrices));
 	}
@@ -25,21 +29,28 @@ public class HistoricDataController : ControllerBase
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetReturns([FromBody] HistoricDataRequest request)
 	{
-		HistoricData historicReturns = Historic.Returns(await API.Prices(request.Source!.Market!, request.Secid!, request.TimeSeries!.Frequency!.Value, request.TimeSeries.Period!.Value));
+		HistoricData prices = await API.Prices(
+			request.Source!.Market!,
+			request.Secid!,
+			request.TimeSeries!.Frequency!.Value,
+			request.TimeSeries.Period!.Value);
+		HistoricData returns = Historic.Returns(prices);
 
-		return Ok(new HistoricDataResponce(historicReturns));
+		return Ok(new HistoricDataResponce(returns));
 	}
 
 	[HttpPost("portfolio/values")]
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetPortfolioValue([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
 	{
+		CustomContext context = new();
+
 		HistoricData[] assetPrices = await Helper(assets, timeSeries);
 		double[] amounts = new double[assets.Length];
 		for (int i = 0; i < assets.Length; i++) amounts[i] = assets[i].Amount;
-		HistoricData total = Historic.Total(assetPrices, amounts);
+		HistoricData total = Historic.Total(context, assetPrices, amounts);
 
-		return Ok(new HistoricDataResponce(total));
+		return Ok(new { data = new HistoricDataResponce(total), notes = context.GetNotes() });
 	}
 
 	[HttpPost("portfolio/prices")]
@@ -58,7 +69,11 @@ public class HistoricDataController : ControllerBase
 		HistoricData[] result  = new HistoricData[assets.Length];
 		for (int i = 0; i < assets.Length; i++)
 		{
-			HistoricData prices = await API.Prices(assets[i].Market!, assets[i].Secid!, timeSeries.Frequency!.Value, timeSeries.Period!.Value);
+			HistoricData prices = await API.Prices(
+				assets[i].Market!,
+				assets[i].Secid!,
+				timeSeries.Frequency!.Value,
+				timeSeries.Period!.Value);
 			result[i] = prices;
 		}
 		return result;
