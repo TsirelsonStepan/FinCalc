@@ -6,6 +6,9 @@ public static partial class Indicator
 {
 	public static double Beta(HistoricData assetReturns, HistoricData benchmarkReturns)
 	{
+		//prevent unnecessary calculation for identical data
+		if (assetReturns.Name == benchmarkReturns.Name) return 1;
+		
 		int length = Math.Min(assetReturns.Values.Length, benchmarkReturns.Values.Length);
 		double[] alignedAssetReturns = new double[length];
 		double[] alignedBenchmarkReturns = new double[length];
