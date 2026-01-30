@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\FinCalc\FinCalc.csproj" />
+		<ProjectReference Include="..\..\src\FinCalc.MoexApi\FinCalc.MoexApi.csproj" />
 	</ItemGroup>
 
 </Project>
