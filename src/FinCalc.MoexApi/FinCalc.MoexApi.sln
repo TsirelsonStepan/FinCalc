@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinCalc", "FinCalc.csproj", "{9E2CFBB8-020C-D1B8-939D-B83864A8CEE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinCalc.MoexApi", "FinCalc.MoexApi.csproj", "{D80AF2DA-C84E-EBF0-4B3D-34A5842518CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,15 +10,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9E2CFBB8-020C-D1B8-939D-B83864A8CEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E2CFBB8-020C-D1B8-939D-B83864A8CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E2CFBB8-020C-D1B8-939D-B83864A8CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E2CFBB8-020C-D1B8-939D-B83864A8CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80AF2DA-C84E-EBF0-4B3D-34A5842518CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80AF2DA-C84E-EBF0-4B3D-34A5842518CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80AF2DA-C84E-EBF0-4B3D-34A5842518CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80AF2DA-C84E-EBF0-4B3D-34A5842518CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1E32A044-1309-48B9-AAD5-8F310F9E8DA1}
+		SolutionGuid = {FFC62433-578E-4E72-B1D4-28F7D5B6D518}
 	EndGlobalSection
 EndGlobal

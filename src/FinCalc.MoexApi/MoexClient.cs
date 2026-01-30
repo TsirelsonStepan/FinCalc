@@ -1,6 +1,6 @@
-namespace FinCalc.RemoteAPIs;
+namespace FinCalc.MoexApi;
 
-public partial class MOEXAPI : IRemoteAPI
+public partial class MoexClient
 {
 	private static readonly HttpClient Client = new();
 }

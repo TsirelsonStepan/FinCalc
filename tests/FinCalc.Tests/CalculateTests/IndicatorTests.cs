@@ -7,9 +7,33 @@ namespace FinCalc.Tests;
 
 public class CalculateTests
 {
-    readonly HistoricData TestHistoricReturns = new("TestReturns", 7, 35, [0, 7, 14, 21, 28, 35], [0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
+	readonly HistoricData TestHistoricReturns = new(
+		"TestReturns",
+		Frequency.Weekly,
+		35,
+		[
+			DateTime.Today,
+			DateTime.Today.AddDays(-7),
+			DateTime.Today.AddDays(-14),
+			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-28),
+			DateTime.Today.AddDays(-35)
+		],
+		[0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
 
-    readonly HistoricData TestHistoricBenchmarkReturns = new("TestBenchmarkReturns", 7, 35, [0, 7, 14, 21, 28, 35], [0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
+	readonly HistoricData TestHistoricBenchmarkReturns = new(
+		"TestBenchmarkReturns",
+		Frequency.Weekly,
+		35,
+		[
+			DateTime.Today,
+			DateTime.Today.AddDays(-7),
+			DateTime.Today.AddDays(-14),
+			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-28),
+			DateTime.Today.AddDays(-35)
+		],
+		[0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
 
 	[Fact]
 	public void AnnualReturns()

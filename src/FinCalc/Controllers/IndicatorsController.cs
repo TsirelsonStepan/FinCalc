@@ -1,28 +1,27 @@
 using FinCalc.DataStructures;
 using FinCalc.Calculate;
-using FinCalc.RemoteAPIs;
 
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
-[Route("api/indicators")]
+[Route("indicators")]
 public class IndicatorsController : ControllerBase
 {
-	private readonly IRemoteAPI API = new MOEXAPI();
-
 	[HttpPost("war")]
 	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
 	public async Task<ActionResult<double>> GetWAR([FromBody] AssetInPortfolio[] portfolio, [FromQuery] TimeSeriesRequest request)
 	{
+		CustomContext context = new();
 		double[] annualReturns = new double[portfolio.Length];
 		double[] weights = new double[portfolio.Length];
 		for (int i = 0; i < portfolio.Length; i++)
 		{
-			HistoricData prices = await API.Prices(
-				portfolio[i].Market!,
-				portfolio[i].Secid!,
+			HistoricData prices = await IRemoteAPI.FromString(portfolio[i].Source.Api).Prices(
+				context,
+				portfolio[i].Source.AssetPath!,
 				request.Frequency!.Value,
 				request.Period!.Value);
 			HistoricData returns = Historic.Returns(prices);
@@ -31,18 +30,19 @@ public class IndicatorsController : ControllerBase
 			weights[i] = portfolio[i].Amount;
 		}
 
-		return Ok(Basic.WeightedAverage(annualReturns, weights));
+		return Ok(new { data = Basic.WeightedAverage(annualReturns, weights), notes = context.GetNotes() });
 	}
 
 	[HttpPost("capm")]
 	[ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
 	public async Task<ActionResult<double>> GetCAPM([FromBody] CAPMRequest request)
 	{
-		int frequency = request.Benchmark!.TimeSeries!.Frequency!.Value;
-		int period = request.Benchmark!.TimeSeries!.Period!.Value;
-		HistoricData benchmarkPrices = await API.Prices(
-			request.Benchmark.Source!.Market!,
-			request.Benchmark.Secid!,
+		CustomContext context = new();
+		Frequency frequency = request.Benchmark!.TimeSeries!.Frequency!.Value;
+		int period = request.Benchmark.TimeSeries.Period!.Value;
+		HistoricData benchmarkPrices = await IRemoteAPI.FromString(request.Benchmark.Source.Api).Prices(//GetPricesRaw in the future
+			context,
+			request.Benchmark.Source.AssetPath,
 			frequency,
 			period);
 		HistoricData benchmarkReturns = Historic.Returns(benchmarkPrices);
@@ -51,9 +51,9 @@ public class IndicatorsController : ControllerBase
 		double[] weights = new double[request.Assets.Length];
 		for (int i = 0; i < request.Assets.Length; i++)
 		{
-			HistoricData prices = await API.Prices(
-				request.Assets[i].Market!,
-				request.Assets[i].Secid!,
+			HistoricData prices = await IRemoteAPI.FromString(request.Assets[i].Source.Api).Prices(//GetPricesRaw in the future
+				context,
+				request.Assets[i].Source.AssetPath!,
 				frequency,
 				period);
 			HistoricData returns = Historic.Returns(prices);
@@ -62,10 +62,10 @@ public class IndicatorsController : ControllerBase
 			weights[i] = request.Assets[i].Amount;
 		}
 		double portfolioBeta = Basic.WeightedAverage(betas, weights);
-		double riskFreeRate = await API.RiskFreeRate();
+		double riskFreeRate = await IRemoteAPI.FromString(request.Benchmark.Source.Api).RiskFreeRate();
 
 		double capm = riskFreeRate + portfolioBeta * (Indicator.AnnualReturn(benchmarkReturns) - riskFreeRate);
 
-		return Ok(capm);
+		return Ok(new { data = capm, notes = context.GetNotes() });
 	}
 }

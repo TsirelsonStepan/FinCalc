@@ -1,0 +1,12 @@
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/bin/Debug/net8.0/FinCalc.MoexApi.deps.json
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/bin/Debug/net8.0/FinCalc.MoexApi.dll
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/bin/Debug/net8.0/FinCalc.MoexApi.pdb
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.GeneratedMSBuildEditorConfig.editorconfig
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.AssemblyInfoInputs.cache
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.AssemblyInfo.cs
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.csproj.CoreCompileInputs.cache
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.sourcelink.json
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.dll
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/refint/FinCalc.MoexApi.dll
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/FinCalc.MoexApi.pdb
+/home/main/Documents/csharp_proj/FinCalc/src/FinCalc.MoexApi/obj/Debug/net8.0/ref/FinCalc.MoexApi.dll

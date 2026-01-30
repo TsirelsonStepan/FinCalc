@@ -18,7 +18,10 @@ async function searchAssets() {
 	searchResults.innerHTML = `<p data-i18n="searching_mes"></p>`;
 	applyTranslations(assetsSearch);
 	
-	const response = await fetch(`/search?partialName=${query}&source=${currentActiveSegment.dataset.type}`);
+	var url = `/${currentAPI.dataset.type}/search?query=`;
+	if (currentAPI.dataset.type == "moex" && currentActiveSegment.dataset.type != null) url += `${currentActiveSegment.dataset.type}/`;
+	url += query;
+	const response = await fetch(url);
 	if (!response.ok) {
 		searchResults.innerHTML = `<p data-i18n="searching_error_mes"></p>`;
 		applyTranslations(assetsSearch);
@@ -41,8 +44,9 @@ function renderSearchResults(assets) {
 		const wrapper = document.createElement("div");
 		wrapper.className = "search-result-item";
 		wrapper.innerHTML = Templates.search_result_item;
-		wrapper.querySelector("#shortname").textContent = asset.shortname;
-		//wrapper.querySelector("#secid").textContent = asset.secid;
+
+		if (asset.shortname != null) wrapper.querySelector("#name").textContent = asset.shortname;
+		else if (asset.name != null) wrapper.querySelector("#name").textContent = asset.name;
 		
 		wrapper.querySelector(".add-to-portfolio-btn").addEventListener("click", () => {
 			addAsset(asset, true);
@@ -73,20 +77,9 @@ searchInput.addEventListener("keydown", function(e) {
 	if (e.key === "Enter") {
 		e.preventDefault();
 		searchAssets();
-    }
+	}
 });
 
 const tooltip = document.createElement("div");
 tooltip.className = "tooltip-text";
 document.querySelector(".main").appendChild(tooltip);
-
-const assetTypeSwitches = document.querySelectorAll(".assets-search-switch-option");
-var currentActiveSegment = assetTypeSwitches[0];
-assetTypeSwitches.forEach(seg => {
-	seg.addEventListener("click", () => {
-		currentActiveSegment.classList.remove("active");
-		seg.classList.add("active");
-		currentActiveSegment = seg;
-		searchResults.innerHTML = "";
-	});
-});

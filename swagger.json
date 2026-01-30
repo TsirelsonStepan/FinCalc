@@ -1,447 +1,447 @@
 {
-  "openapi": "3.0.4",
-  "info": {
-    "title": "FinCalc",
-    "version": "1.0"
-  },
-  "paths": {
-    "/historicAssetPrices": {
-      "get": {
-        "tags": [
-          "HistoricData"
-        ],
-        "parameters": [
-          {
-            "name": "market",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "secid",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "freq",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 7
-            }
-          },
-          {
-            "name": "length",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 52
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HistoricData"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/historicAssetReturns": {
-      "get": {
-        "tags": [
-          "HistoricData"
-        ],
-        "parameters": [
-          {
-            "name": "market",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "secid",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "freq",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 7
-            }
-          },
-          {
-            "name": "length",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 52
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HistoricData"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/portfolio": {
-      "post": {
-        "tags": [
-          "Portfolio"
-        ],
-        "parameters": [
-          {
-            "name": "freq",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "length",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AssetInPortfolio"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Portfolio"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Portfolio"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/totalHistoricValues": {
-      "get": {
-        "tags": [
-          "Portfolio"
-        ],
-        "parameters": [
-          {
-            "name": "update",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "freq",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 7
-            }
-          },
-          {
-            "name": "length",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 52
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HistoricData"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/assetsHistoricPrices": {
-      "get": {
-        "tags": [
-          "Portfolio"
-        ],
-        "parameters": [
-          {
-            "name": "update",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "freq",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 7
-            }
-          },
-          {
-            "name": "length",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 52
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HistoricData"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/search": {
-      "get": {
-        "tags": [
-          "Search"
-        ],
-        "parameters": [
-          {
-            "name": "partialName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "market",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Asset"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Asset": {
-        "type": "object",
-        "properties": {
-          "secid": {
-            "type": "string",
-            "nullable": true
-          },
-          "shortname": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AssetInPortfolio": {
-        "type": "object",
-        "properties": {
-          "market": {
-            "type": "string",
-            "nullable": true
-          },
-          "secid": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "HistoricData": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "dates": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
-          },
-          "realDates": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "values": {
-            "type": "array",
-            "items": {
-              "type": "number",
-              "format": "double",
-              "nullable": true
-            },
-            "nullable": true
-          },
-          "frequency": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "period": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Portfolio": {
-        "type": "object",
-        "properties": {
-          "assets": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AssetInPortfolio"
-            },
-            "nullable": true
-          },
-          "assetsHistoricPrices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/HistoricData"
-            },
-            "nullable": true
-          },
-          "riskFreeRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "beta": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "weightedAverageReturn": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "expectedReturn": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "totalHistoricValues": {
-            "$ref": "#/components/schemas/HistoricData"
-          }
-        },
-        "additionalProperties": false
-      }
-    }
-  },
-  "tags": [
-    {
-      "name": "HistoricData"
-    },
-    {
-      "name": "Portfolio"
-    },
-    {
-      "name": "Search"
-    }
-  ]
+	"openapi": "3.0.4",
+	"info": {
+		"title": "FinCalc",
+		"version": "1.0"
+	},
+	"paths": {
+		"/historicAssetPrices": {
+			"get": {
+				"tags": [
+					"HistoricData"
+				],
+				"parameters": [
+					{
+						"name": "market",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "secid",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "freq",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 7
+						}
+					},
+					{
+						"name": "length",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 52
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HistoricData"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/historicAssetReturns": {
+			"get": {
+				"tags": [
+					"HistoricData"
+				],
+				"parameters": [
+					{
+						"name": "market",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "secid",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "freq",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 7
+						}
+					},
+					{
+						"name": "length",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 52
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HistoricData"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/portfolio": {
+			"post": {
+				"tags": [
+					"Portfolio"
+				],
+				"parameters": [
+					{
+						"name": "freq",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "length",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "array",
+								"items": {
+									"$ref": "#/components/schemas/AssetInPortfolio"
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Portfolio"
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Portfolio"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/totalHistoricValues": {
+			"get": {
+				"tags": [
+					"Portfolio"
+				],
+				"parameters": [
+					{
+						"name": "update",
+						"in": "query",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "freq",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 7
+						}
+					},
+					{
+						"name": "length",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 52
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HistoricData"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/assetsHistoricPrices": {
+			"get": {
+				"tags": [
+					"Portfolio"
+				],
+				"parameters": [
+					{
+						"name": "update",
+						"in": "query",
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"name": "freq",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 7
+						}
+					},
+					{
+						"name": "length",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32",
+							"default": 52
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/HistoricData"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/search": {
+			"get": {
+				"tags": [
+					"Search"
+				],
+				"parameters": [
+					{
+						"name": "partialName",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "market",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Asset"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Asset": {
+				"type": "object",
+				"properties": {
+					"secid": {
+						"type": "string",
+						"nullable": true
+					},
+					"shortname": {
+						"type": "string",
+						"nullable": true
+					},
+					"name": {
+						"type": "string",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"additionalProperties": false
+			},
+			"AssetInPortfolio": {
+				"type": "object",
+				"properties": {
+					"market": {
+						"type": "string",
+						"nullable": true
+					},
+					"secid": {
+						"type": "string",
+						"nullable": true
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"additionalProperties": false
+			},
+			"HistoricData": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"nullable": true
+					},
+					"dates": {
+						"type": "array",
+						"items": {
+							"type": "integer",
+							"format": "int32"
+						},
+						"nullable": true
+					},
+					"realDates": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"nullable": true
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"type": "number",
+							"format": "double",
+							"nullable": true
+						},
+						"nullable": true
+					},
+					"frequency": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"period": {
+						"type": "integer",
+						"format": "int32"
+					}
+				},
+				"additionalProperties": false
+			},
+			"Portfolio": {
+				"type": "object",
+				"properties": {
+					"assets": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/AssetInPortfolio"
+						},
+						"nullable": true
+					},
+					"assetsHistoricPrices": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/HistoricData"
+						},
+						"nullable": true
+					},
+					"riskFreeRate": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"beta": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"weightedAverageReturn": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"expectedReturn": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"totalHistoricValues": {
+						"$ref": "#/components/schemas/HistoricData"
+					}
+				},
+				"additionalProperties": false
+			}
+		}
+	},
+	"tags": [
+		{
+			"name": "HistoricData"
+		},
+		{
+			"name": "Portfolio"
+		},
+		{
+			"name": "Search"
+		}
+	]
 }

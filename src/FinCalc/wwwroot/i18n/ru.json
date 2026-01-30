@@ -3,8 +3,14 @@
 	"other_selected_assets": "Бенчмарк",
 	"calculate_for_this_assets": "Расчитать для этих активов",
 	"assets_search_switch_label": "Найти",
+
+	"api_switch_label": "API",
+	"api_switch_yfinance": "YFinance",
+	"api_switch_moex": "MOEX",
+
 	"asset_search_switch_shares": "Акции",
 	"asset_search_switch_indexes": "Индексы",
+	"asset_search_switch_all": "Все",
 
 	"historic_data": "Исторические Значения",
 	"return_ratios": "Показатели Доходности",
@@ -16,7 +22,7 @@
 	"searching_no_assets_mes": "По данному запросу ничего не найдено",
 
 	"weighted_average_portfolio_return": "Средневзвешенная Доходность Портфеля",
-	"expected_portfolio_return": "Расчетная Ожидаемая Доходность Портфеля",    
+	"expected_portfolio_return": "Расчетная Ожидаемая Доходность Портфеля",
 
 	"info_label": "Финансовый Калькулятор Инвестиционного Портфеля",
 	"this_project": "Этот Проект",

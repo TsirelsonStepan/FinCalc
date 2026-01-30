@@ -3,28 +3,19 @@ using FinCalc.DataStructures;
 
 public struct HistoricDataResponce
 {
-    [Required]
-    public string[] Dates { get; set; } = [];
+	[Required]
+	public string[] Dates { get; set; } = [];
 
-    [Required]
-    public double?[] Values { get; set; } = [];
+	[Required]
+	public double?[] Values { get; set; } = [];
 
-    public HistoricDataResponce() {}
+	public HistoricDataResponce() {}
 
-    public HistoricDataResponce(HistoricData data)
-    {
-        Dates = GetRealDates(data.Dates);
-        Values = data.Values;
-    }
-
-	private readonly string[] GetRealDates(int[] pastDays)
+	public HistoricDataResponce(HistoricData data)
 	{
-		DateTime today = DateTime.Today;
-        string[] realDates = new string[pastDays.Length];
-		for (int i = 0; i < pastDays.Length; i++)
-		{
-            realDates[i] = $"{today.AddDays(-pastDays[i]):yyyy-MM-dd}";
-		}
-		return realDates;
-	}    
+		Dates = new string[data.Dates.Length];
+		for (int i = 0; i < data.Dates.Length; i++)
+			Dates[i] = $"{data.Dates[i]:yyyy-MM-dd}";
+		Values = data.Values;
+	} 
 }

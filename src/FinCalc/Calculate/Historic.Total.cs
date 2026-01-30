@@ -9,13 +9,13 @@ public static partial class Historic
 	//FIX: find a way to work with different dates series
 	public static HistoricData Total(CustomContext context, HistoricData[] assetsPrices, double[] amounts)
 	{
-		int commonFrequency = assetsPrices[0].Frequency;
-		int earliestDate = 0;
+		Frequency commonFrequency = assetsPrices[0].Frequency;
+		DateTime earliestDate = DateTime.Today;
 		int longestSeries = 0;
 		for (int i = 0; i < assetsPrices.Length; i++)
 		{
-			if (assetsPrices[i].Frequency != commonFrequency) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
-			earliestDate = Math.Max(earliestDate, assetsPrices[i].Dates[^1]);
+			if ((int)assetsPrices[i].Frequency != (int)commonFrequency) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
+			if (DateTime.Compare(earliestDate, assetsPrices[i].Dates[^1]) > 0) earliestDate = assetsPrices[i].Dates[^1];
 			longestSeries = Math.Max(longestSeries, assetsPrices[i].Values.Length);
 		}
 
@@ -40,7 +40,7 @@ public static partial class Historic
 			if (values[i] == 0) values[i] = null;
 		}
 
-		HistoricData result = new("Portfolio", commonFrequency, earliestDate, assetsPrices[0].Dates, values);
+		HistoricData result = new("Portfolio", commonFrequency, (int)(DateTime.Today - earliestDate).TotalDays, assetsPrices[0].Dates, values);
 
 		return result;
 	}

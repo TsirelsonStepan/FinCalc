@@ -12,6 +12,7 @@ public static partial class Indicator
 		int length = Math.Min(assetReturns.Values.Length, benchmarkReturns.Values.Length);
 		double[] alignedAssetReturns = new double[length];
 		double[] alignedBenchmarkReturns = new double[length];
+		int newLength = 0;
 		for (int i = 0; i < length; i++)
 		{
 			if (assetReturns.Values[i] == null || benchmarkReturns.Values[i] == null) continue;
@@ -20,9 +21,10 @@ public static partial class Indicator
 				//can use ! because if above check null
 				alignedAssetReturns[i] = assetReturns.Values[i]!.Value;
 				alignedBenchmarkReturns[i] = benchmarkReturns.Values[i]!.Value;
+				newLength++;
 			}
 		}
-		double beta = Basic.LinearRegressionSlope(alignedAssetReturns, alignedBenchmarkReturns);
+		double beta = Basic.LinearRegressionSlope(alignedAssetReturns[0..newLength], alignedBenchmarkReturns[0..newLength]);
 		return beta;
 	}
 }

@@ -3,8 +3,14 @@
 	"other_selected_assets": "Benchmark",
 	"calculate_for_this_assets": "Calculate for these assets",
 	"assets_search_switch_label": "Search",
+
+	"api_switch_label": "API",
+	"api_switch_yfinance": "YFinance",
+	"api_switch_moex": "MOEX",
+	
 	"asset_search_switch_shares": "Shares",
 	"asset_search_switch_indexes": "Indexes",
+	"asset_search_switch_all": "All",
 
 	"historic_data": "Historic Data",
 	"return_ratios": "Return Ratios",
