@@ -11,7 +11,11 @@ public class YFinanceTests
 
 	Asset testAsset = new()
     {
-		AssetPath = "AAPL",
+		Source = new()
+		{
+			Api = "yfinance",
+			AssetPath = "AAPL",
+		},
 		Name = "Apple Inc."
 	};
 
@@ -25,7 +29,7 @@ public class YFinanceTests
 	[Fact]
 	public async Task CurrentPrice()
 	{
-		double result = await API.CurrentPrice(testAsset.AssetPath);
+		double result = await API.CurrentPrice(testAsset.Source.AssetPath);
 		result.Should().BeGreaterThan(0);
 	}
 }

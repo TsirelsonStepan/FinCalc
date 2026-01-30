@@ -56,14 +56,28 @@ public class MoexAPI : IRemoteAPI
 		HistoricData result = new(assetPath, frequency, period, dates, values);
 		return result;
 	}
+
 	public async Task<double> CurrentPrice(string assetPath)
 	{
-		return 0;
+		string[] assetPathArr = assetPath.Split('/');
+		double result = await Client.GetCurrentPrice(
+			new SecurityInfo()
+			{
+				Engine = assetPathArr[0],
+				Market = assetPathArr[1],
+				Board = assetPathArr[2],
+				Secid = assetPathArr[3]
+			}
+		);
+		return result;
 	}
+
 	public async Task<double> RiskFreeRate()
 	{
-		return 0;
+		double result = await Client.GetRiskFreeRate();
+		return result;
 	}
+
 	public async Task<Asset[]> SecuritiesList(string query)
 	{
 		IReadOnlyList<SecurityInfo> result = await Client.GetSecuritiesList(query);

@@ -11,7 +11,11 @@ public class MoexTests
 
 	Asset testAsset = new()
     {
-		AssetPath = "stock/shares/TQBR/SBER",
+		Source = new()
+		{
+			Api = "moex",
+			AssetPath = "stock/shares/TQBR/SBER"
+		},
 		Name = "Apple Inc."
 	};
 
@@ -25,7 +29,7 @@ public class MoexTests
 	[Fact]
 	public async Task CurrentPrice()
 	{
-		double result = await API.CurrentPrice(testAsset.AssetPath);
+		double result = await API.CurrentPrice(testAsset.Source.AssetPath);
 		result.Should().BeGreaterThan(0);
 	}
 
@@ -33,7 +37,7 @@ public class MoexTests
     public async Task Prices()
     {
         CustomContext context = new();
-        HistoricData result = await API.Prices(context, testAsset.AssetPath, Frequency.Weekly, 365);
+        HistoricData result = await API.Prices(context, testAsset.Source.AssetPath, Frequency.Weekly, 365);
         result.Should().NotBeNull();
     }
 }
