@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
 
-COPY src/FinCalc/FinCalc.csproj FinCalc/
-RUN dotnet restore FinCalc/FinCalc.csproj
+COPY src/FinCalc/FinCalc.csproj src/FinCalc/
+COPY src/FinCalc.MoexApi/FinCalc.MoexApi.csproj src/FinCalc.MoexApi/
+RUN dotnet restore src/FinCalc/FinCalc.csproj
 
-COPY src/FinCalc/ FinCalc/
+COPY src/ /src/
 WORKDIR /src/FinCalc
 RUN dotnet publish -c Release
 
