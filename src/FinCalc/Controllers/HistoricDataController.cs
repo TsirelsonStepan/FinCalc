@@ -1,42 +1,42 @@
 using FinCalc.DataStructures;
 using FinCalc.Calculate;
-using FinCalc.RemoteAPIs;
 
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
-[Route("api/historicData")]
+[Route("historicData")]
 public class HistoricDataController : ControllerBase
 {
-	private readonly IRemoteAPI API = new MOEXAPI();
-
 	[HttpPost("prices")]
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetPrices([FromBody] HistoricDataRequest request)
 	{
-		HistoricData historicPrices = await API.Prices(
-			request.Source!.Market!,
-			request.Secid!,
+		CustomContext context = new();
+		HistoricData historicPrices = await IRemoteAPI.FromString(request.Source.Api).Prices(
+			context,
+			request.Source.AssetPath,
 			request.TimeSeries!.Frequency!.Value,
 			request.TimeSeries.Period!.Value);
 
-		return Ok(new HistoricDataResponce(historicPrices));
+		return Ok(new { data = new HistoricDataResponce(historicPrices), notes = context.GetNotes() });
 	}
 
 	[HttpPost("returns")]
 	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce>> GetAssetReturns([FromBody] HistoricDataRequest request)
 	{
-		HistoricData prices = await API.Prices(
-			request.Source!.Market!,
-			request.Secid!,
+		CustomContext context = new();
+		HistoricData prices = await IRemoteAPI.FromString(request.Source.Api).Prices(
+			context,
+			request.Source.AssetPath,
 			request.TimeSeries!.Frequency!.Value,
 			request.TimeSeries.Period!.Value);
 		HistoricData returns = Historic.Returns(prices);
 
-		return Ok(new HistoricDataResponce(returns));
+		return Ok(new { data = new HistoricDataResponce(returns), notes = context.GetNotes()});
 	}
 
 	[HttpPost("portfolio/values")]
@@ -45,7 +45,7 @@ public class HistoricDataController : ControllerBase
 	{
 		CustomContext context = new();
 
-		HistoricData[] assetPrices = await Helper(assets, timeSeries);
+		HistoricData[] assetPrices = await GetMultiplePrices(context, assets, timeSeries);
 		double[] amounts = new double[assets.Length];
 		for (int i = 0; i < assets.Length; i++) amounts[i] = assets[i].Amount;
 		HistoricData total = Historic.Total(context, assetPrices, amounts);
@@ -57,21 +57,22 @@ public class HistoricDataController : ControllerBase
 	[ProducesResponseType(typeof(HistoricDataResponce[]), StatusCodes.Status200OK)]
 	public async Task<ActionResult<HistoricDataResponce[]>> GetAssetsHistoricPrices([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
 	{
-		HistoricData[] assetPrices = await Helper(assets, timeSeries);
+		CustomContext context = new();
+		HistoricData[] assetPrices = await GetMultiplePrices(context, assets, timeSeries);
 		HistoricDataResponce[] result = new HistoricDataResponce[assets.Length];
 		for (int i = 0; i < assets.Length; i++) result[i] = new HistoricDataResponce(assetPrices[i]);
 
-		return Ok(result);
+		return Ok(new { data = result, notes = context.GetNotes() });
 	}
 
-	private async Task<HistoricData[]> Helper(AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
+	private async Task<HistoricData[]> GetMultiplePrices(CustomContext context, AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
 	{
-		HistoricData[] result  = new HistoricData[assets.Length];
+		HistoricData[] result = new HistoricData[assets.Length];
 		for (int i = 0; i < assets.Length; i++)
 		{
-			HistoricData prices = await API.Prices(
-				assets[i].Market!,
-				assets[i].Secid!,
+			HistoricData prices = await IRemoteAPI.FromString(assets[i].Source.Api).Prices(
+				context,
+				assets[i].Source.AssetPath,
 				timeSeries.Frequency!.Value,
 				timeSeries.Period!.Value);
 			result[i] = prices;

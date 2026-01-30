@@ -8,10 +8,10 @@ var selectedArr = [];
 var otherSelectedArr = [];
 
 function addAsset(asset, toPortfolio) {
-    if (toPortfolio && selectedArr.find(e => e.secid === asset.secid)) return;
-	else if (!toPortfolio && otherSelectedArr.find(e => e.secid === asset.secid)) return;
+	if (toPortfolio && selectedArr.find(e => e.source.api === asset.source.api && e.source.assetPath === asset.source.assetPath)) return;
+	else if (!toPortfolio && otherSelectedArr.find(e => e.source.api === asset.source.api && e.source.assetPath === asset.source.assetPath)) return;
 
-	const newAsset = { api: "MOEX", market: currentActiveSegment.dataset.type, secid: asset.secid, amount: 0 };
+	const newAsset = { source: asset.source, amount: null };
 
 	if (selectedArr.length === 0 && toPortfolio) {
 		const topRaw = document.createElement("div");
@@ -31,20 +31,21 @@ function addAsset(asset, toPortfolio) {
 		wrapper.innerHTML = Templates.other_selected_asset_item;	
 	}
 
-	wrapper.querySelector("#shortname").textContent = asset.shortname;
+	if (asset.shortname != null) wrapper.querySelector("#shortname").textContent = asset.shortname;
+	else if (asset.name != null) wrapper.querySelector("#shortname").textContent = asset.name;
 
 	if (toPortfolio) {
 		const amountInput = wrapper.querySelector(".asset-amount-input");
 		amountInput.addEventListener("input", () => {
-			const amount = amountInput.value.trim();
-			if (amount === "") newAsset.amount = 0;
-			else newAsset.amount = parseInt(amount);
+			const amount = parseInt(amountInput.value.trim());
+			if (Number.isInteger(amount)) newAsset.amount = amount;
+			else amountInput.value = "";
 		});
 	}
 
 	wrapper.querySelector(".delete-btn").addEventListener("click", () => {
-		if (toPortfolio) selectedArr = selectedArr.filter(x => x.secid != asset.secid);
-		else otherSelectedArr = otherSelectedArr.filter(x => x.secid != asset.secid);
+		if (toPortfolio) selectedArr = selectedArr.filter(x => x.source != asset.source);
+		else otherSelectedArr = otherSelectedArr.filter(x => x.source != asset.source);
 
 		if (toPortfolio && selectedArr.length === 0) assetsList.querySelector(".selected-asset-item").remove();
 		wrapper.remove();

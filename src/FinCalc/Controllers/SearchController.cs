@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using FinCalc.DataStructures;
-using FinCalc.RemoteAPIs;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 [Produces("application/json")]
 public class SearchController : ControllerBase
 {
-	private readonly IRemoteAPI API = new MOEXAPI();
-
-	[HttpGet("search")]
+	[HttpGet("{api}/search")]
 	[ProducesResponseType(typeof(Asset[]), StatusCodes.Status200OK)]
-	public async Task<ActionResult<Asset[]>> GetSecuritiesList([FromQuery] string partialName, [FromQuery] string source)
+	public async Task<ActionResult<Asset[]>> GetSecuritiesList([FromQuery] string query, [FromRoute] [AllowedValues("moex", "yfinance")] string api)
 	{
-		Asset[] assets = await API.SecuritiesList(partialName, source);
+		IRemoteAPI API = IRemoteAPI.FromString(api);
+		Asset[] assets = await API.SecuritiesList(query);
 		return Ok(assets);
 	}
 }

@@ -1,23 +1,25 @@
-using FinCalc.DataStructures;
+/*using FinCalc.DataStructures;
 using System.Text.Json.Nodes;
 
 namespace FinCalc.RemoteAPIs;
 
 public partial class MOEXAPI
 {
-	public async Task<HistoricData> Prices(string market, string secid, int frequency, int period)
+	Dictionary<Frequency, int> EnumFreqToMoexFreq = new()
 	{
-		Dictionary<int, int> daysToInterval = new()
-		{
-			{1, 24},
-			{7, 7},
-			{30, 31},
-			{90, 4},
-		};
+		{Frequency.Daily, 24},
+		{Frequency.Weekly, 7},
+		{Frequency.Monthly, 31},
+		{Frequency.Quarterly, 4},
+	};
+
+	public async Task<HistoricData> Prices(string market, string secid, Frequency frequency, int period)
+	{
+		int freq = EnumFreqToMoexFreq[frequency];
 		//get period longer then desired by 1 freq (1 observation) to prevent missing early data
-		DateTime start = DateTime.Today.AddDays(-(period + frequency));
+		DateTime start = DateTime.Today.AddDays(-(period + freq));
 		
-		string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{secid}/candles.json?from={start:yyyy-MM-dd}&interval={daysToInterval[frequency]}&iss.reverse=true";
+		string url = $"https://iss.moex.com/iss/engines/stock/markets/{market}/securities/{secid}/candles.json?from={start:yyyy-MM-dd}&interval={freq}&iss.reverse=true";
 		JsonArray finalJson = [];
 		DateTime today = DateTime.Today;
 		string[] date;
@@ -49,7 +51,7 @@ public partial class MOEXAPI
 
 		int addedValues = 0;
 		int daysCounter = 0;
-		int desiredLength = period / frequency;
+		int desiredLength = period / freq;
 		int[] dates = new int[desiredLength];
 		double?[] values = new double?[desiredLength];
 		
@@ -60,7 +62,7 @@ public partial class MOEXAPI
 			{
 				dates[i] = daysCounter;
 				values[i] = null;
-				daysCounter += frequency;
+				daysCounter += freq;
 				continue;
 			}
 
@@ -71,7 +73,7 @@ public partial class MOEXAPI
 			int currentDaysPassed = (int)(today - currentDate).TotalDays;
 
 			//check if the real dates are not too far in the past meaning no values skipped and real dates correspond to expected (approximately)
-			if (currentDaysPassed - daysCounter < frequency)
+			if (currentDaysPassed - daysCounter < freq)
 			{
 				daysCounter = currentDaysPassed;
 				//trust MOEX
@@ -84,11 +86,11 @@ public partial class MOEXAPI
 				values[i] = null;
 				addedValues++;
 			}
-			daysCounter += frequency;
+			daysCounter += freq;
 		}
 		dates[0] = 0;
 		HistoricData result = new(secid, frequency, period, dates, values);
 		
 		return result;
 	}
-}
+}*/

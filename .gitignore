@@ -1,5 +1,7 @@
 src/FinCalc/bin/
 src/FinCalc/obj/
+src/FinCalc.MoexApi/bin/
+src/FinCalc.MoexApi/obj/
 tests/FinCalc.Tests/bin/
 tests/FinCalc.Tests/obj/
 diagrams/Structure

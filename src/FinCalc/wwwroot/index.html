@@ -21,12 +21,21 @@
 		<div class="sidebar">
 
 			<div class="assets-search">
+				<div class="api-switch">
+					<label class="api-switch-label" data-i18n="api_switch_label"></label>
+
+					<div class="api-switch-segment">
+						<button class="api-switch-option" data-type="yfinance" data-i18n="api_switch_yfinance"></button>
+						<button class="api-switch-option" data-type="moex" data-i18n="api_switch_moex"></button>
+					</div>
+				</div>
 				<div class="assets-search-switch">
 					<label class="assets-search-switch-label" data-i18n="assets_search_switch_label"></label>
 
 					<div class="asset-search-switch-segment">
-						<button class="assets-search-switch-option active" data-type="shares" data-i18n="asset_search_switch_shares"></button>
-						<button class="assets-search-switch-option" data-type="index" data-i18n="asset_search_switch_indexes"></button>
+						<button class="assets-search-switch-option" data-type="shares/stock" data-i18n="asset_search_switch_shares"></button>
+						<button class="assets-search-switch-option" data-type="index/stock" data-i18n="asset_search_switch_indexes"></button>
+						<button class="assets-search-switch-option" data-type="stock" data-i18n="asset_search_switch_all"></button>
 					</div>
 				</div>
 
@@ -78,7 +87,7 @@
 	<script src="js/search_assets.js"></script>
 	<script src="js/manage_assets.js"></script>
 	<script src="js/calculations.js"></script>
-	
+	<script src="js/global_swithches.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
 
 </body>

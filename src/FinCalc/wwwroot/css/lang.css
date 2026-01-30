@@ -1,25 +1,25 @@
 
 .lang-select {
-    background-color: #020617;
-    color: #e5e7eb;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 14px;
-    cursor: pointer;
+	background-color: #020617;
+	color: #e5e7eb;
+	border: 1px solid #334155;
+	border-radius: 8px;
+	padding: 6px 10px;
+	font-size: 14px;
+	cursor: pointer;
 }
 
 .lang-select:hover {
-    border-color: #38bdf8;
+	border-color: #38bdf8;
 }
 
 .lang-select:focus {
-    outline: none;
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+	outline: none;
+	border-color: #38bdf8;
+	box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
 }
 
 .lang-select option {
-    background-color: #020617;
-    color: #e5e7eb;
+	background-color: #020617;
+	color: #e5e7eb;
 }
