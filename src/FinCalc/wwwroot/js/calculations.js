@@ -87,7 +87,7 @@ async function getChartData(freq, period) {
 			if (x !== null) return x * (portfolioData.data.values[realLength - 1] / assetData.data.values[realLength - 1])
 		});
 
-		data.push({label: otherSelectedArr[i].source.assetPath.split("/")[-1], data: [...assetData.data.values].reverse()});
+		data.push({label: "Benchmark", data: [...assetData.data.values].reverse()});
 	}
 	
 	labels = [...portfolioData.data.dates].reverse();
