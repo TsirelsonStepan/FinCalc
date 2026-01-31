@@ -7,16 +7,18 @@ public static partial class Historic
 	//
 	//Find the total historical values of portfolio
 	//FIX: find a way to work with different dates series
-	public static HistoricData Total(CustomContext context, HistoricData[] assetsPrices, double[] amounts)
+	public static HistoricData Total(CustomContext context, IReadOnlyList<HistoricData> assetsRawPrices, double[] amounts)
 	{
-		Frequency commonFrequency = assetsPrices[0].Frequency;
+		Frequency commonFrequency = assetsRawPrices[0].Frequency;
 		DateTime earliestDate = DateTime.Today;
 		int longestSeries = 0;
-		for (int i = 0; i < assetsPrices.Length; i++)
+		HistoricData[] assetsPrices = new HistoricData[assetsRawPrices.Count];
+		for (int i = 0; i < assetsRawPrices.Count; i++)
 		{
-			if ((int)assetsPrices[i].Frequency != (int)commonFrequency) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
+			if ((int)assetsRawPrices[i].Frequency != (int)commonFrequency) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
+			assetsPrices[i] = FitDates(assetsRawPrices[i]);
 			if (DateTime.Compare(earliestDate, assetsPrices[i].Dates[^1]) > 0) earliestDate = assetsPrices[i].Dates[^1];
-			longestSeries = Math.Max(longestSeries, assetsPrices[i].Values.Length);
+			longestSeries = Math.Max(longestSeries, assetsPrices[i].Values.Count);
 		}
 
 		double?[] values = new double?[longestSeries];
@@ -25,7 +27,7 @@ public static partial class Historic
 			values[i] = 0;
 			for (int j = 0; j < assetsPrices.Length; j++)
 			{
-				if (assetsPrices[j].Values.Length <= i) continue;
+				if (assetsPrices[j].Values.Count <= i) continue;
 				if (assetsPrices[j].Values[i] == null)
 				{
 					values[i] = 0;
@@ -40,7 +42,7 @@ public static partial class Historic
 			if (values[i] == 0) values[i] = null;
 		}
 
-		HistoricData result = new("Portfolio", commonFrequency, (int)(DateTime.Today - earliestDate).TotalDays, assetsPrices[0].Dates, values);
+		HistoricData result = new("Portfolio", commonFrequency, assetsPrices[0].Dates, values);
 
 		return result;
 	}

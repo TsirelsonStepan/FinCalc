@@ -4,18 +4,19 @@ using FinCalc.DataStructures;
 public struct HistoricDataResponce
 {
 	[Required]
-	public string[] Dates { get; set; } = [];
+	public IReadOnlyList<string> Dates { get; set; } = [];
 
 	[Required]
-	public double?[] Values { get; set; } = [];
+	public IReadOnlyList<double?> Values { get; set; } = [];
 
 	public HistoricDataResponce() {}
 
 	public HistoricDataResponce(HistoricData data)
 	{
-		Dates = new string[data.Dates.Length];
-		for (int i = 0; i < data.Dates.Length; i++)
-			Dates[i] = $"{data.Dates[i]:yyyy-MM-dd}";
+		string[] newDates = new string[data.Dates.Count];
+		for (int i = 0; i < data.Dates.Count; i++)
+			newDates[i] = $"{data.Dates[i]:yyyy-MM-dd}";
+		Dates = newDates;
 		Values = data.Values;
 	} 
 }

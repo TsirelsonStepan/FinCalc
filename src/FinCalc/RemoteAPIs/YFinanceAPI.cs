@@ -28,7 +28,7 @@ public class YFinanceAPI : IRemoteAPI
 			dates[i] = price.Date;
 			i--;
 		}
-		HistoricData result = new(assetPath, frequency, period, dates, values);
+		HistoricData result = new(assetPath, frequency, dates, values);
 		return result;
 	}
 	public async Task<double> CurrentPrice(string assetPath)

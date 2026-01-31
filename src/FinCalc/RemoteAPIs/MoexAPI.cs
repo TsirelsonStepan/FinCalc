@@ -46,14 +46,14 @@ public class MoexAPI : IRemoteAPI
 		);
 		double?[] values = new double?[rawData.Count()];
 		DateTime[] dates = new DateTime[rawData.Count()];
-		int i = rawData.Count() - 1; //reverse direction because api provide in cronological order (opposite to moex)
+		int i = 0;
 		foreach (HistoricDataPoint point in rawData)
 		{
 			values[i] = point.ClosePrice;
 			dates[i] = point.CloseDateTime;
-			i--;
+			i++;
 		}
-		HistoricData result = new(assetPath, frequency, period, dates, values);
+		HistoricData result = new(assetPath, frequency, dates, values);
 		return result;
 	}
 

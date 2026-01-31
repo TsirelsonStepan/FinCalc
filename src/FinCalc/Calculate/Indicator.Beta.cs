@@ -9,7 +9,7 @@ public static partial class Indicator
 		//prevent unnecessary calculation for identical data
 		if (assetReturns.Name == benchmarkReturns.Name) return 1;
 		
-		int length = Math.Min(assetReturns.Values.Length, benchmarkReturns.Values.Length);
+		int length = Math.Min(assetReturns.Values.Count, benchmarkReturns.Values.Count);
 		double[] alignedAssetReturns = new double[length];
 		double[] alignedBenchmarkReturns = new double[length];
 		int newLength = 0;
