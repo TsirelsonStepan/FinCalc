@@ -10,28 +10,26 @@ public class CalculateTests
 	readonly HistoricData TestHistoricReturns = new(
 		"TestReturns",
 		Frequency.Weekly,
-		35,
 		[
-			DateTime.Today,
-			DateTime.Today.AddDays(-7),
-			DateTime.Today.AddDays(-14),
-			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-35),
 			DateTime.Today.AddDays(-28),
-			DateTime.Today.AddDays(-35)
+			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-14),
+			DateTime.Today.AddDays(-7),
+			DateTime.Today
 		],
 		[0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
 
 	readonly HistoricData TestHistoricBenchmarkReturns = new(
 		"TestBenchmarkReturns",
 		Frequency.Weekly,
-		35,
 		[
-			DateTime.Today,
-			DateTime.Today.AddDays(-7),
-			DateTime.Today.AddDays(-14),
-			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-35),
 			DateTime.Today.AddDays(-28),
-			DateTime.Today.AddDays(-35)
+			DateTime.Today.AddDays(-21),
+			DateTime.Today.AddDays(-14),
+			DateTime.Today.AddDays(-7),
+			DateTime.Today
 		],
 		[0.01, 0.02, 0.03, 0.02, 0.01, 0.02]);
 
