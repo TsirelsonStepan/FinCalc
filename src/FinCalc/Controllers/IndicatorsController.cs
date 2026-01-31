@@ -2,7 +2,6 @@ using FinCalc.DataStructures;
 using FinCalc.Calculate;
 
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 [ApiController]
 [Produces("application/json")]
@@ -47,19 +46,21 @@ public class IndicatorsController : ControllerBase
 			period);
 		HistoricData benchmarkReturns = Historic.Returns(benchmarkPrices);
 
-		double[] betas = new double[request.Assets!.Length];
-		double[] weights = new double[request.Assets.Length];
-		for (int i = 0; i < request.Assets.Length; i++)
+		List<double> betas = [];
+		List<double> weights = [];
+		for (int i = 0; i < request.Assets!.Length; i++)
 		{
 			HistoricData prices = await IRemoteAPI.FromString(request.Assets[i].Source.Api).Prices(//GetPricesRaw in the future
 				context,
 				request.Assets[i].Source.AssetPath!,
 				frequency,
 				period);
+			if (prices.Dates.Count == 0) continue;
+			prices = Historic.FitDates(prices, benchmarkPrices.Dates);
 			HistoricData returns = Historic.Returns(prices);
 			double beta = Indicator.Beta(returns, benchmarkReturns);
-			betas[i] = beta;
-			weights[i] = request.Assets[i].Amount;
+			betas.Add(beta);
+			weights.Add(request.Assets[i].Amount);
 		}
 		double portfolioBeta = Basic.WeightedAverage(betas, weights);
 		double riskFreeRate = await IRemoteAPI.FromString(request.Benchmark.Source.Api).RiskFreeRate();

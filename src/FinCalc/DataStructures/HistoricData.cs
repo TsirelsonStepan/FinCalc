@@ -3,22 +3,16 @@ namespace FinCalc.DataStructures;
 public struct HistoricData
 {
 	public string Name { get; }
-	public DateTime[] Dates { get; } = [];
-	public double?[] Values { get; } = [];
+	public IReadOnlyList<DateTime> Dates { get; } = [];
+	public IReadOnlyList<double?> Values { get; } = [];
 	public Frequency Frequency { get; }
-	public int Period { get; }
 
-	public HistoricData(string name, Frequency frequency, int period, DateTime[] dates, double?[] values)
+	public HistoricData(string name, Frequency frequency, IReadOnlyList<DateTime> dates, IReadOnlyList<double?> values)
 	{
-		if (dates == null || dates.Length == 0 || values == null || values.Length == 0) throw new Exception("Attempt to copy zero array in constructor");
-		
 		Name = name;
 		Frequency = frequency;
-		Period = period;
 		
-		Dates = new DateTime[dates.Length];
-		Array.Copy(dates, Dates, dates.Length);
-		Values = new double?[values.Length];
-		Array.Copy(values, Values, values.Length);
+		Dates = dates;
+		Values = values;
 	}
 }

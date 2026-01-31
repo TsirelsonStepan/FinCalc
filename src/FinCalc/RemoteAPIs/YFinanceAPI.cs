@@ -28,7 +28,7 @@ public class YFinanceAPI : IRemoteAPI
 			dates[i] = price.Date;
 			i--;
 		}
-		HistoricData result = new(assetPath, frequency, period, dates, values);
+		HistoricData result = new(assetPath, frequency, dates, values);
 		return result;
 	}
 	public async Task<double> CurrentPrice(string assetPath)
@@ -48,6 +48,7 @@ public class YFinanceAPI : IRemoteAPI
 		int i = 0;
 		foreach (AutoCompleteResult asset in assets)
 		{
+			AssetProfile detail = await Client.GetAssetProfileAsync(asset.Symbol);
 			results[i] = new Asset()
 			{
 				Name = asset.Name,
@@ -55,7 +56,8 @@ public class YFinanceAPI : IRemoteAPI
 				{
 					Api = "yfinance",
 					AssetPath = asset.Symbol
-				}
+				},
+				Description = detail.LongBusinessSummary
 			};
 
 			i++;

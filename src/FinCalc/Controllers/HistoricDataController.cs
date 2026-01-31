@@ -21,7 +21,7 @@ public class HistoricDataController : ControllerBase
 			request.TimeSeries!.Frequency!.Value,
 			request.TimeSeries.Period!.Value);
 
-		return Ok(new { data = new HistoricDataResponce(historicPrices), notes = context.GetNotes() });
+		return Ok(new { data = new HistoricDataResponce(Historic.FitDates(historicPrices)), notes = context.GetNotes() });
 	}
 
 	[HttpPost("returns")]
@@ -45,7 +45,7 @@ public class HistoricDataController : ControllerBase
 	{
 		CustomContext context = new();
 
-		HistoricData[] assetPrices = await GetMultiplePrices(context, assets, timeSeries);
+		IReadOnlyList<HistoricData> assetPrices = await GetMultiplePrices(context, assets, timeSeries);
 		double[] amounts = new double[assets.Length];
 		for (int i = 0; i < assets.Length; i++) amounts[i] = assets[i].Amount;
 		HistoricData total = Historic.Total(context, assetPrices, amounts);
@@ -58,16 +58,16 @@ public class HistoricDataController : ControllerBase
 	public async Task<ActionResult<HistoricDataResponce[]>> GetAssetsHistoricPrices([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
 	{
 		CustomContext context = new();
-		HistoricData[] assetPrices = await GetMultiplePrices(context, assets, timeSeries);
+		IReadOnlyList<HistoricData> assetPrices = await GetMultiplePrices(context, assets, timeSeries);
 		HistoricDataResponce[] result = new HistoricDataResponce[assets.Length];
-		for (int i = 0; i < assets.Length; i++) result[i] = new HistoricDataResponce(assetPrices[i]);
+		for (int i = 0; i < assets.Length; i++) result[i] = new HistoricDataResponce(Historic.FitDates(assetPrices[i]));
 
 		return Ok(new { data = result, notes = context.GetNotes() });
 	}
 
-	private async Task<HistoricData[]> GetMultiplePrices(CustomContext context, AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
+	private async Task<IReadOnlyList<HistoricData>> GetMultiplePrices(CustomContext context, AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
 	{
-		HistoricData[] result = new HistoricData[assets.Length];
+		List<HistoricData> result = [];
 		for (int i = 0; i < assets.Length; i++)
 		{
 			HistoricData prices = await IRemoteAPI.FromString(assets[i].Source.Api).Prices(
@@ -75,7 +75,8 @@ public class HistoricDataController : ControllerBase
 				assets[i].Source.AssetPath,
 				timeSeries.Frequency!.Value,
 				timeSeries.Period!.Value);
-			result[i] = prices;
+			if (prices.Dates.Count == 0) continue;
+			result.Add(prices);
 		}
 		return result;
 	}

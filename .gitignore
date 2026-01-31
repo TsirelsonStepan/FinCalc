@@ -4,4 +4,7 @@ src/FinCalc.MoexApi/bin/
 src/FinCalc.MoexApi/obj/
 tests/FinCalc.Tests/bin/
 tests/FinCalc.Tests/obj/
+/src/FinCalc/*.sln
+/src/FinCalc.MoexApi/*.sln
+/tests/FinCalc.Tests/*.sln
 diagrams/Structure
