@@ -10,19 +10,25 @@ public static partial class Historic
 	public static HistoricData Total(CustomContext context, IReadOnlyList<HistoricData> assetsRawPrices, double[] amounts)
 	{
 		Frequency commonFrequency = assetsRawPrices[0].Frequency;
-		DateTime earliestDate = DateTime.Today;
-		int longestSeries = 0;
-		HistoricData[] assetsPrices = new HistoricData[assetsRawPrices.Count];
+		DateTime earliestDate = DateTime.MaxValue;
+		DateTime latestDate = DateTime.MinValue;
+		
 		for (int i = 0; i < assetsRawPrices.Count; i++)
 		{
 			if ((int)assetsRawPrices[i].Frequency != (int)commonFrequency) throw new Exception("Different values of frequency during GetTotalHistoricValues()");
-			assetsPrices[i] = FitDates(assetsRawPrices[i]);
-			if (DateTime.Compare(earliestDate, assetsPrices[i].Dates[^1]) > 0) earliestDate = assetsPrices[i].Dates[^1];
-			longestSeries = Math.Max(longestSeries, assetsPrices[i].Values.Count);
+			if (DateTime.Compare(earliestDate, assetsRawPrices[i].Dates[0]) > 0) earliestDate = assetsRawPrices[i].Dates[0];
+			if (DateTime.Compare(latestDate, assetsRawPrices[i].Dates[^1]) < 0) latestDate = assetsRawPrices[i].Dates[^1];
 		}
-
-		double?[] values = new double?[longestSeries];
-		for (int i = 0; i < longestSeries; i++)
+		int commonLength = -1;
+		HistoricData[] assetsPrices = new HistoricData[assetsRawPrices.Count];
+			for (int i = 0; i < assetsRawPrices.Count; i++)
+			{
+				assetsPrices[i] = FitDates(assetsRawPrices[i], earliestDate, latestDate);
+				if (commonLength >= 0 && commonLength != assetsPrices[i].Dates.Count) throw new Exception("Dates fitting failed, differing length encountered.");
+				commonLength = assetsPrices[i].Dates.Count;
+			}
+		double?[] values = new double?[commonLength];
+		for (int i = 0; i < commonLength; i++)
 		{
 			values[i] = 0;
 			for (int j = 0; j < assetsPrices.Length; j++)

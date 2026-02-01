@@ -6,12 +6,12 @@ public static partial class Historic
 {
 	//
 	// Changes toFit.Dates to be identical to model.Dates, and recalcualtes values to correspond to new dates
-	public static HistoricData FitDates(HistoricData toFit, IReadOnlyList<DateTime>? modelDates = null)
+	public static HistoricData FitDates(HistoricData toFit, DateTime? startDate = null, DateTime? endDate = null)
 	{
-		DateTime newStartDate = modelDates?[0] ?? toFit.Dates[0];
-		DateTime newEndDate = modelDates?[0] ?? toFit.Dates[^1];
+		DateTime newStartDate = startDate ?? toFit.Dates[0];
+		DateTime newEndDate = endDate ?? toFit.Dates[^1];
 		if (DateTime.Compare(newEndDate, DateTime.Today) > 0) newEndDate = DateTime.Today;
-		modelDates ??= GetStandardDates(toFit.Frequency, newStartDate, newEndDate);
+		IReadOnlyList<DateTime> modelDates = GetStandardDates(toFit.Frequency, newStartDate, newEndDate);
 		double?[] newValues = new double?[modelDates.Count];
 
 		int skipped = 0;
@@ -23,7 +23,7 @@ public static partial class Historic
 			if (comp == 0) newValues[i] = toFit.Values[i + skipped];
 			else if (comp > 0)
 			{
-				if (i + skipped >= toFit.Dates.Count - 1) newValues[i] = null;
+				if (i + 1 + skipped >= toFit.Dates.Count || i + 1 >= modelDates.Count) newValues[i] = null;
 				else if (DateTime.Compare(modelDates[i], toFit.Dates[i + 1 + skipped]) < 0 && DateTime.Compare(modelDates[i + 1], toFit.Dates[i + 1 + skipped]) > 0)
 				{
 					newValues[i] = GetAverageValue(
@@ -42,7 +42,7 @@ public static partial class Historic
 			}
 			else if (comp < 0)
 			{
-				if (i + skipped <= 0)
+				if (i + skipped - 1 < 0 || i - 1 < 0)
 				{
 					skipped--;
 					newValues[i] = null;
