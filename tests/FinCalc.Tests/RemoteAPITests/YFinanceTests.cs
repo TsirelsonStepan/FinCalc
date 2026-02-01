@@ -1,6 +1,6 @@
 using FluentAssertions;
 
-using FinCalc.DataStructures;
+using FinCalc.Models;
 using FinCalc.RemoteAPIs;
 
 namespace FinCalc.Tests;
@@ -22,7 +22,7 @@ public class YFinanceTests
 	[Fact]
 	public async Task SecuritiesList()
 	{
-		Asset[] result = await API.SecuritiesList("appl");
+		IReadOnlyList<Asset> result = await API.SecuritiesList("appl");
 		result.Should().NotBeNull();
 	}
 
