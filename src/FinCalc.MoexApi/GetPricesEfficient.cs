@@ -23,7 +23,7 @@ public partial class MOEXAPI
 		{
 			string newUrl = url + $"&start={totalCount}";
 			string response = await Client.GetStringAsync(newUrl);
-			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponce(response);
+			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponse(response);
 			finalJson!.Add(addJson);
 			totalCount += addJson.Count;
 			if (addJson.Count < 500) break;//moex returns batches of 500 rows of data, so less then 500 means last batch

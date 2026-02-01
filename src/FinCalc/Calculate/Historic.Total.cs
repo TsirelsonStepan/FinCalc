@@ -1,13 +1,10 @@
-using FinCalc.DataStructures;
+using FinCalc.Models;
 
 namespace FinCalc.Calculate;
 
 public static partial class Historic
 {
-	//
-	//Find the total historical values of portfolio
-	//FIX: find a way to work with different dates series
-	public static HistoricData Total(CustomContext context, IReadOnlyList<HistoricData> assetsRawPrices, double[] amounts)
+	public static HistoricData Total(CustomContext context, IReadOnlyList<HistoricData> assetsRawPrices, IReadOnlyList<double> amounts)
 	{
 		Frequency commonFrequency = assetsRawPrices[0].Frequency;
 		DateTime earliestDate = DateTime.MaxValue;
@@ -53,14 +50,3 @@ public static partial class Historic
 		return result;
 	}
 }
-
-/*
-		for (int i = 0; i < assetPrices.Length; i++)
-		{
-			foreach (KeyValuePair<int, double?> item in assetPrices[i].Data)
-			{
-				if (!result.ContainsKey(item.Key)) result[item.Key] = 0;
-				result[item.Key] += item.Value * amounts[i];
-			}
-		}
-*/

@@ -1,3 +1,5 @@
+namespace FinCalc.Models;
+
 public class CustomContext
 {
 	private readonly List<string> Notes = [];
@@ -7,7 +9,7 @@ public class CustomContext
 		Notes.Add(message);
 	}
 
-	public List<string> GetNotes()
+	public IReadOnlyList<string> GetNotes()
 	{
 		return Notes;
 	}

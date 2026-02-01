@@ -50,7 +50,7 @@ for (const seg of APISwitches) {
 		seg.classList.add("active");
 		if (seg.dataset.type == "yfinance") document.querySelector(".assets-search-switch").style.display = 'none';
 		else if (seg.dataset.type == "moex") document.querySelector(".assets-search-switch").style.display = 'flex';
-		
+		searchResults.innerHTML = "";
 		currentAPI = seg;
 	});
 }

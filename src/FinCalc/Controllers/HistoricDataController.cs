@@ -1,32 +1,33 @@
-using FinCalc.DataStructures;
-using FinCalc.Calculate;
-
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+
+using FinCalc.Calculate;
+using FinCalc.Models;
+using FinCalc.Models.DTOs;
 
 [ApiController]
 [Produces("application/json")]
 [Consumes("application/json")]
-[Route("historicData")]
+[Route("historic")]
 public class HistoricDataController : ControllerBase
 {
 	[HttpPost("prices")]
-	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricDataResponce>> GetAssetPrices([FromBody] HistoricDataRequest request)
+	[ProducesResponseType(typeof(HistoricDataResponse), StatusCodes.Status200OK)]
+	public async Task<ActionResult<HistoricDataResponse>> GetAssetPrices([FromBody] HistoricDataRequest request)
 	{
 		CustomContext context = new();
-		HistoricData historicPrices = await IRemoteAPI.FromString(request.Source.Api).Prices(
+		HistoricData raw = await IRemoteAPI.FromString(request.Source.Api).Prices(
 			context,
 			request.Source.AssetPath,
 			request.TimeSeries!.Frequency!.Value,
 			request.TimeSeries.Period!.Value);
 
-		return Ok(new { data = new HistoricDataResponce(Historic.FitDates(historicPrices)), notes = context.GetNotes() });
+		HistoricData result = Historic.FitDates(raw);
+		return Ok(new { data = new HistoricDataResponse(result), notes = context.GetNotes() });
 	}
-
+/*
 	[HttpPost("returns")]
-	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricDataResponce>> GetAssetReturns([FromBody] HistoricDataRequest request)
+	[ProducesResponseType(typeof(HistoricDataResponse), StatusCodes.Status200OK)]
+	public async Task<ActionResult<HistoricDataResponse>> GetAssetReturns([FromBody] HistoricDataRequest request)
 	{
 		CustomContext context = new();
 		HistoricData prices = await IRemoteAPI.FromString(request.Source.Api).Prices(
@@ -36,48 +37,7 @@ public class HistoricDataController : ControllerBase
 			request.TimeSeries.Period!.Value);
 		HistoricData returns = Historic.Returns(prices);
 
-		return Ok(new { data = new HistoricDataResponce(returns), notes = context.GetNotes()});
+		return Ok(new { data = new HistoricDataResponse(returns), notes = context.GetNotes()});
 	}
-
-	[HttpPost("portfolio/values")]
-	[ProducesResponseType(typeof(HistoricDataResponce), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricDataResponce>> GetPortfolioValue([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
-	{
-		CustomContext context = new();
-
-		IReadOnlyList<HistoricData> assetPrices = await GetMultiplePrices(context, assets, timeSeries);
-		double[] amounts = new double[assets.Length];
-		for (int i = 0; i < assets.Length; i++) amounts[i] = assets[i].Amount;
-		HistoricData total = Historic.Total(context, assetPrices, amounts);
-
-		return Ok(new { data = new HistoricDataResponce(total), notes = context.GetNotes() });
-	}
-
-	[HttpPost("portfolio/prices")]
-	[ProducesResponseType(typeof(HistoricDataResponce[]), StatusCodes.Status200OK)]
-	public async Task<ActionResult<HistoricDataResponce[]>> GetAssetsHistoricPrices([FromBody] AssetInPortfolio[] assets, [FromQuery] TimeSeriesRequest timeSeries)
-	{
-		CustomContext context = new();
-		IReadOnlyList<HistoricData> assetPrices = await GetMultiplePrices(context, assets, timeSeries);
-		HistoricDataResponce[] result = new HistoricDataResponce[assets.Length];
-		for (int i = 0; i < assets.Length; i++) result[i] = new HistoricDataResponce(Historic.FitDates(assetPrices[i]));
-
-		return Ok(new { data = result, notes = context.GetNotes() });
-	}
-
-	private async Task<IReadOnlyList<HistoricData>> GetMultiplePrices(CustomContext context, AssetInPortfolio[] assets, TimeSeriesRequest timeSeries)
-	{
-		List<HistoricData> result = [];
-		for (int i = 0; i < assets.Length; i++)
-		{
-			HistoricData prices = await IRemoteAPI.FromString(assets[i].Source.Api).Prices(
-				context,
-				assets[i].Source.AssetPath,
-				timeSeries.Frequency!.Value,
-				timeSeries.Period!.Value);
-			if (prices.Dates.Count == 0) continue;
-			result.Add(prices);
-		}
-		return result;
-	}
+*/
 }

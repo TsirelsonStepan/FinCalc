@@ -32,8 +32,8 @@ public partial class MOEXAPI
 			//request and parse data
 			string newUrl = url + $"&start={finalJson!.Count}";
 			string response = await Client.GetStringAsync(newUrl);
-			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponce(response);
-			if (addJson.Count == 0) throw new UnexpectedMoexResponce(response);
+			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new UnexpectedMoexResponse(response);
+			if (addJson.Count == 0) throw new UnexpectedMoexResponse(response);
 
 			//concat with previous data
 			foreach (JsonNode? item in addJson) finalJson!.Add(item?.DeepClone());

@@ -1,4 +1,4 @@
-using FinCalc.DataStructures;
+using FinCalc.Models;
 
 namespace FinCalc.Calculate;
 

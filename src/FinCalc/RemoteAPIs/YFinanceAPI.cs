@@ -2,7 +2,7 @@ using OoplesFinance.YahooFinanceAPI;
 using OoplesFinance.YahooFinanceAPI.Models;
 using OoplesFinance.YahooFinanceAPI.Enums;
 
-using FinCalc.DataStructures;
+using FinCalc.Models;
 
 namespace FinCalc.RemoteAPIs;
 
@@ -41,7 +41,7 @@ public class YFinanceAPI : IRemoteAPI
 		double result = await CurrentPrice("^TNX"); //10 year treasury yield
 		return result / 100;
 	}
-	public async Task<Asset[]> SecuritiesList(string query)
+	public async Task<IReadOnlyList<Asset>> SecuritiesList(string query)
 	{
 		IEnumerable<AutoCompleteResult> assets = await Client.GetAutoCompleteInfoAsync(query);
 		Asset[] results = new Asset[assets.Count()];

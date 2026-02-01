@@ -29,7 +29,7 @@ public partial class MoexClient
 		{
 			string newUrl = url + $"&start={result.Count}";
 			string response = await Client.GetStringAsync(newUrl);
-			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new InvalidDataException($"Unexpected MOEX responce while trying to get historic data: {response}");
+			JsonArray addJson = JsonNode.Parse(response)?["candles"]?["data"]?.AsArray() ?? throw new InvalidDataException($"Unexpected MOEX response while trying to get historic data: {response}");
 			
 			foreach (JsonNode? item in addJson)
 			{

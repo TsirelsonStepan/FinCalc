@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using FinCalc.DataStructures;
+
+using FinCalc.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 public class SearchController : ControllerBase
 {
 	[HttpGet("{api}/search")]
-	[ProducesResponseType(typeof(Asset[]), StatusCodes.Status200OK)]
-	public async Task<ActionResult<Asset[]>> GetSecuritiesList([FromQuery] string query, [FromRoute] [AllowedValues("moex", "yfinance")] string api)
+	[ProducesResponseType(typeof(IReadOnlyList<Asset>), StatusCodes.Status200OK)]
+	public async Task<ActionResult<IReadOnlyList<Asset>>> GetSecuritiesList([FromQuery] string query, [FromRoute] [AllowedValues("moex", "yfinance")] string api)
 	{
 		IRemoteAPI API = IRemoteAPI.FromString(api);
-		Asset[] assets = await API.SecuritiesList(query);
-		return Ok(assets);
+		return Ok(await API.SecuritiesList(query));
 	}
 }
