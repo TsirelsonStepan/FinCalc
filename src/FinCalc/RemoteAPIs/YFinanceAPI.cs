@@ -21,12 +21,12 @@ public class YFinanceAPI : IRemoteAPI
 		IEnumerable<HistoricalChartInfo> rawData = await Client.GetHistoricalDataAsync(assetPath, FrequencyMap[frequency], DateTime.Today.AddDays(-period));
 		double?[] values = new double?[rawData.Count()];
 		DateTime[] dates = new DateTime[rawData.Count()];
-		int i = rawData.Count() - 1; //reverse direction because api provide in cronological order (opposite to moex)
+		int i = 0;
 		foreach (HistoricalChartInfo price in rawData)
 		{
 			values[i] = price.Close;
 			dates[i] = price.Date;
-			i--;
+			i++;
 		}
 		HistoricData result = new(assetPath, frequency, dates, values);
 		return result;
@@ -48,7 +48,15 @@ public class YFinanceAPI : IRemoteAPI
 		int i = 0;
 		foreach (AutoCompleteResult asset in assets)
 		{
-			AssetProfile detail = await Client.GetAssetProfileAsync(asset.Symbol);
+			string description;
+			try
+			{
+				description = (await Client.GetAssetProfileAsync(asset.Symbol)).LongBusinessSummary;
+			}
+			catch 
+			{
+				description = "No Description";
+			}
 			results[i] = new Asset()
 			{
 				Name = asset.Name,
@@ -57,7 +65,7 @@ public class YFinanceAPI : IRemoteAPI
 					Api = "yfinance",
 					AssetPath = asset.Symbol
 				},
-				Description = detail.LongBusinessSummary
+				Description = description
 			};
 
 			i++;

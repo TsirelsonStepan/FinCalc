@@ -79,16 +79,24 @@ async function getChartData(freq, period) {
 
 	data.push({label: "Portfolio", data: portfolioData.data.values});
 
-	for (let i = 0; i < otherSelectedArr.length; i++) {
-		const assetData = await getOtherAssetData(otherSelectedArr[i].source, freq, period);
-		assetData.data.values.length = realLength;
-		assetData.data.dates.length = realLength;
-		assetData.data.values = assetData.data.values.map(x => {
-			if (x !== null) return x * (portfolioData.data.values[0] / assetData.data.values[0])
-		});
-
-		data.push({label: "Benchmark", data: assetData.data.values});
+	const assetData = await getOtherAssetData(otherSelectedArr[0].source, freq, period);
+	assetData.data.values.length = realLength;
+	assetData.data.dates.length = realLength;
+	
+	var firstNonNullEl = -1;
+	for (let j = 0; j < portfolioData.data.values.length; j++) {
+		if (portfolioData.data.values[j] != null && assetData.data.values[j] != null) {
+			firstNonNullEl = j;
+			break;
+		}
 	}
+	const m = portfolioData.data.values[firstNonNullEl] / assetData.data.values[firstNonNullEl];
+	assetData.data.values = assetData.data.values.map(x => {
+		if (x == null) return null;
+		else return x * m;
+	});
+
+	data.push({label: "Benchmark", data: assetData.data.values});
 	
 	labels = portfolioData.data.dates;
 	return [labels, data];

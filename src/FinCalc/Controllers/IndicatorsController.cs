@@ -56,7 +56,7 @@ public class IndicatorsController : ControllerBase
 				frequency,
 				period);
 			if (prices.Dates.Count == 0) continue;
-			prices = Historic.FitDates(prices, benchmarkPrices.Dates);
+			prices = Historic.FitDates(prices, benchmarkPrices.Dates[0], benchmarkPrices.Dates[^1]);
 			HistoricData returns = Historic.Returns(prices);
 			double beta = Indicator.Beta(returns, benchmarkReturns);
 			betas.Add(beta);
