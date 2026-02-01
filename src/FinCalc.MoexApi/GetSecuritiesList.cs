@@ -25,7 +25,7 @@ public partial class MoexClient
 		catch (TaskCanceledException) { throw new Exception("Timeout"); }
 
 		JsonNode? json = JsonNode.Parse(response);
-		JsonArray companiesData = json?["securities"]?["data"]?.AsArray() ?? throw new InvalidDataException($"Unexpected MOEX responce while trying to get securoties list: {response}");
+		JsonArray companiesData = json?["securities"]?["data"]?.AsArray() ?? throw new InvalidDataException($"Unexpected MOEX response while trying to get securoties list: {response}");
 		SecurityInfo[] companies = new SecurityInfo[companiesData.Count];
 
 		for (int i = 0; i < companiesData.Count; i++)

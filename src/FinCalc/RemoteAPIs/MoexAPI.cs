@@ -1,8 +1,7 @@
 using FinCalc.MoexApi;
-using FinCalc.MoexApi.Enums;
 using FinCalc.MoexApi.Models;
 
-using FinCalc.DataStructures;
+using FinCalc.Models;
 
 namespace FinCalc.RemoteAPIs;
 
@@ -78,7 +77,7 @@ public class MoexAPI : IRemoteAPI
 		return result;
 	}
 
-	public async Task<Asset[]> SecuritiesList(string query)
+	public async Task<IReadOnlyList<Asset>> SecuritiesList(string query)
 	{
 		IReadOnlyList<SecurityInfo> result = await Client.GetSecuritiesList(query);
 		Asset[] assets = new Asset[result.Count];

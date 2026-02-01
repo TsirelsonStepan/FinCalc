@@ -1,9 +1,9 @@
-using FinCalc.DataStructures;
+using FinCalc.Models;
 using FinCalc.RemoteAPIs;
 
 public interface IRemoteAPI
 {
-	Task<Asset[]> SecuritiesList(
+	Task<IReadOnlyList<Asset>> SecuritiesList(
 		string query
 	);
 

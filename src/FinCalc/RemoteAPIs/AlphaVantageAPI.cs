@@ -1,8 +1,9 @@
+/*
 using System.Text.Json;
 
-namespace FinCalc.AlphaVantageAPI;
+namespace FinCalc.RemoteAPIs;
 
-class AlphaVantageAPI
+public class AlphaVantageAPI
 {
 	private static readonly string domain = "https://www.alphavantage.co/query?";
 	private static readonly string apiKey = "yourApiKey";
@@ -41,3 +42,4 @@ class AlphaVantageAPI
 		return lastPeriod;
 	}
 }
+*/

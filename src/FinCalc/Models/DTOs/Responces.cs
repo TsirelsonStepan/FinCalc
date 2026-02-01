@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using FinCalc.DataStructures;
 
-public struct HistoricDataResponce
+namespace FinCalc.Models.DTOs;
+
+public struct HistoricDataResponse
 {
 	[Required]
 	public IReadOnlyList<string> Dates { get; set; } = [];
@@ -9,9 +10,9 @@ public struct HistoricDataResponce
 	[Required]
 	public IReadOnlyList<double?> Values { get; set; } = [];
 
-	public HistoricDataResponce() {}
+	public HistoricDataResponse() {}
 
-	public HistoricDataResponce(HistoricData data)
+	public HistoricDataResponse(HistoricData data)
 	{
 		string[] newDates = new string[data.Dates.Count];
 		for (int i = 0; i < data.Dates.Count; i++)

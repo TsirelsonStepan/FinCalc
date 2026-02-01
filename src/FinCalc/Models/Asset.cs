@@ -1,4 +1,4 @@
-namespace FinCalc.DataStructures;
+namespace FinCalc.Models;
 
 public record Asset
 {

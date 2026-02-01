@@ -1,7 +1,7 @@
 using FluentAssertions;
 
 using FinCalc.Calculate;
-using FinCalc.DataStructures;
+using FinCalc.Models;
 
 namespace FinCalc.Tests;
 

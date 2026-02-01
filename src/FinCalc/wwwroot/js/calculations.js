@@ -59,7 +59,7 @@ async function createGraphGroup() {
 async function getChartData(freq, period) {
 	const data = [];
 
-	const response = await fetch(`/historicData/portfolio/values?frequency=${freq}&period=${period}`, {
+	const response = await fetch(`/portfolio/values?frequency=${freq}&period=${period}`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(selectedArr)
@@ -103,7 +103,7 @@ async function getChartData(freq, period) {
 }
 
 async function getOtherAssetData(source, freq, period) {
-	const response = await fetch(`/historicData/prices`, {
+	const response = await fetch(`/historic/prices`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
