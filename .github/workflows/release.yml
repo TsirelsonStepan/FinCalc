@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run:
+          dotnet build
+          --configuration Production
+          --no-restore
+
+      - name: Test
+        run:
+          dotnet test
+          --configuration Production
+          --no-build
+          --verbosity normal

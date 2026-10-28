@@ -41,6 +41,13 @@ public class CalculateTests
 	}
 
 	[Fact]
+	public void AnnualReturnsWrong()
+	{
+		double result = Indicator.AnnualReturn(TestHistoricReturns);
+		result.Should().NotBe(0.992128854);
+	}
+
+	[Fact]
 	public void Beta()
 	{
 		double result = Indicator.Beta(TestHistoricReturns, TestHistoricBenchmarkReturns);
