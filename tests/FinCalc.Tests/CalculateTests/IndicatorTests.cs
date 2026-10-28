@@ -53,4 +53,11 @@ public class CalculateTests
 		double result = Indicator.Beta(TestHistoricReturns, TestHistoricBenchmarkReturns);
 		result.Should().BeApproximately(1, 0.01);
 	}
+
+	[Fact]
+	public void WrongBeta()
+	{
+		double result = Indicator.Beta(TestHistoricReturns, TestHistoricBenchmarkReturns);
+		result.Should().NotBe(0.5);
+	}
 }
