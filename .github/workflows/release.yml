@@ -20,12 +20,12 @@ jobs:
       - name: Build
         run:
           dotnet build
-          --configuration Production
+          --configuration Release
           --no-restore
 
       - name: Test
         run:
           dotnet test
-          --configuration Production
+          --configuration Release
           --no-build
           --verbosity normal
