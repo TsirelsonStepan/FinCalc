@@ -37,14 +37,14 @@ public class CalculateTests
 	public void AnnualReturns()
 	{
 		double result = Indicator.AnnualReturn(TestHistoricReturns);
-		result.Should().NotBe(0.952128854);
+		result.Should().BeApproximately(0.952128854, 0.01);
 	}
 
 	[Fact]
 	public void AnnualReturnsWrong()
 	{
 		double result = Indicator.AnnualReturn(TestHistoricReturns);
-		result.Should().BeApproximately(0.992128854, 0.01);
+		result.Should().NotBe(0.992128854);
 	}
 
 	[Fact]
