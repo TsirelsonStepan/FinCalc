@@ -1,6 +1,6 @@
-# Deployment
+# Deployment 
 
-## From source
+## From source 
 
 This repository contains both Dockerfile and docker-compose.yml so you use either of them.
 
@@ -27,6 +27,6 @@ docker build -t fincalc-app:latest .
 docker run -p 80:8080 fincalc-app:latest
 ```
 
-## Release
+## Release 
 
 Another way is to just downlaod the pre-built docker container from releases and just run it.
