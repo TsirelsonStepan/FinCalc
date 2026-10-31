@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-test-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: docker build -t app:${{ github.ref_name }} .
+
+      - run: docker save app:${{ github.ref_name }} | gzip > app-${{ github.ref_name }}.tar.gz
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: app-${{ github.ref_name }}.tar.gz
