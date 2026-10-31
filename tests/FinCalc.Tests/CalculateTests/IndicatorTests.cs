@@ -41,6 +41,13 @@ public class CalculateTests
 	}
 
 	[Fact]
+	public void AnnualReturns_ThrowsOnEmpty()
+	{
+		Action act = () => Indicator.AnnualReturn(new HistoricData());
+		act.Should().Throw();
+	}
+
+	[Fact]
 	public void Beta()
 	{
 		double result = Indicator.Beta(TestHistoricReturns, TestHistoricBenchmarkReturns);
