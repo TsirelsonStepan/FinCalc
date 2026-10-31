@@ -1,7 +1,7 @@
 name: Create Wiki
 
 on:
-  pull_request:
+  push:
     branches: [release]
     paths: ['docs/**']
 
