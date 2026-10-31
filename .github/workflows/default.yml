@@ -1,6 +1,8 @@
 name: Default
 
-on: push
+on:
+  push:
+    branches: ['release', 'main']
 
 jobs:
   build-and-test:
