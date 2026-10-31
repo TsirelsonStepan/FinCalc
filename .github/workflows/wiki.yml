@@ -3,7 +3,6 @@ name: Create Wiki
 on:
   push:
     branches: [release]
-    paths: ['docs/**']
 
 permissions:
   contents: write
